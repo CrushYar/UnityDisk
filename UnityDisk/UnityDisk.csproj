@@ -92,9 +92,19 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Accounts\Account.cs" />
+    <Compile Include="Accounts\IAccount.cs" />
+    <Compile Include="Accounts\Registry\RegistryChangedEventArg.cs" />
+    <Compile Include="Accounts\Registry\IAccountRegistry.cs" />
+    <Compile Include="Accounts\Registry\RegistryLoadedEventArg.cs" />
+    <Compile Include="Accounts\Registry\RegistrySizeChangedEventArg.cs" />
+    <Compile Include="Accounts\SizeChangedEventArg.cs" />
+    <Compile Include="Accounts\SpaceSize.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FileStorages\IFileStorageAccount.cs" />
+    <Compile Include="FileStorages\OneDrive\Account.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -136,6 +146,31 @@
     <PackageReference Include="StructureMap">
       <Version>4.6.1</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BackgroundOperation\" />
+    <Folder Include="FileStorages\...FileStorageFactoryRagistry\" />
+    <Folder Include="FileStorages\Dropbox\FileStorageAccount\" />
+    <Folder Include="FileStorages\Dropbox\FileStorageFactory\" />
+    <Folder Include="FileStorages\Dropbox\FileStorageItem\" />
+    <Folder Include="FileStorages\Google\FileStorageAccount\" />
+    <Folder Include="FileStorages\Google\FileStorageFactory\" />
+    <Folder Include="FileStorages\Google\FileStorageItem\" />
+    <Folder Include="FileStorages\OneDrive\FileStorageFactory\" />
+    <Folder Include="FileStorages\OneDrive\FileStorageItem\" />
+    <Folder Include="FileStorages\pCloud\FileStorageAccount\" />
+    <Folder Include="FileStorages\pCloud\FileStorageFactory\" />
+    <Folder Include="FileStorages\pCloud\FileStorageItem\" />
+    <Folder Include="FileStorages\Yandex\FileStorageAccount\" />
+    <Folder Include="FileStorages\Yandex\FileStorageFactory\" />
+    <Folder Include="FileStorages\Yandex\FileStorageItem\" />
+    <Folder Include="GroupTree\...Registry\" />
+    <Folder Include="GroupTree\Requests\" />
+    <Folder Include="Settings\...SettingKernel\" />
+    <Folder Include="Settings\Accounts\" />
+    <Folder Include="Settings\BackgroundOperations\" />
+    <Folder Include="Settings\Groups\" />
+    <Folder Include="StorageItems\FileManagers\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

@@ -23,33 +23,9 @@ namespace UnityDisk
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public interface IClass { }
-
-        public interface IClass1 : IClass { }
-
-        public interface IClass2 : IClass { }
-
-        public class Class1 : IClass1 { }
-
-        public class Class2 : IClass2 { }
-        public class RegisterByContainer
-        {
-            public IContainer Container;
-
-            public RegisterByContainer()
-            {
-                Container = new Container(x => {
-                    x.For<IClass1>().Use<Class1>();
-                    x.For<IClass2>().Use<Class2>();
-                });
-            }
-        }
         public MainPage()
         {
-            var container = new RegisterByContainer().Container;
-            var class1Inst = container.GetInstance<IClass1>();
-            var class2Inst = container.GetInstance<IClass2>();
-
+            
             this.InitializeComponent();
         }
     }
