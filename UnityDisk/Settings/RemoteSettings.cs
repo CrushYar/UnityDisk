@@ -8,6 +8,9 @@ using Windows.Storage;
 
 namespace UnityDisk.Settings
 {
+    /// <summary>
+    /// Сохраняет и загружает настройки удаленно
+    /// </summary>
     public class RemoteSettings : ISettings
     {
         public Stream GetValueAsStream(string parameterName, Encoding encoding = null)

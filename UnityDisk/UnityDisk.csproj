@@ -110,6 +110,11 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\Accounts\AccountSettings.cs" />
+    <Compile Include="Settings\Accounts\AccountSettingsItem.cs" />
+    <Compile Include="Settings\Accounts\IAccountSettings.cs" />
+    <Compile Include="Settings\Accounts\IAccountSettingsItem.cs" />
+    <Compile Include="Settings\ContainerConfigurationForSettings.cs" />
     <Compile Include="Settings\ISettings.cs" />
     <Compile Include="Settings\RemoteSettings.cs" />
   </ItemGroup>
@@ -146,6 +151,9 @@
     <PackageReference Include="NETStandard.Library">
       <Version>2.0.2</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>11.0.2</Version>
+    </PackageReference>
     <PackageReference Include="StructureMap">
       <Version>4.6.1</Version>
     </PackageReference>
@@ -169,7 +177,6 @@
     <Folder Include="FileStorages\Yandex\FileStorageItem\" />
     <Folder Include="GroupTree\...Registry\" />
     <Folder Include="GroupTree\Requests\" />
-    <Folder Include="Settings\Accounts\" />
     <Folder Include="Settings\BackgroundOperations\" />
     <Folder Include="Settings\Groups\" />
     <Folder Include="StorageItems\FileManagers\" />

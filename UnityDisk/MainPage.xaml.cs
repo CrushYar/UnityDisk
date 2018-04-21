@@ -13,6 +13,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using StructureMap;
+using StructureMap.Pipeline;
+using UnityDisk.Settings.Accounts;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -25,7 +27,11 @@ namespace UnityDisk
     {
         public MainPage()
         {
-            
+            var settings = new AccountSettings();
+            settings.SaveAccounts(new []
+            {
+                new AccountSettingsItem(){Login = "myLogin", ServerName = "Yandex", Token = "123"},
+            });
             this.InitializeComponent();
         }
     }
