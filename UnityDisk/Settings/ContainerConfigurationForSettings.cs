@@ -18,7 +18,7 @@ namespace UnityDisk.Settings
         {
             Container = new Container(x => x.For<ISettings>().Singleton().Use<RemoteSettings>());
             Container.Configure(x => x.For<IAccountSettings>().Singleton().Use<AccountSettings>());
-            Container.Configure(x => x.For<IAccountSettingsItem>().Singleton().Use<AccountSettingsItem>());
+            Container.Configure(x => x.For<IAccountSettingsItem>().Use<AccountSettingsItem>());
         }
 
         public static ContainerConfigurationForSettings GetContainer()

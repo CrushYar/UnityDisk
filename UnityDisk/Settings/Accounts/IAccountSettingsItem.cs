@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace UnityDisk.Settings.Accounts
 {
-    public interface IAccountSettingsItem
+    public interface IAccountSettingsItem: IEquatable<IAccountSettingsItem>,IComparable<IAccountSettingsItem>
     {
         string Login { get; set; }
         string Token { get; set; }

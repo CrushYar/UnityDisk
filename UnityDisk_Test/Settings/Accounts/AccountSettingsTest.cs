@@ -15,12 +15,14 @@ namespace UnityDisk_Test.Settings.Accounts
     {
         private Mock<ISettings> _mockService;
         private AccountSettings _settings;
+        private string _parameterName;
 
         [TestInitialize]
         public void BeforeEachTest()
         {
             _mockService = Mock.Create<ISettings>();
-            _settings = new AccountSettings(_mockService.Object);
+            _parameterName = "accountSettings";
+            _settings = new AccountSettings(_mockService.Object, _parameterName);
         }
 
         [TestMethod]
@@ -32,7 +34,24 @@ namespace UnityDisk_Test.Settings.Accounts
             {
                 new AccountSettingsItem() {Login = "myLogin", ServerName = "Yandex", Token = "123"},
             });
-            _mockService.Verify(settings => settings.SetValueAsString("saveAcc", expected),Occurred.Once());
+            _mockService.Verify(settings => settings.SetValueAsString(_parameterName, expected), Occurred.Once());
+        }
+        [TestMethod]
+        public void Can_LoadAccounts()
+        {
+            _mockService = Mock.Create<ISettings>();
+            _parameterName = "accountSettings";
+            _settings = new AccountSettings(_mockService.Object, _parameterName);
+
+            string stub =
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<ArrayOfAccountSettingsItem xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <AccountSettingsItem>\r\n    <Login>myLogin</Login>\r\n    <Token>123</Token>\r\n    <ServerName>Yandex</ServerName>\r\n  </AccountSettingsItem>\r\n</ArrayOfAccountSettingsItem>";
+            var expected = new[]
+            {
+                new AccountSettingsItem() {Login = "myLogin", ServerName = "Yandex", Token = "123"},
+            };
+            _mockService.Setup(settings => settings.GetValueAsString(_parameterName)).Returns(stub);
+            IAccountSettingsItem[] actuality = _settings.LoadAccounts();
+            CollectionAssert.AreEqual(expected, actuality);
         }
     }
 }

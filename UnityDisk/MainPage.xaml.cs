@@ -27,11 +27,6 @@ namespace UnityDisk
     {
         public MainPage()
         {
-            var settings = new AccountSettings();
-            settings.SaveAccounts(new []
-            {
-                new AccountSettingsItem(){Login = "myLogin", ServerName = "Yandex", Token = "123"},
-            });
             this.InitializeComponent();
         }
     }
