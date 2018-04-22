@@ -84,5 +84,32 @@ namespace UnityDisk_Test.Accounts
 
             _mockService.Verify(fileStorage => fileStorage.Update(), Occurred.Once());
         }
+        [TestMethod]
+        public async Task Can_Clone()
+        {
+            string expectedToken = "simpleToken";
+            string expectedLogin = "test@gmail.com";
+            DateTime expectedCreaDate = new DateTime(2018, 4, 22, 2, 7, 0);
+            string expectedServerName = "OneDrive";
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 1000, FreelSize = 300, UsedSize = 700 };
+            ConnectionStatusEnum expectedStatus = ConnectionStatusEnum.Connected;
+
+            _mockService.SetupGet(account => account.Token).Returns(expectedToken);
+            _mockService.SetupGet(account => account.Login).Returns(expectedLogin);
+            _mockService.SetupGet(account => account.CreateDate).Returns(expectedCreaDate);
+            _mockService.SetupGet(account => account.ServerName).Returns(expectedServerName);
+            _mockService.SetupGet(account => account.Status).Returns(expectedStatus);
+            _mockService.SetupGet(account => account.Size).Returns(expectedSize);
+            _mockService.SetupGet(account => account.Clone()).Returns(_mockService.Object);
+
+            var accountClone = _account.Clone();
+
+            Assert.AreEqual(accountClone.Token, expectedToken);
+            Assert.AreEqual(accountClone.Login, expectedLogin);
+            Assert.AreEqual(accountClone.CreateDate, expectedCreaDate);
+            Assert.AreEqual(accountClone.ServerName, expectedServerName);
+            Assert.AreEqual(accountClone.Size, expectedSize);
+            Assert.AreEqual(accountClone.Status, expectedStatus);
+        }
     }
 }
