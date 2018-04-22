@@ -24,6 +24,9 @@ namespace UnityDisk_Test.Accounts
             _account = new Account(_mockService.Object);
         }
 
+        /// <summary>
+        /// Все параметры аккаунта должны зависеть от аккаунта файлового хранилища
+        /// </summary>
         [TestMethod]
         public void BindingParametersTest()
         {
@@ -31,7 +34,7 @@ namespace UnityDisk_Test.Accounts
             string expectedLogin = "test@gmail.com";
             DateTime expectedCreaDate = new DateTime(2018, 4, 22, 2, 7, 0);
             string expectedServerName = "OneDrive";
-            SpaceSize expectedSize = new SpaceSize(){TotalSize = 1000, FreelSize = 300, UsedSize = 700};
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 1000, FreelSize = 300, UsedSize = 700 };
             ConnectionStatusEnum expectedStatus = ConnectionStatusEnum.Connected;
 
             _mockService.SetupGet(account => account.Token).Returns(expectedToken);
@@ -48,6 +51,38 @@ namespace UnityDisk_Test.Accounts
             Assert.AreEqual(_account.Size, expectedSize);
             Assert.AreEqual(_account.Status, expectedStatus);
 
+        }
+
+        [TestMethod]
+        public async Task Can_SignIn()
+        {
+            string token = "simpleToken";
+
+            _mockService.Setup(fileStorage => fileStorage.SignIn(token)).Returns(Task.Run(() => { }));
+
+            await _account.SignIn(token);
+
+            _mockService.Verify(fileStorage => fileStorage.SignIn(token), Occurred.Once());
+        }
+
+        [TestMethod]
+        public async Task Can_SignOut()
+        {
+            _mockService.Setup(fileStorage => fileStorage.SignOut()).Returns(Task.Run(() => { }));
+
+            await _account.SignOut();
+
+            _mockService.Verify(fileStorage => fileStorage.SignOut(), Occurred.Once());
+        }
+
+        [TestMethod]
+        public async Task Can_Update()
+        {
+            _mockService.Setup(fileStorage => fileStorage.Update()).Returns(Task.Run(() => { }));
+
+            await _account.Update();
+
+            _mockService.Verify(fileStorage => fileStorage.Update(), Occurred.Once());
         }
     }
 }
