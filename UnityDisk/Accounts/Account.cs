@@ -7,7 +7,7 @@ using UnityDisk.FileStorages;
 
 namespace UnityDisk.Accounts
 {
-    public class Account : Accounts.IAccount
+    public class Account : IAccount
     {
         private IFileStorageAccount _fileStorageAccount;
 
@@ -40,6 +40,17 @@ namespace UnityDisk.Accounts
         public async Task Update()
         {
             await _fileStorageAccount.Update();
+        }
+
+        public IAccount Clone()
+        {
+            Account account=new Account(_fileStorageAccount.C);
+            throw new NotImplementedException();
+        }
+
+        object ICloneable.Clone()
+        {
+            throw new NotImplementedException();
         }
     }
 }

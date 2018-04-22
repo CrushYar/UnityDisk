@@ -11,6 +11,18 @@ namespace UnityDisk.Accounts
     /// </summary>
    public class SpaceSize
     {
+
+        public SpaceSize(SpaceSize size)
+        {
+            this.TotalSize = size.TotalSize;
+            this.UsedSize = size.UsedSize;
+            this.FreelSize = size.FreelSize;
+        }
+
+        public SpaceSize()
+        {
+
+        }
         /// <summary>
         /// Общий размер
         /// </summary>

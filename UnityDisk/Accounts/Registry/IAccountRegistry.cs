@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
+using UnityDisk.Accounts.Registry.Request;
 
 namespace UnityDisk.Accounts.Registry
 {
@@ -48,7 +49,30 @@ namespace UnityDisk.Accounts.Registry
         /// <summary>
         /// Регистрация аккаунта в реестре
         /// </summary>
-        /// <param name="account"></param>
-        void Registry(IAccount account);
+        /// <param name="account">Аккаунт который нужно добавить в реестр</param>
+        bool Registry(IAccount account);
+        /// <summary>
+        /// Снятие с регистрации аккаунта
+        /// </summary>
+        /// <param name="account">Аккаунт на удаление из реестра</param>
+        bool Delete(IAccount account);
+        /// <summary>
+        /// Проверка на наличе уже зарегистрированного аккаунта в реестре
+        /// </summary>
+        /// <param name="account">Аккаунт наличие которого требуется проверить</param>
+        /// <returns>Результат проверки</returns>
+        bool ContainsAccount(IAccount account);
+        /// <summary>
+        /// Выполнение запросса над указанным аккаунтом
+        /// </summary>
+        /// <param name="login">Логин аккаунта</param>
+        /// <param name="request">Запрос на выполнение</param>
+        void AccountChangeRequest(string login, IChangeAccountRequest request);
+        /// <summary>
+        /// Выполнение запросса над указанным аккаунтом
+        /// </summary>
+        /// <param name="account">Аккаунт действия над которым нужно произвести</param>
+        /// <param name="request">Запрос на выполнение</param>
+        void AccountChangeRequest(IAccount account, IChangeAccountRequest request);
     }
 }
