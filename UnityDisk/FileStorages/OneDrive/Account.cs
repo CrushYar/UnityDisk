@@ -36,10 +36,5 @@ namespace UnityDisk.FileStorages.OneDrive
         {
             throw new NotImplementedException();
         }
-
-        object ICloneable.Clone()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

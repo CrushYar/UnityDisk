@@ -94,14 +94,15 @@
   <ItemGroup>
     <Compile Include="Accounts\Account.cs" />
     <Compile Include="Accounts\IAccount.cs" />
+    <Compile Include="FileStorages\FactoryRagistry\FactoryRagistry.cs" />
+    <Compile Include="FileStorages\FactoryRagistry\IFactoryRagistry.cs" />
+    <Compile Include="FileStorages\IFileStorageFactory.cs" />
     <Compile Include="ICloneable.cs" />
     <Compile Include="Accounts\Registry\AccountRegistry.cs" />
     <Compile Include="Accounts\Registry\RegistryChangedEventArg.cs" />
     <Compile Include="Accounts\Registry\IAccountRegistry.cs" />
     <Compile Include="Accounts\Registry\RegistryLoadedEventArg.cs" />
     <Compile Include="Accounts\Registry\RegistrySizeChangedEventArg.cs" />
-    <Compile Include="Accounts\Registry\Request\ChangeAccountSizeRequest.cs" />
-    <Compile Include="Accounts\Registry\Request\IChangeAccountRequest.cs" />
     <Compile Include="Accounts\SizeChangedEventArg.cs" />
     <Compile Include="Accounts\SpaceSize.cs" />
     <Compile Include="App.xaml.cs">
@@ -117,7 +118,7 @@
     <Compile Include="Settings\Accounts\AccountSettingsItem.cs" />
     <Compile Include="Settings\Accounts\IAccountSettings.cs" />
     <Compile Include="Settings\Accounts\IAccountSettingsItem.cs" />
-    <Compile Include="Settings\ContainerConfigurationForSettings.cs" />
+    <Compile Include="ContainerConfiguration.cs" />
     <Compile Include="Settings\ISettings.cs" />
     <Compile Include="Settings\RemoteSettings.cs" />
   </ItemGroup>
@@ -163,7 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BackgroundOperation\" />
-    <Folder Include="FileStorages\...FileStorageFactoryRagistry\" />
     <Folder Include="FileStorages\Dropbox\FileStorageAccount\" />
     <Folder Include="FileStorages\Dropbox\FileStorageFactory\" />
     <Folder Include="FileStorages\Dropbox\FileStorageItem\" />

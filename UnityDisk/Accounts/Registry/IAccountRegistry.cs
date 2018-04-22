@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace UnityDisk.Accounts.Registry
 {
-    interface IAccountRegistry
+   public interface IAccountRegistry
     {
         /// <summary>
         /// Имя пользователя локального компьютера

@@ -17,15 +17,15 @@ namespace UnityDisk.Accounts.Registry
         /// <summary>
         /// реестр аккаунтов, где логин является ключем
         /// </summary>
-        private Dictionary<string, IAccount> _accounts;
+        private readonly Dictionary<string, IAccount> _accounts;
         /// <summary>
         /// Настройки аккаунта
         /// </summary>
-        private IAccountSettings _settings;
+        private readonly IAccountSettings _settings;
         /// <summary>
         /// loc контейнер с настройками
         /// </summary>
-        private IContainer _settingsContainer;
+        private readonly IContainer _settingsContainer;
         /// <summary>
         /// Объект синхронизации
         /// </summary>
@@ -53,9 +53,16 @@ namespace UnityDisk.Accounts.Registry
 
         public AccountRegistry()
         {
-            _settingsContainer = ContainerConfigurationForSettings.GetContainer().Container;
+            _settingsContainer = ContainerConfiguration.GetContainer().Container;
             _settings = _settingsContainer.GetInstance<IAccountSettings>();
             _accounts =new Dictionary<string, IAccount>(10);
+        }
+
+        public AccountRegistry(IAccountSettings settings)
+        {
+            _settingsContainer = ContainerConfiguration.GetContainer().Container;
+            _settings = settings;
+            _accounts = new Dictionary<string, IAccount>(10);
         }
         public IAccount Find(string login)
         {

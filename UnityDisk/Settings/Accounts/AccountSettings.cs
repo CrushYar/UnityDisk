@@ -22,14 +22,14 @@ namespace UnityDisk.Settings.Accounts
 
         public AccountSettings()
         {
-            _settingsContainer = ContainerConfigurationForSettings.GetContainer().Container;
+            _settingsContainer = ContainerConfiguration.GetContainer().Container;
             _settings = _settingsContainer.GetInstance<ISettings>();
             _parameterName = "saveAcc";
         }
 
         public AccountSettings(ISettings settings,string parameterName)
         {
-            _settingsContainer = ContainerConfigurationForSettings.GetContainer().Container;
+            _settingsContainer = ContainerConfiguration.GetContainer().Container;
             _settings = settings;
             _parameterName = parameterName;
         }
