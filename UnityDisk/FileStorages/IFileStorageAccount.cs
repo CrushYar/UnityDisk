@@ -16,7 +16,7 @@ namespace UnityDisk.FileStorages
         /// <summary>
         /// Дата создания
         /// </summary>
-        DateTimeOffset CreateDate { get; set; }
+        DateTime CreateDate { get; set; }
         /// <summary>
         /// Информация о состоянии памяти файлового хранилища аккаунта
         /// </summary>
@@ -37,21 +37,6 @@ namespace UnityDisk.FileStorages
         /// Статус подключения
         /// </summary>
         ConnectionStatusEnum Status { get; set; }
-
-        // + groups : IList<String>
-
-        /// <summary>
-        /// Событие вызываемое во время изменения размера пространства файлового хранилища аккаунта
-        /// </summary>
-        event EventHandler<SizeChangedEventArg> ChangedSizeEvent;
-        /// <summary>
-        /// Событие вызываемое во время входа в аккаунт
-        /// </summary>
-        event EventHandler<IAccount> SignedInEvent;
-        /// <summary>
-        /// Событие вызываемое во время выхода из аккаунта
-        /// </summary>
-        event EventHandler<IAccount> SignedOutEvent;
 
         /// <summary>
         /// Вход в аккаунт

@@ -27,7 +27,7 @@ namespace UnityDisk.Accounts
         /// <summary>
         /// Дата создания
         /// </summary>
-        DateTimeOffset CreateDate { get; set; }
+        DateTime CreateDate { get; set; }
         /// <summary>
         /// Информация о состоянии памяти файлового хранилища аккаунта
         /// </summary>

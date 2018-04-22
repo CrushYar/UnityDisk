@@ -14,14 +14,14 @@ namespace UnityDisk.Accounts
         /// <summary>
         /// Общий размер
         /// </summary>
-        long TotalSize { get; set; }
+        public long TotalSize { get; set; }
         /// <summary>
         /// Используемый размер
         /// </summary>
-        long UsedSize { get; set; }
+        public long UsedSize { get; set; }
         /// <summary>
         /// Свободный размер
         /// </summary>
-        long FreelSize { get; set; }
+        public long FreelSize { get; set; }
     }
 }
