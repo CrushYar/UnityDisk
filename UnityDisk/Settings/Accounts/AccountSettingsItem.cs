@@ -29,7 +29,7 @@ namespace UnityDisk.Settings.Accounts
         public override Boolean Equals(Object o)
         {
             IAccountSettingsItem other = o as IAccountSettingsItem;
-            if (o == null) return false;
+            if (other == null) return false;
             return Login.Equals(other.Login) && Token.Equals(other.Token) && ServerName.Equals(other.ServerName);
         }
     }

@@ -25,7 +25,7 @@ namespace UnityDisk.Accounts.Registry
         /// <summary>
         /// loc контейнер с настройками
         /// </summary>
-        private readonly IContainer _settingsContainer;
+        private readonly IContainer _container;
         /// <summary>
         /// Объект синхронизации
         /// </summary>
@@ -53,15 +53,20 @@ namespace UnityDisk.Accounts.Registry
 
         public AccountRegistry()
         {
-            _settingsContainer = ContainerConfiguration.GetContainer().Container;
-            _settings = _settingsContainer.GetInstance<IAccountSettings>();
+            _container = ContainerConfiguration.GetContainer().Container;
+            _settings = _container.GetInstance<IAccountSettings>();
             _accounts =new Dictionary<string, IAccount>(10);
         }
 
-        public AccountRegistry(IAccountSettings settings)
+        /// <summary>
+        /// Используется для Unit Test
+        /// </summary>
+        /// <param name="settingsContainer"></param>
+        /// <param name="accountContainer"></param>
+        public AccountRegistry(IContainer settingsContainer, IContainer accountContainer)
         {
-            _settingsContainer = ContainerConfiguration.GetContainer().Container;
-            _settings = settings;
+            _container = accountContainer;
+            _settings = settingsContainer.GetInstance<IAccountSettings>();
             _accounts = new Dictionary<string, IAccount>(10);
         }
         public IAccount Find(string login)
@@ -123,13 +128,29 @@ namespace UnityDisk.Accounts.Registry
             UnLock();
             return result;
         }
+
         /// <summary>
         /// Загрузка аккаунтов
         /// </summary>
         private void LoadSettings()
         {
-            
+            IAccountSettingsItem[] accountSettingsItems = _settings.LoadAccounts();
+
+            Lock();
+
+            foreach (var settingsItem in accountSettingsItems)
+            {
+                var account = _container.GetInstance<IAccount>();
+                account.Login = settingsItem.Login;
+                account.Token = settingsItem.Token;
+                account.ServerName = settingsItem.ServerName;
+
+                if (account.LoadServer(settingsItem.ServerName))
+                    _accounts.Add(settingsItem.Login, account);
+            }
+            UnLock();
         }
+
         /// <summary>
         /// Сохранение аккаунтов
         /// </summary>
@@ -160,11 +181,13 @@ namespace UnityDisk.Accounts.Registry
         }
         private void OnLoadedEvent()
         {
-            IList<IAccount> loadedAccounts=new List<IAccount>(_accounts.Count);
+            IAccount[] loadedAccounts=new IAccount[_accounts.Count];
             Lock();
+            int i = 0;
             foreach (var account in _accounts)
             {
-                loadedAccounts.Add(account.Value.Clone());
+                loadedAccounts[i]=account.Value.Clone();
+                i++;
             }
             UnLock();
             LoadedEvent?.Invoke(this,
@@ -193,7 +216,9 @@ namespace UnityDisk.Accounts.Registry
             Lock();
             _accounts.Clear();
             UnLock();
+
             OnChangedRegistryEvent(null,RegistryActionEnum.Reseted);
+
             LoadSettings();
             OnLoadedEvent();
         }

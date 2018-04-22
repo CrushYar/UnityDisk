@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityDisk.Accounts.Registry;
 using UnityDisk.FileStorages;
+using UnityDisk.FileStorages.FactoryRagistry;
+using UnityDisk.Settings.Accounts;
 
 namespace UnityDisk.Accounts
 {
@@ -23,10 +26,21 @@ namespace UnityDisk.Accounts
         public event EventHandler<IAccount> SignedInEvent;
         public event EventHandler<IAccount> SignedOutEvent;
 
+        public Account() { }
+
         public Account(IFileStorageAccount fileStorageAccount)
         {
             this._fileStorageAccount = fileStorageAccount;
         }
+
+        public bool LoadServer(string serverName)
+        {
+            var container = ContainerConfiguration.GetContainer().Container;
+            var factory = container.GetInstance<IFactoryRagistry>();
+            _fileStorageAccount = factory.CreateAccount(serverName);
+            return _fileStorageAccount != null;
+        }
+
         public async Task SignIn(string key)
         {
            await _fileStorageAccount.SignIn(key);
@@ -44,7 +58,7 @@ namespace UnityDisk.Accounts
 
         public IAccount Clone()
         {
-            Account account=new Account(_fileStorageAccount.Clone());
+            Account account=new Account(/*_fileStorageAccount.Clone()*/);
             account.CreateDate=CreateDate;
             account.Login = Login;
             account.ServerName = ServerName;
@@ -55,5 +69,13 @@ namespace UnityDisk.Accounts
             return account;
         }
 
+        public override Boolean Equals(Object o)
+        {
+            IAccount other = o as IAccount;
+            if (other == null) return false;
+            return Login.Equals(other.Login)
+                   && Token.Equals(other.Token)
+                   && ServerName.Equals(other.ServerName);
+        }
     }
 }

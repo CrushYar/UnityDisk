@@ -65,6 +65,12 @@ namespace UnityDisk.Accounts
         event EventHandler<IAccount> SignedOutEvent;
 
         /// <summary>
+        /// Загрузка коннектора
+        /// </summary>
+        /// <param name="serverName">Имя сервера</param>
+        /// <returns>Успех уперации</returns>
+        bool LoadServer(string serverName);
+        /// <summary>
         /// Вход в аккаунт
         /// </summary>
         /// <param name="key"></param>

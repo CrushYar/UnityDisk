@@ -8,6 +8,6 @@ namespace UnityDisk.Accounts.Registry
 {
    public class RegistryLoadedEventArg:EventArgs
     {
-        public IList<IAccount> Accounts { get; set; }
+        public IAccount[] Accounts { get; set; }
     }
 }

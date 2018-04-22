@@ -14,7 +14,10 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using StructureMap;
 using StructureMap.Pipeline;
+using UnityDisk.Accounts;
+using UnityDisk.FileStorages;
 using UnityDisk.Settings.Accounts;
+using System.Threading.Tasks;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
