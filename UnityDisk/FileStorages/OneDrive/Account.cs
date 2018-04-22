@@ -17,7 +17,11 @@ namespace UnityDisk.FileStorages.OneDrive
         public bool IsFree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public ConnectionStatusEnum Status { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-     
+        public IFileStorageAccount Clone()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task SignIn(string key)
         {
             throw new NotImplementedException();
@@ -29,6 +33,11 @@ namespace UnityDisk.FileStorages.OneDrive
         }
 
         public Task Update()
+        {
+            throw new NotImplementedException();
+        }
+
+        object ICloneable.Clone()
         {
             throw new NotImplementedException();
         }

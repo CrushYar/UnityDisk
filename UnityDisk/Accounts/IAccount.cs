@@ -18,7 +18,7 @@ namespace UnityDisk.Accounts
     /// <summary>
     /// Базовый интерфейс акканту
     /// </summary>
-    public interface IAccount
+    public interface IAccount : ICloneable<IAccount>
     {
         /// <summary>
         /// Логин

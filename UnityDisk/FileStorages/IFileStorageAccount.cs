@@ -7,7 +7,7 @@ using UnityDisk.Accounts;
 
 namespace UnityDisk.FileStorages
 {
-    public interface IFileStorageAccount
+    public interface IFileStorageAccount: ICloneable<IFileStorageAccount>
     {
         /// <summary>
         /// Логин

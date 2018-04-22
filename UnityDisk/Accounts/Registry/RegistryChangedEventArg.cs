@@ -8,7 +8,7 @@ namespace UnityDisk.Accounts.Registry
 {
     public enum RegistryActionEnum
     {
-        AddedAccount, RemovedAccount
+        AddedAccount, RemovedAccount,Reseted
     }
     public class RegistryChangedEventArg:EventArgs
     {
