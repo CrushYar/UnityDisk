@@ -100,6 +100,8 @@
     <Compile Include="Accounts\Registry\IAccountRegistry.cs" />
     <Compile Include="Accounts\Registry\RegistryLoadedEventArg.cs" />
     <Compile Include="Accounts\Registry\RegistrySizeChangedEventArg.cs" />
+    <Compile Include="Accounts\Registry\Request\ChangeAccountSizeRequest.cs" />
+    <Compile Include="Accounts\Registry\Request\IChangeAccountRequest.cs" />
     <Compile Include="Accounts\SizeChangedEventArg.cs" />
     <Compile Include="Accounts\SpaceSize.cs" />
     <Compile Include="App.xaml.cs">
