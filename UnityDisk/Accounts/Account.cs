@@ -58,7 +58,7 @@ namespace UnityDisk.Accounts
 
         public IAccount Clone()
         {
-            Account account=new Account(/*_fileStorageAccount.Clone()*/);
+            Account account=new Account(_fileStorageAccount.Clone());
             account.CreateDate=CreateDate;
             account.Login = Login;
             account.ServerName = ServerName;
