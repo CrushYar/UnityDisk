@@ -145,7 +145,7 @@ namespace UnityDisk.Accounts.Registry
                 account.Token = settingsItem.Token;
                 account.ServerName = settingsItem.ServerName;
 
-                if (account.LoadServer(settingsItem.ServerName))
+                if (account.LoadConnector(settingsItem.ServerName))
                     _accounts.Add(settingsItem.Login, account);
             }
             UnLock();
