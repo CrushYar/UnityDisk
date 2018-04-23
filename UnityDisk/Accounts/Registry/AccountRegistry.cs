@@ -74,7 +74,7 @@ namespace UnityDisk.Accounts.Registry
             Lock();
             _accounts.TryGetValue(login, out IAccount value);
             UnLock();
-            return value;
+            return value?.Clone();
         }
 
         public bool Registry(IAccount account)
