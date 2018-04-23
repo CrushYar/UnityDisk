@@ -14,6 +14,8 @@ namespace UnityDisk.Accounts.Registry
 {
     public class AccountRegistry : IAccountRegistry
     {
+        private SpaceSize _size=new SpaceSize();
+        private BitmapImage _userImage;
         /// <summary>
         /// реестр аккаунтов, где логин является ключем
         /// </summary>
@@ -33,15 +35,15 @@ namespace UnityDisk.Accounts.Registry
         /// <summary>
         /// Имя пользователя локального компьютера
         /// </summary>
-        public string UserName { get; set; }
+        public string UserName { get;private set; }
         /// <summary>
         /// Изображение пользователя локального компьютера
         /// </summary>
-        public BitmapImage UserImage { get; set; }
+        public BitmapImage UserImage { get=>new BitmapImage(_userImage.UriSource); private set=> _userImage=value ; }
         /// <summary>
         /// Общее пространство
         /// </summary>
-        public SpaceSize Size { get; set; }
+        public SpaceSize Size {get => new SpaceSize(_size); private set=>_size=value; }
         /// <summary>
         /// Количество зарегистрированных аккаунтов
         /// </summary>
@@ -88,10 +90,10 @@ namespace UnityDisk.Accounts.Registry
             UnLock();
             if (!isContains)
             {
-                SpaceSize oldSize =new SpaceSize(Size);
-                Size.TotalSize += account.Size.TotalSize;
-                Size.UsedSize += account.Size.UsedSize;
-                Size.FreelSize += account.Size.FreelSize;
+                SpaceSize oldSize = _size;
+                _size.TotalSize += account.Size.TotalSize;
+                _size.UsedSize += account.Size.UsedSize;
+                _size.FreelSize += account.Size.FreelSize;
                 SaveSettings();
                 OnChangedSizeEvent(oldSize,account.Clone());
                 OnChangedRegistryEvent(account.Clone(), RegistryActionEnum.AddedAccount);
@@ -111,10 +113,10 @@ namespace UnityDisk.Accounts.Registry
             UnLock();
             if (isContains)
             {
-                SpaceSize oldSize = new SpaceSize(Size);
-                Size.TotalSize += account.Size.TotalSize;
-                Size.UsedSize += account.Size.UsedSize;
-                Size.FreelSize += account.Size.FreelSize;
+                SpaceSize oldSize = Size;
+                _size.TotalSize += account.Size.TotalSize;
+                _size.UsedSize += account.Size.UsedSize;
+                _size.FreelSize += account.Size.FreelSize;
                 SaveSettings();
                 OnChangedSizeEvent(oldSize, account.Clone());
                 OnChangedRegistryEvent(account.Clone(), RegistryActionEnum.RemovedAccount);
@@ -156,7 +158,15 @@ namespace UnityDisk.Accounts.Registry
         /// </summary>
         private void SaveSettings()
         {
-
+            Lock();
+            IAccountSettingsItem[] settingsItems= new AccountSettingsItem[_accounts.Count];
+            int i = 0;
+            foreach (var account in _accounts)
+            {
+                settingsItems[i++]=new AccountSettingsItem(account.Value);
+            }
+            UnLock();
+            _settings.SaveAccounts(settingsItems);
         }
 
         private void Lock()

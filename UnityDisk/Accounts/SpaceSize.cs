@@ -35,5 +35,12 @@ namespace UnityDisk.Accounts
         /// Свободный размер
         /// </summary>
         public long FreelSize { get; set; }
+
+        public override Boolean Equals(Object o)
+        {
+            SpaceSize other = o as SpaceSize;
+            if (other == null) return false;
+            return other.FreelSize == FreelSize && other.TotalSize == TotalSize && other.UsedSize == UsedSize;
+        }
     }
 }

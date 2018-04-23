@@ -12,17 +12,17 @@ namespace UnityDisk.Accounts.Registry
         /// <summary>
         /// Имя пользователя локального компьютера
         /// </summary>
-        string UserName { get; set; }
+        string UserName { get; }
 
         /// <summary>
         /// Изображение пользователя локального компьютера
         /// </summary>
-        BitmapImage UserImage { get; set; }
+        BitmapImage UserImage { get; }
 
         /// <summary>
         /// Размер общего дискового пространства
         /// </summary>
-        SpaceSize Size { get; set; }
+        SpaceSize Size { get; }
 
         /// <summary>
         /// Количество зарегистрированных аккаунтов

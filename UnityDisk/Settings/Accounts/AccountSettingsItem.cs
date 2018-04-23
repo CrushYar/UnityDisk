@@ -3,11 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityDisk.Accounts;
 
 namespace UnityDisk.Settings.Accounts
 {
     public class AccountSettingsItem : IAccountSettingsItem
     {
+
+        public AccountSettingsItem() { }
+        public AccountSettingsItem(IAccount account)
+        {
+            this.Login = account.Login;
+            this.Token = account.Token;
+            this.ServerName = account.ServerName;
+        }
+
         public string Login { get; set; }
         public string Token { get; set; }
         public string ServerName { get; set; }
