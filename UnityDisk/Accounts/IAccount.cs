@@ -69,7 +69,7 @@ namespace UnityDisk.Accounts
         /// </summary>
         /// <param name="serverName">Имя сервера</param>
         /// <returns>Успех уперации</returns>
-        bool LoadServer(string serverName);
+        bool LoadConnector(string serverName);
         /// <summary>
         /// Вход в аккаунт
         /// </summary>

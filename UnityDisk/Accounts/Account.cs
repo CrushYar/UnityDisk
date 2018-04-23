@@ -33,7 +33,7 @@ namespace UnityDisk.Accounts
             this._fileStorageAccount = fileStorageAccount;
         }
 
-        public bool LoadServer(string serverName)
+        public bool LoadConnector(string serverName)
         {
             var container = ContainerConfiguration.GetContainer().Container;
             var factory = container.GetInstance<IFactoryRagistry>();

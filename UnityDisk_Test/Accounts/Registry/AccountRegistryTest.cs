@@ -35,12 +35,7 @@ namespace UnityDisk_Test.Accounts.Registry
             _mockAccount = Mock.Create<IAccount>();
             _mockFileStorageAccount = Mock.Create<IFileStorageAccount>();
         }
-        /*  account.Login = settingsItem.Login;
-           account.Token = settingsItem.Token;
-           account.ServerName = settingsItem.ServerName;
-           
-           if (account.LoadServer(settingsItem.Token))*/
-
+       
         [TestMethod]
         public async Task Can_Load()
         {
@@ -64,7 +59,7 @@ namespace UnityDisk_Test.Accounts.Registry
             };
 
             _mockAccountSettings.SetupGet(settings=>settings.LoadAccounts()).Returns(accountSettingsStub);
-            _mockAccount.SetupGet(acc => acc.LoadServer(expectedServerName)).Returns(true);
+            _mockAccount.SetupGet(acc => acc.LoadConnector(expectedServerName)).Returns(true);
             _mockAccount.SetupGet(acc => acc.Clone()).Returns(_mockAccount.Object);
             _mockAccount.SetupGet(acc => acc.Login).Returns(expectedLogin);
             _mockAccount.SetupGet(acc => acc.ServerName).Returns(expectedServerName);
