@@ -97,6 +97,7 @@ namespace UnityDisk_Test.Accounts.Registry
             _mockAccountSettings.SetupGet(settings => settings.LoadAccounts()).Returns(accountSettingsStub);
             _mockAccount.SetupGet(acc => acc.LoadConnector(expectedServerName)).Returns(true);
             _mockAccount.SetupGet(acc => acc.Clone()).Returns(_mockAccount.Object);
+            _mockAccount.SetupGet(acc => acc.Size).Returns(new SpaceSize(){ TotalSize = 100,FreelSize = 30,UsedSize = 70});
 
             _mockAccountContainer.SetupGet(container => container.GetInstance<IAccount>()).Returns(_mockAccount.Object);
             _mockSettingsContainer.SetupGet(container => container.GetInstance<IAccountSettings>()).Returns(_mockAccountSettings.Object);
