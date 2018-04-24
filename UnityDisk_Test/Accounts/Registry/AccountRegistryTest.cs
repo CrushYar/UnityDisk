@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ namespace UnityDisk_Test.Accounts.Registry
         }
        
         [TestMethod]
-        public async Task Can_Load()
+        public void Can_Load()
         {
             string expectedLogin = "login1",
                  expectedServerName = "pCloud",
@@ -79,7 +80,7 @@ namespace UnityDisk_Test.Accounts.Registry
         }
 
         [TestMethod]
-        public async Task Can_Find()
+        public void Can_Find()
         {
             string expectedLogin = "login1",
                expectedServerName = "pCloud",
@@ -115,12 +116,12 @@ namespace UnityDisk_Test.Accounts.Registry
         }
 
         [TestMethod]
-        public async Task Can_Registry()
+        public void Can_Registry()
         {
             string expectedLogin = "login1",
                 expectedServerName = "pCloud",
                 expectedToken = "123456987";
-            SpaceSize expectedSize=new SpaceSize(){TotalSize = 100,FreelSize = 70,UsedSize = 30};
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 70, UsedSize = 30 };
             _mockAccountSettings.SetupGet(settings => settings.LoadAccounts()).Returns(Array.Empty<IAccountSettingsItem>());
             _mockAccount.SetupGet(acc => acc.LoadConnector(expectedServerName)).Returns(true);
             _mockAccount.SetupGet(acc => acc.Clone()).Returns(_mockAccount.Object);
@@ -138,7 +139,37 @@ namespace UnityDisk_Test.Accounts.Registry
 
             _mockAccount.Verify(acc => acc.Clone(), Occurred.Exactly(3));
             Assert.IsNotNull(accountFound);
+        }
+        [TestMethod]
+        public void Can_SaveSettings()
+        {
+            string expectedLogin = "login1",
+                expectedServerName = "pCloud",
+                expectedToken = "123456987";
+            var expectedAccountSettings = new[]
+            {
+                new AccountSettingsItem()
+                {
+                    Login = expectedLogin, ServerName = expectedServerName, Token = expectedToken
+                }
+            };
 
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 70, UsedSize = 30 };
+            _mockAccountSettings.SetupGet(settings => settings.LoadAccounts()).Returns(Array.Empty<IAccountSettingsItem>());
+            _mockAccount.SetupGet(acc => acc.LoadConnector(expectedServerName)).Returns(true);
+            _mockAccount.SetupGet(acc => acc.Clone()).Returns(_mockAccount.Object);
+            _mockAccount.SetupGet(acc => acc.Login).Returns(expectedLogin);
+            _mockAccount.SetupGet(acc => acc.ServerName).Returns(expectedServerName);
+            _mockAccount.SetupGet(acc => acc.Token).Returns(expectedToken);
+            _mockAccount.SetupGet(acc => acc.Size).Returns(expectedSize);
+            _mockAccount.SetupGet(acc => acc.Login).Returns(expectedLogin);
+
+            _mockSettingsContainer.SetupGet(container => container.GetInstance<IAccountSettings>()).Returns(_mockAccountSettings.Object);
+
+            _accountRegistry = new AccountRegistry(_mockSettingsContainer.Object, _mockAccountContainer.Object);
+
+            _accountRegistry.Registry(_mockAccount.Object);
+            _mockAccountSettings.Verify(settings=>settings.SaveAccounts(Param.Is<IAccountSettingsItem[]>(items=>items.SequenceEqual(expectedAccountSettings))),Occurred.Once());
         }
     }
 }
