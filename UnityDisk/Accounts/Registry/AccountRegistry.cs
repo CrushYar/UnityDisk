@@ -138,8 +138,12 @@ namespace UnityDisk.Accounts.Registry
         {
             IAccountSettingsItem[] accountSettingsItems = _settings.LoadAccounts();
 
-            Lock();
+            _size.TotalSize = 0;
+            _size.UsedSize = 0;
+            _size.FreelSize = 0;
 
+            Lock();
+            
             foreach (var settingsItem in accountSettingsItems)
             {
                 var account = _container.GetInstance<IAccount>();
@@ -148,7 +152,12 @@ namespace UnityDisk.Accounts.Registry
                 account.ServerName = settingsItem.ServerName;
 
                 if (account.LoadConnector(settingsItem.ServerName))
+                {
                     _accounts.Add(settingsItem.Login, account);
+                    _size.TotalSize += account.Size.TotalSize;
+                    _size.UsedSize += account.Size.UsedSize;
+                    _size.FreelSize += account.Size.FreelSize;
+                }
             }
             UnLock();
         }
@@ -201,7 +210,7 @@ namespace UnityDisk.Accounts.Registry
             }
             UnLock();
             LoadedEvent?.Invoke(this,
-                new RegistryLoadedEventArg() {Accounts = loadedAccounts });
+                new RegistryLoadedEventArg() {Accounts = loadedAccounts , Size =Size});
         }
 
         public void ChangeAccountSize(string login, SpaceSize newSize)
@@ -212,7 +221,7 @@ namespace UnityDisk.Accounts.Registry
             if(account==null)return;
             SpaceSize oldSize = Size;
             account.Size=new SpaceSize(newSize);
-            SaveSettings();
+            //SaveSettings();
             OnChangedSizeEvent(oldSize,account.Clone());
         }
 

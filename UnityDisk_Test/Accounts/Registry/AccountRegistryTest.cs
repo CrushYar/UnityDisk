@@ -14,7 +14,7 @@ using UnityDisk.Accounts.Registry;
 using UnityDisk.FileStorages;
 using UnityDisk.Settings;
 using UnityDisk.Settings.Accounts;
-using UnityDisk;
+
 namespace UnityDisk_Test.Accounts.Registry
 {
     [TestClass]
@@ -43,6 +43,7 @@ namespace UnityDisk_Test.Accounts.Registry
             string expectedLogin = "login1",
                  expectedServerName = "pCloud",
                  expectedToken = "123456987";
+            SpaceSize expectedSize = new SpaceSize(){TotalSize = 100, FreelSize = 70,UsedSize = 30};
             var accountSettingsStub = new[]
             {
                 new AccountSettingsItem()
@@ -50,16 +51,11 @@ namespace UnityDisk_Test.Accounts.Registry
                     Login = expectedLogin, ServerName = expectedServerName, Token = expectedToken
                 },
             };
-            Mock<IFileStorageAccount> fileStorageStub = Mock.Create<IFileStorageAccount>();
-
-            fileStorageStub.SetupGet(acc => acc.Login).Returns(expectedLogin);
-            fileStorageStub.SetupGet(acc => acc.ServerName).Returns(expectedServerName);
-            fileStorageStub.SetupGet(acc => acc.Token).Returns(expectedToken);
-            var expected = new Account(fileStorageStub.Object);
-
+         
             _mockAccountSettings.SetupGet(settings => settings.LoadAccounts()).Returns(accountSettingsStub);
             _mockAccount.SetupGet(acc => acc.LoadConnector(expectedServerName)).Returns(true);
             _mockAccount.SetupGet(acc => acc.Clone()).Returns(_mockAccount.Object);
+            _mockAccount.SetupGet(acc => acc.Size).Returns(expectedSize);
 
             _mockAccountContainer.SetupGet(container => container.GetInstance<IAccount>()).Returns(_mockAccount.Object);
             _mockSettingsContainer.SetupGet(container => container.GetInstance<IAccountSettings>()).Returns(_mockAccountSettings.Object);
@@ -75,6 +71,7 @@ namespace UnityDisk_Test.Accounts.Registry
                 _mockAccount.VerifySet(acc => acc.Login, expectedLogin, Occurred.Once());
                 _mockAccount.VerifySet(acc => acc.ServerName, expectedServerName, Occurred.Once());
                 _mockAccount.VerifySet(acc => acc.Token, expectedToken, Occurred.Once());
+                Assert.AreEqual(e.Size, expectedSize);
             };
             _accountRegistry.Load();
         }

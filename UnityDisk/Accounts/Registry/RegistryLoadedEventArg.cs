@@ -8,6 +8,7 @@ namespace UnityDisk.Accounts.Registry
 {
    public class RegistryLoadedEventArg:EventArgs
     {
+        public SpaceSize Size { get; set; }
         public IAccount[] Accounts { get; set; }
     }
 }

@@ -42,5 +42,9 @@ namespace UnityDisk.Accounts
             if (other == null) return false;
             return other.FreelSize == FreelSize && other.TotalSize == TotalSize && other.UsedSize == UsedSize;
         }
+        public Boolean Equals(SpaceSize other)
+        {
+            return other.FreelSize == FreelSize && other.TotalSize == TotalSize && other.UsedSize == UsedSize;
+        }
     }
 }
