@@ -168,5 +168,31 @@ namespace UnityDisk_Test.Accounts.Registry
             _accountRegistry.Registry(_mockAccount.Object);
             _mockAccountSettings.Verify(settings=>settings.SaveAccounts(Param.Is<IAccountSettingsItem[]>(items=>items.SequenceEqual(expectedAccountSettings))),Occurred.Once());
         }
+        [TestMethod]
+        public void Can_Delete()
+        {
+            string expectedLogin = "login1",
+                expectedServerName = "pCloud",
+                expectedToken = "123456987";
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 70, UsedSize = 30 };
+            _mockAccountSettings.SetupGet(settings => settings.LoadAccounts()).Returns(Array.Empty<IAccountSettingsItem>());
+            _mockAccount.SetupGet(acc => acc.LoadConnector(expectedServerName)).Returns(true);
+            _mockAccount.SetupGet(acc => acc.Clone()).Returns(_mockAccount.Object);
+            _mockAccount.SetupGet(acc => acc.Size).Returns(expectedSize);
+            _mockAccount.SetupGet(acc => acc.Login).Returns(expectedLogin);
+
+            // _mockAccountContainer.SetupGet(container => container.GetInstance<IAccount>()).Returns(_mockAccount.Object);
+            _mockSettingsContainer.SetupGet(container => container.GetInstance<IAccountSettings>()).Returns(_mockAccountSettings.Object);
+
+            _accountRegistry = new AccountRegistry(_mockSettingsContainer.Object, _mockAccountContainer.Object);
+
+            _accountRegistry.Registry(_mockAccount.Object);
+            Assert.IsTrue(_accountRegistry.Delete(expectedLogin));
+            Assert.AreEqual(_accountRegistry.Size, new SpaceSize());
+            IAccount accountFound = _accountRegistry.Find(expectedLogin);
+
+            _mockAccount.Verify(acc => acc.Clone(), Occurred.Exactly(4));
+            Assert.IsNull(accountFound);
+        }
     }
 }

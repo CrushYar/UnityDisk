@@ -103,23 +103,27 @@ namespace UnityDisk.Accounts.Registry
         }
         public bool Delete(IAccount account)
         {
-            bool isContains;
+            return Delete(account.Login);
+        }
+        public bool Delete(string login)
+        {
             Lock();
-            isContains = _accounts.ContainsKey(account.Login);
+            _accounts.TryGetValue(login,out IAccount  accountForRemoved);
+            bool isContains = accountForRemoved != null;
             if (isContains)
             {
-                _accounts.Remove(account.Login);
+                _accounts.Remove(login);
             }
             UnLock();
             if (isContains)
             {
                 SpaceSize oldSize = Size;
-                _size.TotalSize += account.Size.TotalSize;
-                _size.UsedSize += account.Size.UsedSize;
-                _size.FreelSize += account.Size.FreelSize;
+                _size.TotalSize -= accountForRemoved.Size.TotalSize;
+                _size.UsedSize -= accountForRemoved.Size.UsedSize;
+                _size.FreelSize -= accountForRemoved.Size.FreelSize;
                 SaveSettings();
-                OnChangedSizeEvent(oldSize, account.Clone());
-                OnChangedRegistryEvent(account.Clone(), RegistryActionEnum.RemovedAccount);
+                OnChangedSizeEvent(oldSize, accountForRemoved.Clone());
+                OnChangedRegistryEvent(accountForRemoved.Clone(), RegistryActionEnum.RemovedAccount);
             }
             return isContains;
         }
