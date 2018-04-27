@@ -10,6 +10,7 @@ using UnityDisk.Settings.Accounts;
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
+using UnityDisk.Accounts.Registry;
 
 namespace UnityDisk
 {
@@ -26,7 +27,8 @@ namespace UnityDisk
                 new InjectionConstructor())
                 .RegisterType<IAccount, Account>(new InjectionConstructor())
                 .RegisterType<IAccountSettingsItem, AccountSettingsItem>(new InjectionConstructor())
-                .RegisterType<IFactoryRagistry, FactoryRagistry>();
+                .RegisterType<IFactoryRagistry, FactoryRagistry>(new InjectionConstructor())
+                .RegisterType<IAccountProjection, AccountProjection>(new InjectionConstructor());
         }
 
         public static ContainerConfiguration GetContainer()

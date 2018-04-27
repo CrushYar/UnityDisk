@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityDisk.Accounts;
+using UnityDisk.Accounts.Registry;
 
 namespace UnityDisk.GroupTree
 { 
@@ -15,6 +16,6 @@ namespace UnityDisk.GroupTree
         /// <summary>
         /// Коллекция аккаунтов находящиеся в группе
         /// </summary>
-        IList<IAccount> Items { get; }
+        IList<IAccountProjection> Items { get; }
     }
 }

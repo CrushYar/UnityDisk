@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityDisk.Accounts;
+using UnityDisk.Accounts.Registry;
 
 namespace UnityDisk.GroupTree
 {
     public sealed class Group : IGroup
     {
         private SpaceSize _size;
-        public IList<IAccount> Items { get; private set; }
+        public IList<IAccountProjection> Items { get; private set; }
         public string Name { get; set; }
         public SpaceSize Size => new SpaceSize(_size);
 
