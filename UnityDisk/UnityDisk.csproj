@@ -101,11 +101,7 @@
     <Compile Include="FileStorages\FactoryRagistry\IFactoryRagistry.cs" />
     <Compile Include="FileStorages\IFileStorageFactory.cs" />
     <Compile Include="GroupTree\Container.cs" />
-    <Compile Include="GroupTree\ContainerUnloadedEventArg.cs" />
-    <Compile Include="GroupTree\ContainerLoadedEventArg.cs" />
     <Compile Include="GroupTree\Group.cs" />
-    <Compile Include="GroupTree\GroupLoadedEventArg.cs" />
-    <Compile Include="GroupTree\GroupUnloadedEventArg.cs" />
     <Compile Include="GroupTree\IContainer.cs" />
     <Compile Include="GroupTree\IGroupTreeItem.cs" />
     <Compile Include="GroupTree\IGroup.cs" />

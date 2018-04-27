@@ -15,9 +15,6 @@ namespace UnityDisk.GroupTree
         public string Name { get; set; }
         public SpaceSize Size => new SpaceSize(_size);
 
-        public event EventHandler<ContainerLoadedEventArg> LoadedEvent;
-        public event EventHandler<ContainerUnloadedEventArg> UnloadEvent;
-
         public void LoadDirectory()
         {
             throw new NotImplementedException();
@@ -34,15 +31,6 @@ namespace UnityDisk.GroupTree
                 size.FreelSize += item.Size.FreelSize;
             }
             _size = size;
-        }
-
-        private void OnUnload()
-        {
-            UnloadEvent?.Invoke(this, new ContainerUnloadedEventArg(Items));
-        }
-        private void Onload()
-        {
-            LoadedEvent?.Invoke(this, new ContainerLoadedEventArg(Items));
         }
     }
 }

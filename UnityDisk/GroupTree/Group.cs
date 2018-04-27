@@ -12,10 +12,7 @@ namespace UnityDisk.GroupTree
         private SpaceSize _size;
         public IList<IAccount> Items { get; private set; }
         public string Name { get; set; }
-        public SpaceSize Size =>new SpaceSize(_size);
-
-        public event EventHandler<GroupLoadedEventArg> LoadedEvent;
-        public event EventHandler<GroupUnloadedEventArg> UnloadEvent;
+        public SpaceSize Size => new SpaceSize(_size);
 
         public void LoadDirectory()
         {
@@ -33,15 +30,6 @@ namespace UnityDisk.GroupTree
             }
 
             _size = size;
-        }
-
-        private void OnUnload()
-        {
-            UnloadEvent?.Invoke(this, new GroupUnloadedEventArg(Items));
-        }
-        private void Onload()
-        {
-            LoadedEvent?.Invoke(this, new GroupLoadedEventArg(Items));
         }
     }
 }

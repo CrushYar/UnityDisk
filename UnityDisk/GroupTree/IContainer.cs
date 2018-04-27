@@ -15,13 +15,5 @@ namespace UnityDisk.GroupTree
         /// Коллекция дочерних элементов групп
         /// </summary>
         IList<IGroupTreeItem> Items { get; }
-        /// <summary>
-        /// Событие после загрузки контейнера
-        /// </summary>
-        event EventHandler<ContainerLoadedEventArg> LoadedEvent;
-        /// <summary>
-        /// Событие после выгрузки контейнера
-        /// </summary>
-        event EventHandler<ContainerUnloadedEventArg> UnloadEvent;
     }
 }
