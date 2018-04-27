@@ -92,6 +92,8 @@ namespace UnityDisk_Test.Accounts
             DateTime expectedCreaDate = new DateTime(2018, 4, 22, 2, 7, 0);
             string expectedServerName = "OneDrive";
             SpaceSize expectedSize = new SpaceSize() { TotalSize = 1000, FreelSize = 300, UsedSize = 700 };
+            List<string> expectedGroups=new List<string>(){"Group1","Group2"};
+
             ConnectionStatusEnum expectedStatus = ConnectionStatusEnum.Connected;
 
             _mockService.SetupGet(account => account.Token).Returns(expectedToken);
@@ -101,9 +103,12 @@ namespace UnityDisk_Test.Accounts
             _mockService.SetupGet(account => account.Status).Returns(expectedStatus);
             _mockService.SetupGet(account => account.Size).Returns(expectedSize);
             _mockService.SetupGet(account => account.Clone()).Returns(_mockService.Object);
+            _account.Groups.Add("Group1");
+            _account.Groups.Add("Group2");
 
             var accountClone = _account.Clone();
 
+            CollectionAssert.AreEqual((List<string>)_account.Groups, expectedGroups);
             Assert.AreEqual(accountClone.Token, expectedToken);
             Assert.AreEqual(accountClone.Login, expectedLogin);
             Assert.AreEqual(accountClone.CreateDate, expectedCreaDate);
