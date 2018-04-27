@@ -43,14 +43,15 @@ namespace UnityDisk.Accounts
         /// <summary>
         /// Указывает на отсутствие привязки к группе
         /// </summary>
-        bool IsFree { get; set; }
+        bool IsFree { get; }
         /// <summary>
+        /// Коллекция названий групп в которых состоит аккаунт
+        /// </summary>
+        IList<String> Groups { get; }
+            /// <summary>
         /// Статус подключения
         /// </summary>
         ConnectionStatusEnum Status { get; set; }
-
-        // + groups : IList<String>
-
         /// <summary>
         /// Событие вызываемое во время изменения размера пространства файлового хранилища аккаунта
         /// </summary>

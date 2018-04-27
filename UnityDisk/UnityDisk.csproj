@@ -97,6 +97,8 @@
   <ItemGroup>
     <Compile Include="Accounts\Account.cs" />
     <Compile Include="Accounts\IAccount.cs" />
+    <Compile Include="Accounts\Registry\AccountProjection.cs" />
+    <Compile Include="Accounts\Registry\IAccountProjection.cs" />
     <Compile Include="FileStorages\FactoryRagistry\FactoryRagistry.cs" />
     <Compile Include="FileStorages\FactoryRagistry\IFactoryRagistry.cs" />
     <Compile Include="FileStorages\IFileStorageFactory.cs" />

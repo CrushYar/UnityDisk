@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityDisk.Accounts;
 
-namespace UnityDisk.FileStorages
+namespace UnityDisk.Accounts.Registry
 {
-    public interface IFileStorageAccount: ICloneable<IFileStorageAccount>
+   public interface IAccountProjection
     {
         /// <summary>
         /// Логин
@@ -30,25 +29,12 @@ namespace UnityDisk.FileStorages
         /// </summary>
         string Token { get; set; }
         /// <summary>
-        /// Статус подключения
+        /// Указывает на отсутствие привязки к группе
         /// </summary>
-        ConnectionStatusEnum Status { get; set; }
-
+        bool IsFree { get; }
         /// <summary>
-        /// Вход в аккаунт
+        /// Коллекция названий групп в которых состоит аккаунт
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        Task SignIn(String key);
-        /// <summary>
-        /// Выход из аккаунта
-        /// </summary>
-        /// <returns></returns>
-        Task SignOut();
-        /// <summary>
-        /// Обновление информации об аккауте
-        /// </summary>
-        /// <returns></returns>
-        Task Update();
+        IList<String> Groups { get; }
     }
 }

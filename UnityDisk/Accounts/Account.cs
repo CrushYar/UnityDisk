@@ -20,18 +20,23 @@ namespace UnityDisk.Accounts
         public SpaceSize Size { get => _fileStorageAccount.Size; set => _fileStorageAccount.Size = value; }
         public string ServerName { get => _fileStorageAccount.ServerName; set => _fileStorageAccount.ServerName = value; }
         public string Token { get => _fileStorageAccount.Token; set => _fileStorageAccount.Token = value; }
-        public bool IsFree { get => _fileStorageAccount.IsFree; set => _fileStorageAccount.IsFree = value; }
+        public bool IsFree => Groups.Count==0;
         public ConnectionStatusEnum Status { get => _fileStorageAccount.Status; set => _fileStorageAccount.Status = value; }
+        public IList<string> Groups { get; private set; }
 
         public event EventHandler<SizeChangedEventArg> ChangedSizeEvent;
         public event EventHandler<IAccount> SignedInEvent;
         public event EventHandler<IAccount> SignedOutEvent;
 
-        public Account() { }
+        public Account()
+        {
+            Groups=new List<string>();
+        }
 
         public Account(IFileStorageAccount fileStorageAccount)
         {
             this._fileStorageAccount = fileStorageAccount;
+            Groups = new List<string>();
         }
 
         public bool LoadConnector(string serverName)
@@ -66,7 +71,7 @@ namespace UnityDisk.Accounts
             account.Size=new SpaceSize(Size);
             account.Status = Status;
             account.Token = Token;
-            account.IsFree = IsFree;
+            account.Groups = new List<string>(Groups);
             return account;
         }
 
