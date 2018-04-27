@@ -11,7 +11,7 @@ namespace UnityDisk.Settings
     /// <summary>
     /// Сохраняет и загружает настройки удаленно
     /// </summary>
-    public class RemoteSettings : ISettings
+    public sealed class RemoteSettings : ISettings
     {
         public Stream GetValueAsStream(string parameterName, Encoding encoding = null)
         {

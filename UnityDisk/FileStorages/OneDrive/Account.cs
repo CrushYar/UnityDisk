@@ -7,7 +7,7 @@ using UnityDisk.Accounts;
 
 namespace UnityDisk.FileStorages.OneDrive
 {
-    public class Account : IFileStorageAccount
+    public sealed class Account : IFileStorageAccount
     {
         public string Login { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public DateTime CreateDate { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

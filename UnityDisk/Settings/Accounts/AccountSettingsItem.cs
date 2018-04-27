@@ -7,7 +7,7 @@ using UnityDisk.Accounts;
 
 namespace UnityDisk.Settings.Accounts
 {
-    public class AccountSettingsItem : IAccountSettingsItem
+    public sealed class AccountSettingsItem : IAccountSettingsItem
     {
 
         public AccountSettingsItem() { }

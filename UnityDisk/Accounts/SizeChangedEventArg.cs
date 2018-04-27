@@ -9,7 +9,7 @@ namespace UnityDisk.Accounts
     /// <summary>
     /// Параметр события об изменении размера
     /// </summary>
-    public class SizeChangedEventArg : EventArgs
+    public sealed class SizeChangedEventArg : EventArgs
     {
         /// <summary>
         /// Старый размер

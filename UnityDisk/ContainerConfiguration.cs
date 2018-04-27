@@ -13,7 +13,7 @@ using Unity.Lifetime;
 
 namespace UnityDisk
 {
-    public class ContainerConfiguration
+    public sealed class ContainerConfiguration
     {
         private static readonly ContainerConfiguration Configuration=new ContainerConfiguration();
 

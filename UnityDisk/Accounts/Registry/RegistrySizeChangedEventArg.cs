@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UnityDisk.Accounts.Registry
 {
-    public class RegistrySizeChangedEventArg :EventArgs
+    public sealed class RegistrySizeChangedEventArg :EventArgs
     {
         /// <summary>
         /// Старый размер

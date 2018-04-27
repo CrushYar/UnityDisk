@@ -9,7 +9,7 @@ namespace UnityDisk.Accounts
     /// <summary>
     /// Тип размера пространства
     /// </summary>
-   public class SpaceSize
+   public sealed class SpaceSize
     {
 
         public SpaceSize(SpaceSize size)

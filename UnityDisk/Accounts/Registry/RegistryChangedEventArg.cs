@@ -10,7 +10,7 @@ namespace UnityDisk.Accounts.Registry
     {
         AddedAccount, RemovedAccount,Reseted
     }
-    public class RegistryChangedEventArg:EventArgs
+    public sealed class RegistryChangedEventArg:EventArgs
     {
         /// <summary>
         /// Аккаунт на котором произошло изменение

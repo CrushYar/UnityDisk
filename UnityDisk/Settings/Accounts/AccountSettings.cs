@@ -14,7 +14,7 @@ namespace UnityDisk.Settings.Accounts
     /// <summary>
     /// Класс отвечающий за экспорт и импрот коллекций аккантов
     /// </summary>
-    public class AccountSettings : IAccountSettings
+    public sealed class AccountSettings : IAccountSettings
     {
         private ISettings _settings;
         private string _parameterName;

@@ -105,7 +105,6 @@
     <Compile Include="GroupTree\IContainer.cs" />
     <Compile Include="GroupTree\IGroupTreeItem.cs" />
     <Compile Include="GroupTree\IGroup.cs" />
-    <Compile Include="GroupTree\RenameEventArg.cs" />
     <Compile Include="ICloneable.cs" />
     <Compile Include="Accounts\Registry\AccountRegistry.cs" />
     <Compile Include="Accounts\Registry\RegistryChangedEventArg.cs" />

@@ -13,7 +13,7 @@ using UnityDisk.Settings.Accounts;
 
 namespace UnityDisk.Accounts.Registry
 {
-    public class AccountRegistry : IAccountRegistry
+    public sealed class AccountRegistry : IAccountRegistry
     {
         private SpaceSize _size=new SpaceSize();
         private BitmapImage _userImage;

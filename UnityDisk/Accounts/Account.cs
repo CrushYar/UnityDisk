@@ -11,7 +11,7 @@ using UnityDisk.Settings.Accounts;
 
 namespace UnityDisk.Accounts
 {
-    public class Account : IAccount
+    public sealed class Account : IAccount
     {
         private IFileStorageAccount _fileStorageAccount;
 
