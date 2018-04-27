@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StructureMap;
 using UnityDisk.Accounts;
 using UnityDisk.FileStorages.FactoryRagistry;
 using UnityDisk.Settings;
 using UnityDisk.Settings.Accounts;
+using Unity;
+using Unity.Injection;
+using Unity.Lifetime;
 
 namespace UnityDisk
 {
@@ -15,15 +17,16 @@ namespace UnityDisk
     {
         private static readonly ContainerConfiguration Configuration=new ContainerConfiguration();
 
-        public IContainer Container { get; private set; }
+        public IUnityContainer Container { get; private set; }
 
         private ContainerConfiguration()
         {
-            Container = new Container(x => x.For<ISettings>().Singleton().Use<RemoteSettings>());
-            Container.Configure(x => x.For<Accounts.IAccount>().Use<Accounts.Account>().SelectConstructor(()=>new Account()));
-            Container.Configure(x => x.For<IAccountSettings>().Singleton().Use<AccountSettings>().SelectConstructor(()=>new AccountSettings()));
-            Container.Configure(x => x.For<IAccountSettingsItem>().Use<AccountSettingsItem>().SelectConstructor(()=>new AccountSettingsItem()));
-            Container.Configure(x => x.For<IFactoryRagistry>().Use<FactoryRagistry>().SelectConstructor(()=>new FactoryRagistry()));
+            Container= new UnityContainer();
+            Container.RegisterType<ISettings, RemoteSettings>(new ContainerControlledLifetimeManager(),
+                new InjectionConstructor())
+                .RegisterType<IAccount, Account>(new InjectionConstructor())
+                .RegisterType<IAccountSettingsItem, AccountSettingsItem>(new InjectionConstructor())
+                .RegisterType<IFactoryRagistry, FactoryRagistry>();
         }
 
         public static ContainerConfiguration GetContainer()

@@ -6,7 +6,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
-using StructureMap;
+using Unity;
+using UnityDisk.GroupTree;
 using UnityDisk.Settings;
 using UnityDisk.Settings.Accounts;
 
@@ -27,7 +28,7 @@ namespace UnityDisk.Accounts.Registry
         /// <summary>
         /// loc контейнер с настройками
         /// </summary>
-        private readonly IContainer _container;
+        private readonly IUnityContainer _container;
         /// <summary>
         /// Объект синхронизации
         /// </summary>
@@ -56,7 +57,7 @@ namespace UnityDisk.Accounts.Registry
         public AccountRegistry()
         {
             _container = ContainerConfiguration.GetContainer().Container;
-            _settings = _container.GetInstance<IAccountSettings>();
+            _settings = _container.Resolve<IAccountSettings>();
             _accounts =new Dictionary<string, IAccount>(10);
         }
 
@@ -65,10 +66,10 @@ namespace UnityDisk.Accounts.Registry
         /// </summary>
         /// <param name="settingsContainer"></param>
         /// <param name="accountContainer"></param>
-        public AccountRegistry(IContainer settingsContainer, IContainer accountContainer)
+        public AccountRegistry(IAccountSettings settings, IUnityContainer accountContainer)
         {
             _container = accountContainer;
-            _settings = settingsContainer.GetInstance<IAccountSettings>();
+            _settings = settings;
             _accounts = new Dictionary<string, IAccount>(10);
         }
         public IAccount Find(string login)
@@ -150,7 +151,7 @@ namespace UnityDisk.Accounts.Registry
             
             foreach (var settingsItem in accountSettingsItems)
             {
-                var account = _container.GetInstance<IAccount>();
+                var account = _container.Resolve<IAccount>();
                 account.Login = settingsItem.Login;
                 account.Token = settingsItem.Token;
                 account.ServerName = settingsItem.ServerName;

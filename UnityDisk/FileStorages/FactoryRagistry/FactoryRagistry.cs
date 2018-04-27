@@ -13,6 +13,7 @@ namespace UnityDisk.FileStorages.FactoryRagistry
     public class FactoryRagistry : IFactoryRagistry
     {
         private readonly Dictionary<string, IFileStorageFactory> _ragistries=new Dictionary<string, IFileStorageFactory>();
+        
         /// <summary>
         /// Объект синхронизации
         /// </summary>

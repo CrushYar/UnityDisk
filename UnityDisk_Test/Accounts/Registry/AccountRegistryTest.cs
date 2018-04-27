@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HyperMock;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using StructureMap;
+using Unity;
 using UnityDisk;
 using UnityDisk.Accounts;
 using UnityDisk.Accounts.Registry;
@@ -21,8 +21,7 @@ namespace UnityDisk_Test.Accounts.Registry
     public class AccountRegistryTest
     {
         private Mock<IAccountSettings> _mockAccountSettings;
-        private Mock<IContainer> _mockSettingsContainer;
-        private Mock<IContainer> _mockAccountContainer;
+        private IUnityContainer _accountContainerStub;
         private Mock<IAccount> _mockAccount;
         private Mock<IFileStorageAccount> _mockFileStorageAccount;
         private AccountRegistry _accountRegistry;
@@ -31,19 +30,19 @@ namespace UnityDisk_Test.Accounts.Registry
         public void BeforeEachTest()
         {
             _mockAccountSettings = Mock.Create<IAccountSettings>();
-            _mockSettingsContainer = Mock.Create<IContainer>();
-            _mockAccountContainer = Mock.Create<IContainer>();
             _mockAccount = Mock.Create<IAccount>();
             _mockFileStorageAccount = Mock.Create<IFileStorageAccount>();
+            _accountContainerStub=new UnityContainer();
+            _accountContainerStub.RegisterInstance<IAccount>(_mockAccount.Object);
         }
-       
+
         [TestMethod]
         public void Can_Load()
         {
             string expectedLogin = "login1",
                  expectedServerName = "pCloud",
                  expectedToken = "123456987";
-            SpaceSize expectedSize = new SpaceSize(){TotalSize = 100, FreelSize = 70,UsedSize = 30};
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 70, UsedSize = 30 };
             var accountSettingsStub = new[]
             {
                 new AccountSettingsItem()
@@ -51,16 +50,13 @@ namespace UnityDisk_Test.Accounts.Registry
                     Login = expectedLogin, ServerName = expectedServerName, Token = expectedToken
                 },
             };
-         
+
             _mockAccountSettings.SetupGet(settings => settings.LoadAccounts()).Returns(accountSettingsStub);
             _mockAccount.SetupGet(acc => acc.LoadConnector(expectedServerName)).Returns(true);
             _mockAccount.SetupGet(acc => acc.Clone()).Returns(_mockAccount.Object);
             _mockAccount.SetupGet(acc => acc.Size).Returns(expectedSize);
 
-            _mockAccountContainer.SetupGet(container => container.GetInstance<IAccount>()).Returns(_mockAccount.Object);
-            _mockSettingsContainer.SetupGet(container => container.GetInstance<IAccountSettings>()).Returns(_mockAccountSettings.Object);
-
-            _accountRegistry = new AccountRegistry(_mockSettingsContainer.Object, _mockAccountContainer.Object);
+            _accountRegistry = new AccountRegistry(_mockAccountSettings.Object, _accountContainerStub);
 
             _accountRegistry.LoadedEvent += (o, e) =>
             {
@@ -97,20 +93,17 @@ namespace UnityDisk_Test.Accounts.Registry
             _mockAccountSettings.SetupGet(settings => settings.LoadAccounts()).Returns(accountSettingsStub);
             _mockAccount.SetupGet(acc => acc.LoadConnector(expectedServerName)).Returns(true);
             _mockAccount.SetupGet(acc => acc.Clone()).Returns(_mockAccount.Object);
-            _mockAccount.SetupGet(acc => acc.Size).Returns(new SpaceSize(){ TotalSize = 100,FreelSize = 30,UsedSize = 70});
-
-            _mockAccountContainer.SetupGet(container => container.GetInstance<IAccount>()).Returns(_mockAccount.Object);
-            _mockSettingsContainer.SetupGet(container => container.GetInstance<IAccountSettings>()).Returns(_mockAccountSettings.Object);
-
-            _accountRegistry = new AccountRegistry(_mockSettingsContainer.Object, _mockAccountContainer.Object);
+            _mockAccount.SetupGet(acc => acc.Size).Returns(new SpaceSize() { TotalSize = 100, FreelSize = 30, UsedSize = 70 });
+            
+            _accountRegistry = new AccountRegistry(_mockAccountSettings.Object, _accountContainerStub);
 
             _accountRegistry.Load();
 
             IAccount accountFound = _accountRegistry.Find(expectedLogin);
 
-            _mockAccount.Verify(acc=>acc.Clone(),Occurred.Exactly(2));
+            _mockAccount.Verify(acc => acc.Clone(), Occurred.Exactly(2));
             Assert.IsNotNull(accountFound);
-            
+
         }
 
         [TestMethod]
@@ -126,10 +119,7 @@ namespace UnityDisk_Test.Accounts.Registry
             _mockAccount.SetupGet(acc => acc.Size).Returns(expectedSize);
             _mockAccount.SetupGet(acc => acc.Login).Returns(expectedLogin);
 
-            // _mockAccountContainer.SetupGet(container => container.GetInstance<IAccount>()).Returns(_mockAccount.Object);
-            _mockSettingsContainer.SetupGet(container => container.GetInstance<IAccountSettings>()).Returns(_mockAccountSettings.Object);
-
-            _accountRegistry = new AccountRegistry(_mockSettingsContainer.Object, _mockAccountContainer.Object);
+            _accountRegistry = new AccountRegistry(_mockAccountSettings.Object, _accountContainerStub);
 
             _accountRegistry.Registry(_mockAccount.Object);
             Assert.AreEqual(_accountRegistry.Size, expectedSize);
@@ -162,12 +152,10 @@ namespace UnityDisk_Test.Accounts.Registry
             _mockAccount.SetupGet(acc => acc.Size).Returns(expectedSize);
             _mockAccount.SetupGet(acc => acc.Login).Returns(expectedLogin);
 
-            _mockSettingsContainer.SetupGet(container => container.GetInstance<IAccountSettings>()).Returns(_mockAccountSettings.Object);
-
-            _accountRegistry = new AccountRegistry(_mockSettingsContainer.Object, _mockAccountContainer.Object);
+            _accountRegistry = new AccountRegistry(_mockAccountSettings.Object, _accountContainerStub);
 
             _accountRegistry.Registry(_mockAccount.Object);
-            _mockAccountSettings.Verify(settings=>settings.SaveAccounts(Param.Is<IAccountSettingsItem[]>(items=>items.SequenceEqual(expectedAccountSettings))),Occurred.Once());
+            _mockAccountSettings.Verify(settings => settings.SaveAccounts(Param.Is<IAccountSettingsItem[]>(items => items.SequenceEqual(expectedAccountSettings))), Occurred.Once());
         }
         [TestMethod]
         public void Can_Delete()
@@ -181,11 +169,8 @@ namespace UnityDisk_Test.Accounts.Registry
             _mockAccount.SetupGet(acc => acc.Clone()).Returns(_mockAccount.Object);
             _mockAccount.SetupGet(acc => acc.Size).Returns(expectedSize);
             _mockAccount.SetupGet(acc => acc.Login).Returns(expectedLogin);
-
-            // _mockAccountContainer.SetupGet(container => container.GetInstance<IAccount>()).Returns(_mockAccount.Object);
-            _mockSettingsContainer.SetupGet(container => container.GetInstance<IAccountSettings>()).Returns(_mockAccountSettings.Object);
-
-            _accountRegistry = new AccountRegistry(_mockSettingsContainer.Object, _mockAccountContainer.Object);
+     
+            _accountRegistry = new AccountRegistry(_mockAccountSettings.Object, _accountContainerStub);
 
             _accountRegistry.Registry(_mockAccount.Object);
             Assert.IsTrue(_accountRegistry.Delete(expectedLogin));

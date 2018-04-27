@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using StructureMap;
+using Unity;
 using UnityDisk.Accounts;
 
 namespace UnityDisk.Settings.Accounts
@@ -18,18 +18,15 @@ namespace UnityDisk.Settings.Accounts
     {
         private ISettings _settings;
         private string _parameterName;
-        private IContainer _settingsContainer;
 
-        public AccountSettings()
+        public AccountSettings(ISettings settings)
         {
-            _settingsContainer = ContainerConfiguration.GetContainer().Container;
-            _settings = _settingsContainer.GetInstance<ISettings>();
+            _settings = settings;
             _parameterName = "saveAcc";
         }
 
         public AccountSettings(ISettings settings,string parameterName)
         {
-            _settingsContainer = ContainerConfiguration.GetContainer().Container;
             _settings = settings;
             _parameterName = parameterName;
         }

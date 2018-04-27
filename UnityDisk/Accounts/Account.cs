@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity;
 using UnityDisk.Accounts.Registry;
 using UnityDisk.FileStorages;
 using UnityDisk.FileStorages.FactoryRagistry;
@@ -35,8 +36,8 @@ namespace UnityDisk.Accounts
 
         public bool LoadConnector(string serverName)
         {
-            var container = ContainerConfiguration.GetContainer().Container;
-            var factory = container.GetInstance<IFactoryRagistry>();
+            IUnityContainer container = ContainerConfiguration.GetContainer().Container;
+            var factory = container.Resolve<IFactoryRagistry>();
             _fileStorageAccount = factory.CreateAccount(serverName);
             return _fileStorageAccount != null;
         }
