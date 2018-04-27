@@ -15,14 +15,14 @@ namespace UnityDisk.GroupTree
         /// <summary>
         /// Коллекция аккаунтов находящиеся в группе
         /// </summary>
-        IList<IAccount> Items { get; set; }
+        IList<IAccount> Items { get; }
         /// <summary>
         /// Событие после загрузки контейнера
         /// </summary>
-        event EventHandler<GroupLoadedEventArg> Loaded;
+        event EventHandler<GroupLoadedEventArg> LoadedEvent;
         /// <summary>
         /// Событие после выгрузки контейнера
         /// </summary>
-        event EventHandler<GroupUnloadedEventArg> Unload;
+        event EventHandler<GroupUnloadedEventArg> UnloadEvent;
     }
 }

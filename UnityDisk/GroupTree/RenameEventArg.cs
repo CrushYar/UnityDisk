@@ -9,7 +9,7 @@ namespace UnityDisk.GroupTree
     /// <summary>
     /// Параметр возвращаемый событием после переименования элемента дерева групп
     /// </summary>
-    public class RenameEventArg:EventArgs
+    public sealed class RenameEventArg:EventArgs
     {
         /// <summary>
         /// Старое название

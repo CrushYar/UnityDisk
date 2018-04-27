@@ -10,7 +10,7 @@ namespace UnityDisk.GroupTree
     /// <summary>
     /// Параметр возвращаемый событием после загрузки контейнера
     /// </summary>
-    public class ContainerLoadedEventArg : EventArgs
+    public sealed class ContainerLoadedEventArg : EventArgs
     {
         public ContainerLoadedEventArg(IList<IGroupTreeItem> items)
         {

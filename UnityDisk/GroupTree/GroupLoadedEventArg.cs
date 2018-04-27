@@ -10,7 +10,7 @@ namespace UnityDisk.GroupTree
     /// <summary>
     /// Параметр возвращаемый событием после загрузки группы
     /// </summary>
-    public class GroupLoadedEventArg:EventArgs
+    public sealed  class GroupLoadedEventArg :EventArgs
     {
         public GroupLoadedEventArg(IList<IAccount> items)
         {

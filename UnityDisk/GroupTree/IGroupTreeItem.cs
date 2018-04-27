@@ -19,20 +19,11 @@ namespace UnityDisk.GroupTree
         /// <summary>
         /// Размер элемента группы
         /// </summary>
-        SpaceSize Size { get; set; }
+        SpaceSize Size { get; }
         /// <summary>
-        /// Родительский элемент
+        /// Загрузка информации об размере
         /// </summary>
-        IGroupTreeItem Parent { get; set; }
-        /// <summary>
-        /// Событие при изменении имени элемента
-        /// </summary>
-        event EventHandler<RenameEventArg> RenameEvent;
-        /// <summary>
-        /// Получения информации об размере
-        /// </summary>
-        /// <returns>Информация об размере</returns>
-        SpaceSize LoadSizeInfo();
+        void LoadSizeInfo();
         /// <summary>
         /// Загрузка корневой директории всех аккаунтов ниже по дереву
         /// </summary>

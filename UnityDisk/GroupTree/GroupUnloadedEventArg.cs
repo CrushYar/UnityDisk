@@ -10,7 +10,7 @@ namespace UnityDisk.GroupTree
     /// <summary>
     /// Параметр возвращаемый событием после выгрузки группы
     /// </summary>
-    public class GroupUnloadedEventArg:EventArgs
+    public sealed class GroupUnloadedEventArg:EventArgs
     {
         public GroupUnloadedEventArg(IList<IAccount> items)
         {

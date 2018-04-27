@@ -18,10 +18,10 @@ namespace UnityDisk.GroupTree
         /// <summary>
         /// Событие после загрузки контейнера
         /// </summary>
-        event EventHandler<ContainerLoadedEventArg> Loaded;
+        event EventHandler<ContainerLoadedEventArg> LoadedEvent;
         /// <summary>
         /// Событие после выгрузки контейнера
         /// </summary>
-        event EventHandler<ContainerUnloadedEventArg> Unload;
+        event EventHandler<ContainerUnloadedEventArg> UnloadEvent;
     }
 }

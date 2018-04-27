@@ -9,12 +9,15 @@ namespace UnityDisk.GroupTree
     /// <summary>
     /// Параметр возвращаемый событием после выгрузки контейнера
     /// </summary>
-    public class ContainerUnloadedEventArg : EventArgs
+    public sealed class ContainerUnloadedEventArg : EventArgs
     {
         public ContainerUnloadedEventArg(IList<IGroupTreeItem> items)
         {
             Items = items;
         }
+        /// <summary>
+        /// Колекция дочерних элементов входящая в состав контейнера
+        /// </summary>
         public IList<IGroupTreeItem> Items { get; set; }
     }
 }
