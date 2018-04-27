@@ -14,8 +14,12 @@ namespace UnityDisk.Accounts.Registry
         public string ServerName { get; set; }
         public string Token { get; set; }
         public bool IsFree => Groups.Count == 0;
-        public IList<string> Groups { get; }
+        public IList<string> Groups { get; private set; }
 
+        public AccountProjection()
+        {
+            Groups=new List<string>();
+        }
         public AccountProjection(IAccount account)
         {
             Login = account.Login;

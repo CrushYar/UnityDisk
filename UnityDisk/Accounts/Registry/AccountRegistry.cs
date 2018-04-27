@@ -99,7 +99,7 @@ namespace UnityDisk.Accounts.Registry
                 _size.UsedSize += account.Size.UsedSize;
                 _size.FreelSize += account.Size.FreelSize;
                 SaveSettings();
-                OnChangedSizeEvent(oldSize,account.Clone());
+                OnChangedSizeEvent(oldSize,account);
                 OnChangedRegistryEvent(account.Clone(), RegistryActionEnum.AddedAccount);
             }
 
@@ -198,16 +198,24 @@ namespace UnityDisk.Accounts.Registry
 
         private void OnChangedRegistryEvent(IAccount account, RegistryActionEnum action)
         {
-            IAccountProjection projection = _container.Resolve<IAccountProjection>();
-            projection.SetDataContext(account);
+            IAccountProjection projection=null;
+            if (account != null)
+            {
+                projection = _container.Resolve<IAccountProjection>();
+                projection.SetDataContext(account);
+            }
 
             ChangedRegistryEvent?.Invoke(this,
                 new RegistryChangedEventArg() { Account = projection, Action = action });
         }
         private void OnChangedSizeEvent(SpaceSize oldSize, IAccount account)
         {
-            IAccountProjection projection = _container.Resolve<IAccountProjection>();
-            projection.SetDataContext(account);
+            IAccountProjection projection = null;
+            if (account != null)
+            {
+                projection = _container.Resolve<IAccountProjection>();
+                projection.SetDataContext(account);
+            }
             ChangedSizeEvent?.Invoke(this,
                 new RegistrySizeChangedEventArg() { Account = projection, OldSize = oldSize, NewSize = this.Size });
         }
