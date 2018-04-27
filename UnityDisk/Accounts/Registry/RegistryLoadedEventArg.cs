@@ -9,6 +9,6 @@ namespace UnityDisk.Accounts.Registry
    public sealed class RegistryLoadedEventArg:EventArgs
     {
         public SpaceSize Size { get; set; }
-        public IAccount[] Accounts { get; set; }
+        public IAccountProjection[] Accounts { get; set; }
     }
 }

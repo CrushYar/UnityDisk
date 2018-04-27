@@ -20,6 +20,6 @@ namespace UnityDisk.Accounts.Registry
         /// <summary>
         /// Аккаунт на котором произошло изменение
         /// </summary>
-        public IAccount Account { get; set; }
+        public IAccountProjection Account { get; set; }
     }
 }

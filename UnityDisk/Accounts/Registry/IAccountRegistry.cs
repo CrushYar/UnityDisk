@@ -49,7 +49,7 @@ namespace UnityDisk.Accounts.Registry
         /// </summary>
         /// <param name="login">Логин аккаунта</param>
         /// <returns>Найденный аккаунт</returns>
-        IAccount Find(String login);
+        IAccountProjection Find(String login);
 
         /// <summary>
         /// Регистрация аккаунта в реестре
@@ -61,14 +61,14 @@ namespace UnityDisk.Accounts.Registry
         /// Снятие с регистрации аккаунта
         /// </summary>
         /// <param name="account">Аккаунт на удаление из реестра</param>
-        bool Delete(IAccount account);
+        bool Delete(IAccountProjection account);
 
         /// <summary>
         /// Проверка на наличе уже зарегистрированного аккаунта в реестре
         /// </summary>
         /// <param name="account">Аккаунт наличие которого требуется проверить</param>
         /// <returns>Результат проверки</returns>
-        bool ContainsAccount(IAccount account);
+        bool ContainsAccount(IAccountProjection account);
 
         /// <summary>
         /// Выполнение запросса на изменение в размере файлового пространства в указанном аккаунте

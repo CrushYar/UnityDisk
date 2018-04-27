@@ -72,12 +72,15 @@ namespace UnityDisk.Accounts.Registry
             _settings = settings;
             _accounts = new Dictionary<string, IAccount>(10);
         }
-        public IAccount Find(string login)
+        public IAccountProjection Find(string login)
         {
             Lock();
             _accounts.TryGetValue(login, out IAccount value);
             UnLock();
-            return value?.Clone();
+            if (value == null) return null;
+            IAccountProjection projection= _container.Resolve<IAccountProjection>();
+            projection.SetDataContext(value);
+            return projection;
         }
 
         public bool Registry(IAccount account)
@@ -102,7 +105,7 @@ namespace UnityDisk.Accounts.Registry
 
             return !isContains;
         }
-        public bool Delete(IAccount account)
+        public bool Delete(IAccountProjection account)
         {
             return Delete(account.Login);
         }
@@ -128,7 +131,7 @@ namespace UnityDisk.Accounts.Registry
             }
             return isContains;
         }
-        public bool ContainsAccount(IAccount account)
+        public bool ContainsAccount(IAccountProjection account)
         {
             Lock();
             bool result= _accounts.ContainsKey(account.Login);
@@ -195,22 +198,29 @@ namespace UnityDisk.Accounts.Registry
 
         private void OnChangedRegistryEvent(IAccount account, RegistryActionEnum action)
         {
+            IAccountProjection projection = _container.Resolve<IAccountProjection>();
+            projection.SetDataContext(account);
+
             ChangedRegistryEvent?.Invoke(this,
-                new RegistryChangedEventArg() { Account = account, Action = action });
+                new RegistryChangedEventArg() { Account = projection, Action = action });
         }
         private void OnChangedSizeEvent(SpaceSize oldSize, IAccount account)
         {
+            IAccountProjection projection = _container.Resolve<IAccountProjection>();
+            projection.SetDataContext(account);
             ChangedSizeEvent?.Invoke(this,
-                new RegistrySizeChangedEventArg() { Account = account, OldSize = oldSize, NewSize = this.Size });
+                new RegistrySizeChangedEventArg() { Account = projection, OldSize = oldSize, NewSize = this.Size });
         }
         private void OnLoadedEvent()
         {
-            IAccount[] loadedAccounts=new IAccount[_accounts.Count];
+            IAccountProjection[] loadedAccounts=new IAccountProjection[_accounts.Count];
             Lock();
             int i = 0;
             foreach (var account in _accounts)
             {
-                loadedAccounts[i]=account.Value.Clone();
+                IAccountProjection projection = _container.Resolve<IAccountProjection>();
+                projection.SetDataContext(account.Value);
+                loadedAccounts[i]= projection;
                 i++;
             }
             UnLock();

@@ -36,5 +36,10 @@ namespace UnityDisk.Accounts.Registry
         /// Коллекция названий групп в которых состоит аккаунт
         /// </summary>
         IList<String> Groups { get; }
+        /// <summary>
+        /// Устанавливает контекст данных
+        /// </summary>
+        /// <param name="account">Аккаунт с данными для копирования</param>
+        void SetDataContext(IAccount account);
     }
 }
