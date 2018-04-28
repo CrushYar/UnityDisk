@@ -15,6 +15,8 @@ namespace UnityDisk.GroupTree
         public string Name { get; set; }
         public SpaceSize Size => new SpaceSize(_size);
 
+        public GroupTreeTypeEnum Type=>GroupTreeTypeEnum.Group;
+
         public void LoadDirectory()
         {
             throw new NotImplementedException();

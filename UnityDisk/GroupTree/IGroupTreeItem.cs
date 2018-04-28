@@ -7,8 +7,12 @@ using UnityDisk.Accounts;
 
 namespace UnityDisk.GroupTree
 {
+    public enum GroupTreeTypeEnum
+    {
+        Group,Container
+    }
     /// <summary>
-    /// Базовый интерфейс элементов групп
+    /// Базовый интерфейс элементов
     /// </summary>
    public interface IGroupTreeItem
     {
@@ -17,9 +21,13 @@ namespace UnityDisk.GroupTree
         /// </summary>
         string Name { get; set; }
         /// <summary>
-        /// Размер элемента группы
+        /// Размер элемента
         /// </summary>
         SpaceSize Size { get; }
+        /// <summary>
+        /// Тип элемента
+        /// </summary>
+        GroupTreeTypeEnum Type { get; }
         /// <summary>
         /// Загрузка информации об размере
         /// </summary>

@@ -11,9 +11,13 @@ namespace UnityDisk.GroupTree
     {
         private SpaceSize _size;
 
-        public IList<IGroupTreeItem> Items { get; private set; }
+        public IList<IGroupTreeItem> Items { get; set; }
         public string Name { get; set; }
         public SpaceSize Size => new SpaceSize(_size);
+
+        public GroupTreeTypeEnum Type => GroupTreeTypeEnum.Container;
+
+        public bool IsActive { get; set; }
 
         public void LoadDirectory()
         {

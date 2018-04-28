@@ -16,7 +16,7 @@ namespace UnityDisk.Accounts.Registry
         public string ServerName => _originAccount.ServerName;
         public string Token => _originAccount.Token;
         public bool IsFree => Groups.Count == 0;
-        public IList<string> Groups => new List<string>(_originAccount.Groups);
+        public IList<string> Groups => _originAccount.Groups;
 
         public AccountProjection()
         {

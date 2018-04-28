@@ -39,7 +39,7 @@ namespace UnityDisk.Accounts.Registry
         /// <summary>
         /// Устанавливает контекст данных
         /// </summary>
-        /// <param name="account">Аккаунт с данными для копирования</param>
+        /// <param name="account">Источник данных</param>
         void SetDataContext(IAccount account);
     }
 }

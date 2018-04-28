@@ -14,6 +14,10 @@ namespace UnityDisk.GroupTree
         /// <summary>
         /// Коллекция дочерних элементов групп
         /// </summary>
-        IList<IGroupTreeItem> Items { get; }
+        IList<IGroupTreeItem> Items { get; set; }
+        /// <summary>
+        /// Режим контейнера
+        /// </summary>
+        bool IsActive { get; set; }
     }
 }
