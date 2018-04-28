@@ -100,7 +100,7 @@ namespace UnityDisk.Accounts.Registry
                 _size.FreelSize += account.Size.FreelSize;
                 SaveSettings();
                 OnChangedSizeEvent(oldSize,account);
-                OnChangedRegistryEvent(account, RegistryActionEnum.AddedAccount);
+                OnChangedRegistryEvent(account, RegistryActionEnum.Added);
             }
 
             return !isContains;
@@ -127,7 +127,7 @@ namespace UnityDisk.Accounts.Registry
                 _size.FreelSize -= accountForRemoved.Size.FreelSize;
                 SaveSettings();
                 OnChangedSizeEvent(oldSize, accountForRemoved);
-                OnChangedRegistryEvent(accountForRemoved, RegistryActionEnum.RemovedAccount);
+                OnChangedRegistryEvent(accountForRemoved, RegistryActionEnum.Removed);
             }
             return isContains;
         }

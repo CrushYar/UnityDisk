@@ -109,6 +109,9 @@
     <Compile Include="GroupTree\IGroup.cs" />
     <Compile Include="GroupTree\Registry\ContainerProjection.cs" />
     <Compile Include="GroupTree\Registry\GroupProjection.cs" />
+    <Compile Include="GroupTree\Registry\GroupTreeRegistry.cs" />
+    <Compile Include="GroupTree\Registry\GroupTreeSizeChangedEventArg.cs" />
+    <Compile Include="GroupTree\Registry\GroupTreeStructureChangedEventArg.cs" />
     <Compile Include="GroupTree\Registry\IContainerProjection.cs" />
     <Compile Include="GroupTree\Registry\IGroupProjection.cs" />
     <Compile Include="GroupTree\Registry\IGroupTreeItemProjection.cs" />

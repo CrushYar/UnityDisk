@@ -16,6 +16,6 @@ namespace UnityDisk.GroupTree
         /// <summary>
         /// Коллекция аккаунтов находящиеся в группе
         /// </summary>
-        IList<IAccountProjection> Items { get; }
+        IList<IAccountProjection> Items { get; set; }
     }
 }

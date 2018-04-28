@@ -10,19 +10,22 @@ namespace UnityDisk.GroupTree.Registry
     /// Базовый интерфейс реестра дерева групп
     /// </summary>
    public interface IGroupTreeRegistry
-   {
-       /// <summary>
-       /// Добавление новой группы по указанному пути
-       /// </summary>
-       /// <param name="path">Пусть, относительно которого нужно добавить группу</param>
-       /// <param name="group">Добавляемая группа</param>
-       void Add(Queue<string> path, IGroup group);
+    {
         /// <summary>
-        /// Добавление нового контейнера по указанному пути
+        /// Событие при изменении размера одного из элементов дерева групп
+        /// </summary>
+        event EventHandler<GroupTreeSizeChangedEventArg> ChangedSizeEvent;
+        /// <summary>
+        /// Событие при изменении структуры дерева групп
+        /// </summary>
+        event EventHandler<GroupTreeStructureChangedEventArg> ChangedStructureEvent;
+        /// <summary>
+        /// Добавление нового элемента по указанному пути
         /// </summary>
         /// <param name="path">Пусть, относительно которого нужно добавить группу</param>
-        /// <param name="container">Добавляемый контейнер</param>
-        void Add(Queue<string> path, IContainer container);
+        /// <param name="item">Добавляемый элемент</param>
+        void Add(Queue<string> path, IGroupTreeItem item);
+       
         /// <summary>
         /// Удаление элемента по указанному пути
         /// </summary>
@@ -30,17 +33,12 @@ namespace UnityDisk.GroupTree.Registry
         /// <param name="type">Тип элемента</param>
        void Delete(Queue<string> fullPath, GroupTreeTypeEnum type);
         /// <summary>
-        /// Удаление группы по указанному пути
+        /// Удаление элемента по указанному пути
         /// </summary>
-        /// <param name="path">Полный путь к группе</param>
-        /// <param name="group">Удаляемая группа</param>
-        void Delete(Queue<string> path, IGroup group);
-       /// <summary>
-       /// Удаление контейнера по указанному пути
-       /// </summary>
-       /// <param name="path">Полный путь к контейнеру</param>
-       /// <param name="container">Удаляемый контейнер</param>
-       void Delete(Queue<string> path, IContainer container);
+        /// <param name="path">Полный путь к элементу</param>
+        /// <param name="item">Удаляемый элемент</param>
+        void Delete(Queue<string> path, IGroupTreeItem item);
+      
         /// <summary>
         /// Переименование элемента
         /// </summary>
@@ -50,19 +48,12 @@ namespace UnityDisk.GroupTree.Registry
         /// <param name="newName">Новое имя элемента</param>
        void Rename(Queue<string> path, string oldName, GroupTreeTypeEnum type, string newName);
         /// <summary>
-        /// Переименование группы
+        /// Переименование элемента
         /// </summary>
-        /// <param name="path">Путь к группе</param>
-       /// <param name="group">Группа для переименования</param>
-        /// <param name="newName">Новое имя группы</param>
-        void Rename(Queue<string> path, IGroup group,string newName);
-       /// <summary>
-       /// Переименование контейнера
-       /// </summary>
-       /// <param name="path">Путь к контейнеру</param>
-       /// <param name="container">Контейнер для переименования</param>
-       /// <param name="newName">Новое имя контейнера</param>
-       void Rename(Queue<string> path, IContainer container, string newName);
+        /// <param name="path">Путь к элементу</param>
+        /// <param name="item">Элемент для переименования</param>
+        /// <param name="newName">Новое имя элемента</param>
+        void Rename(Queue<string> path, IGroupTreeItem item, string newName);
         /// <summary>
         /// Перемещение элемента
         /// </summary>
@@ -70,34 +61,20 @@ namespace UnityDisk.GroupTree.Registry
         /// <param name="type">Тип элемента</param>
         /// <param name="newPath">Целевой путь, не включая имя</param>
         void Move(Queue<string> oldFullPath, GroupTreeTypeEnum type, Queue<string> newPath);
-       /// <summary>
-       /// Перемещение группы
-       /// </summary>
-       /// <param name="path">Путь к группе</param>
-       /// <param name="group">Группа для перемещения</param>
-       /// <param name="newPath">Целевой путь</param>
-       void Move(Queue<string> path, IGroup group, Queue<string> newPath);
-       /// <summary>
-       /// Перемещаемая группа
-       /// </summary>
-       /// <param name="path">Путь к контейнеру</param>
-       /// <param name="container">Контейнер для перемещения</param>
-       /// <param name="newPath">Целевой путь</param>
-       void Move(Queue<string> path, IContainer container, Queue<string> newPath);
         /// <summary>
-        /// Копирование группы
+        /// Перемещение элемента
         /// </summary>
-        /// <param name="path">Путь к группе</param>
-        /// <param name="group">Группа для копирования</param>
+        /// <param name="path">Путь к элементу</param>
+        /// <param name="item">Элемент для перемещения</param>
         /// <param name="newPath">Целевой путь</param>
-       void Copy(Queue<string> path, IGroup group, Queue<string> newPath);
+        void Move(Queue<string> path, IGroupTreeItem item, Queue<string> newPath);
         /// <summary>
-        /// Копирование контейнера
+        /// Копирование элемента
         /// </summary>
-        /// <param name="path">Путь к контейнеру</param>
-        /// <param name="container">Контейнер для копирования</param>
+        /// <param name="path">Путь к элементу</param>
+        /// <param name="item">Элемент для копирования</param>
         /// <param name="newPath">Целевой путь</param>
-        void Copy(Queue<string> path, IContainer container, Queue<string> newPath);
+        void Copy(Queue<string> path, IGroupTreeItem item, Queue<string> newPath);
         /// <summary>
         /// Копирование элемента
         /// </summary>
@@ -105,5 +82,9 @@ namespace UnityDisk.GroupTree.Registry
         /// <param name="type">Тип элемента</param>
         /// <param name="otherPath">Целевой путь</param>
         void Copy(Queue<string> fullPath, GroupTreeTypeEnum type, Queue<string> otherPath);
+        /// <summary>
+        /// Загрузка данных
+        /// </summary>
+        void Load();
     }
 }

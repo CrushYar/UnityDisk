@@ -9,15 +9,13 @@ namespace UnityDisk.GroupTree
 {
     public sealed class Container : IContainer
     {
-        private SpaceSize _size;
-
         public IList<IGroupTreeItem> Items { get; set; }
         public string Name { get; set; }
-        public SpaceSize Size => new SpaceSize(_size);
-
+        public SpaceSize Size { get; set; }
         public GroupTreeTypeEnum Type => GroupTreeTypeEnum.Container;
 
         public bool IsActive { get; set; }
+        public IContainer Parent { get; set; }
 
         public void LoadDirectory()
         {
@@ -26,15 +24,14 @@ namespace UnityDisk.GroupTree
 
         public void LoadSizeInfo()
         {
-            SpaceSize size = new SpaceSize();
+            Size = new SpaceSize();
             foreach (var item in Items)
             {
                 item.LoadSizeInfo();
-                size.TotalSize += item.Size.TotalSize;
-                size.UsedSize += item.Size.UsedSize;
-                size.FreelSize += item.Size.FreelSize;
+                Size.TotalSize += item.Size.TotalSize;
+                Size.UsedSize += item.Size.UsedSize;
+                Size.FreelSize += item.Size.FreelSize;
             }
-            _size = size;
         }
     }
 }

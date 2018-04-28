@@ -23,7 +23,11 @@ namespace UnityDisk.GroupTree
         /// <summary>
         /// Размер элемента
         /// </summary>
-        SpaceSize Size { get; }
+        SpaceSize Size { get; set; }
+        /// <summary>
+        /// Родитель
+        /// </summary>
+        IContainer Parent { get; set; }
         /// <summary>
         /// Тип элемента
         /// </summary>

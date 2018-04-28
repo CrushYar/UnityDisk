@@ -36,6 +36,26 @@ namespace UnityDisk.Accounts
         /// </summary>
         public long FreelSize { get; set; }
 
+        /// <summary>
+        /// Прибавляет переданное значение к текущему 
+        /// </summary>
+        /// <param name="size">Прибавляемое значение</param>
+        public void Addition(SpaceSize size)
+        {
+            TotalSize += size.TotalSize;
+            UsedSize += size.UsedSize;
+            FreelSize += size.FreelSize;
+        }
+        /// <summary>
+        /// Вычитает переданное значение к текущему
+        /// </summary>
+        /// <param name="size">Вычитающее значение</param>
+        public void Subtraction(SpaceSize size)
+        {
+            TotalSize -= size.TotalSize;
+            UsedSize -= size.UsedSize;
+            FreelSize -= size.FreelSize;
+        }
         public override Boolean Equals(Object o)
         {
             SpaceSize other = o as SpaceSize;
