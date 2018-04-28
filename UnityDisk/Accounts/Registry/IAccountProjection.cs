@@ -11,23 +11,23 @@ namespace UnityDisk.Accounts.Registry
         /// <summary>
         /// Логин
         /// </summary>
-        string Login { get; set; }
+        string Login { get;}
         /// <summary>
         /// Дата создания
         /// </summary>
-        DateTime CreateDate { get; set; }
+        DateTime CreateDate { get; }
         /// <summary>
         /// Информация о состоянии памяти файлового хранилища аккаунта
         /// </summary>
-        SpaceSize Size { get; set; }
+        SpaceSize Size { get;  }
         /// <summary>
         /// Имя сервера
         /// </summary>
-        string ServerName { get; set; }
+        string ServerName { get;  }
         /// <summary>
         /// Токен для работы с файловым хранилищем аккаунта
         /// </summary>
-        string Token { get; set; }
+        string Token { get;  }
         /// <summary>
         /// Указывает на отсутствие привязки к группе
         /// </summary>
