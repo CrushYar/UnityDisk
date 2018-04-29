@@ -142,25 +142,6 @@ namespace UnityDisk_Test.Settings.Groups
             string stubSettings =
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<GroupSettingsContainer xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>Room</Name>\r\n  <IsActive>false</IsActive>\r\n  <Items>\r\n    <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n      <Name>MainContainer</Name>\r\n      <IsActive>true</IsActive>\r\n      <Items>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n          <Name>Group</Name>\r\n          <Items>\r\n            <string>Account1</string>\r\n            <string>Account2</string>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n          <Name>Container</Name>\r\n          <IsActive>true</IsActive>\r\n          <Items />\r\n        </GroupSettingsItem>\r\n      </Items>\r\n    </GroupSettingsItem>\r\n  </Items>\r\n</GroupSettingsContainer>";
             string expectedStringForSave = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<GroupSettingsContainer xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>Room</Name>\r\n  <IsActive>false</IsActive>\r\n  <Items>\r\n    <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n      <Name>MainContainer</Name>\r\n      <IsActive>true</IsActive>\r\n      <Items>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n          <Name>Container</Name>\r\n          <IsActive>true</IsActive>\r\n          <Items />\r\n        </GroupSettingsItem>\r\n      </Items>\r\n    </GroupSettingsItem>\r\n  </Items>\r\n</GroupSettingsContainer>";
-            var expected = new GroupSettingsContainer()
-            {
-                Name = "MainContainer",
-                IsActive = true,
-                Items = new List<GroupSettingsItem>()
-                {
-                    new GroupSettingsGroup()
-                    {
-                        Items = new List<string>() {"Account1", "Account2"},
-                        Name = "Group"
-                    },
-                    new GroupSettingsContainer()
-                    {
-                        Name = "Container",
-                        Items = new List<GroupSettingsItem>(),
-                        IsActive = true
-                    }
-                }
-            };
 
             _mockService.Setup(settings => settings.GetValueAsString(_parameterName)).Returns(stubSettings);
             GroupSettingsContainer actuality = _settings.LoadGroupTree();
@@ -177,30 +158,28 @@ namespace UnityDisk_Test.Settings.Groups
             string stubSettings =
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<GroupSettingsContainer xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>Room</Name>\r\n  <IsActive>false</IsActive>\r\n  <Items>\r\n    <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n      <Name>MainContainer</Name>\r\n      <IsActive>true</IsActive>\r\n      <Items>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n          <Name>Group</Name>\r\n          <Items>\r\n            <string>Account1</string>\r\n            <string>Account2</string>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n          <Name>Container</Name>\r\n          <IsActive>true</IsActive>\r\n          <Items />\r\n        </GroupSettingsItem>\r\n      </Items>\r\n    </GroupSettingsItem>\r\n  </Items>\r\n</GroupSettingsContainer>";
             string expectedStringForSave = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<GroupSettingsContainer xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>Room</Name>\r\n  <IsActive>false</IsActive>\r\n  <Items>\r\n    <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n      <Name>MainContainer</Name>\r\n      <IsActive>true</IsActive>\r\n      <Items>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n          <Name>NewName for Group</Name>\r\n          <Items>\r\n            <string>Account1</string>\r\n            <string>Account2</string>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n          <Name>Container</Name>\r\n          <IsActive>true</IsActive>\r\n          <Items />\r\n        </GroupSettingsItem>\r\n      </Items>\r\n    </GroupSettingsItem>\r\n  </Items>\r\n</GroupSettingsContainer>";
-            var expected = new GroupSettingsContainer()
-            {
-                Name = "MainContainer",
-                IsActive = true,
-                Items = new List<GroupSettingsItem>()
-                {
-                    new GroupSettingsGroup()
-                    {
-                        Items = new List<string>() {"Account1", "Account2"},
-                        Name = "Group"
-                    },
-                    new GroupSettingsContainer()
-                    {
-                        Name = "Container",
-                        Items = new List<GroupSettingsItem>(),
-                        IsActive = true
-                    }
-                }
-            };
 
             _mockService.Setup(settings => settings.GetValueAsString(_parameterName)).Returns(stubSettings);
             GroupSettingsContainer actuality = _settings.LoadGroupTree();
 
-            _settings.Rename(new List<string>() { "MainContainer" }, "Group", GroupTreeTypeEnum.Group,"NewName for Group");
+            _settings.Rename(new List<string>() { "MainContainer" }, "Group", GroupTreeTypeEnum.Group, "NewName for Group");
+
+            _mockService.Verify(settings => settings.SetValueAsString(_parameterName, expectedStringForSave),
+                Occurred.Once());
+        }
+        [TestMethod]
+        public void Can_Move()
+        {
+            GroupSettings _settings = new GroupSettings(_mockService.Object, _parameterName, null);
+            string stubSettings =
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<GroupSettingsContainer xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>Room</Name>\r\n  <IsActive>false</IsActive>\r\n  <Items>\r\n    <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n      <Name>MainContainer</Name>\r\n      <IsActive>true</IsActive>\r\n      <Items>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n          <Name>Group</Name>\r\n          <Items>\r\n            <string>Account1</string>\r\n            <string>Account2</string>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n          <Name>Container</Name>\r\n          <IsActive>true</IsActive>\r\n          <Items>\r\n            <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n              <Name>Group2</Name>\r\n              <Items>\r\n                <string>Account1</string>\r\n              </Items>\r\n            </GroupSettingsItem>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n      </Items>\r\n    </GroupSettingsItem>\r\n  </Items>\r\n</GroupSettingsContainer>";
+            string expectedStringForSave =
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<GroupSettingsContainer xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>Room</Name>\r\n  <IsActive>false</IsActive>\r\n  <Items>\r\n    <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n      <Name>MainContainer</Name>\r\n      <IsActive>true</IsActive>\r\n      <Items>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n          <Name>Group</Name>\r\n          <Items>\r\n            <string>Account1</string>\r\n            <string>Account2</string>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n          <Name>Container</Name>\r\n          <IsActive>true</IsActive>\r\n          <Items />\r\n        </GroupSettingsItem>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n          <Name>Group2</Name>\r\n          <Items>\r\n            <string>Account1</string>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n      </Items>\r\n    </GroupSettingsItem>\r\n  </Items>\r\n</GroupSettingsContainer>";
+           
+            _mockService.Setup(settings => settings.GetValueAsString(_parameterName)).Returns(stubSettings);
+            GroupSettingsContainer actuality = _settings.LoadGroupTree();
+
+            _settings.Move(new List<string>() { "MainContainer" , "Container" }, "Group2", GroupTreeTypeEnum.Group,new List<string>(){ "MainContainer" });
 
             _mockService.Verify(settings => settings.SetValueAsString(_parameterName, expectedStringForSave),
                 Occurred.Once());
