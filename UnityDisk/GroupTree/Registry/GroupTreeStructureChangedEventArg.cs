@@ -35,7 +35,7 @@ namespace UnityDisk.GroupTree.Registry
         /// <summary>
         /// Путь к элементу
         /// </summary>
-        public Queue<string> Path { get; set; }
+        public IList<string> Path { get; set; }
         /// <summary>
         /// Тип действия
         /// </summary>
