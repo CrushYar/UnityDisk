@@ -14,7 +14,7 @@ namespace UnityDisk.GroupTree
     /// <summary>
     /// Базовый интерфейс элементов
     /// </summary>
-   public interface IGroupTreeItem
+   public interface IGroupTreeItem : ICloneable<IGroupTreeItem>
     {
         /// <summary>
         /// Название элемента группы

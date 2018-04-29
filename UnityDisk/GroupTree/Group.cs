@@ -10,14 +10,24 @@ namespace UnityDisk.GroupTree
 {
     public sealed class Group : IGroup
     {
-        private SpaceSize _size;
-        public IList<IAccountProjection> Items { get; private set; }
+        public IList<IAccountProjection> Items { get;  set; }
         public string Name { get; set; }
         public SpaceSize Size { get; set; }
 
         public GroupTreeTypeEnum Type=>GroupTreeTypeEnum.Group;
 
         public IContainer Parent { get; set; }
+
+        public Group() { }
+
+        public IGroupTreeItem Clone()
+        {
+            var clone=new Group();
+            clone.Size = new SpaceSize(Size);
+            clone.Items=new List<IAccountProjection>(Items);
+            clone.Parent = Parent;
+            return clone;
+        }
 
         public void LoadDirectory()
         {
@@ -34,7 +44,7 @@ namespace UnityDisk.GroupTree
                 size.FreelSize += item.Size.FreelSize;
             }
 
-            _size = size;
+            Size = size;
         }
     }
 }

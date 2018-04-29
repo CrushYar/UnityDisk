@@ -17,6 +17,22 @@ namespace UnityDisk.GroupTree
         public bool IsActive { get; set; }
         public IContainer Parent { get; set; }
 
+        public IGroupTreeItem Clone()
+        {
+            var clone=new Container();
+            clone.Items=new List<IGroupTreeItem>(Items.Count);
+            foreach (var item in Items)
+            {
+                clone.Items.Add(item.Clone());
+            }
+            clone.Name = Name;
+            clone.IsActive = IsActive;
+            clone.Size = new SpaceSize(Size);
+            clone.Parent = Parent;
+
+            return clone;
+        }
+
         public void LoadDirectory()
         {
             throw new NotImplementedException();
