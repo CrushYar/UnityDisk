@@ -9,15 +9,15 @@ namespace UnityDisk.GroupTree.Registry
 {
     public class ContainerProjection : IContainerProjection
     {
-        private IContainer _container;
+        private IContainer _originContainer;
 
-        public string Name => _container.Name;
+        public string Name => _originContainer.Name;
 
-        public SpaceSize Size => new SpaceSize(_container.Size);
+        public SpaceSize Size => new SpaceSize(_originContainer.Size);
 
         public GroupTreeTypeEnum Type => GroupTreeTypeEnum.Container;
 
-        public bool IsActive => _container.IsActive;
+        public bool IsActive => _originContainer.IsActive;
 
         public ContainerProjection() { }
         public ContainerProjection(IContainer container)
@@ -27,7 +27,12 @@ namespace UnityDisk.GroupTree.Registry
 
         public void SetDataContext(IContainer container)
         {
-            _container = container;
+            _originContainer = container;
+        }
+
+        public IGroupTreeItemProjection Clone()
+        {
+            return new ContainerProjection(_originContainer);
         }
     }
 }

@@ -24,8 +24,13 @@ namespace UnityDisk.GroupTree.Registry
             OldName = oldName;
             NewName = newName;
         }
-
+        /// <summary>
+        /// Старое имя
+        /// </summary>
         public string OldName { get; set; }
+        /// <summary>
+        /// Новое имя
+        /// </summary>
         public string NewName { get; set; }
         public IGroupTreeItemProjection Item { get; set; }
         /// <summary>

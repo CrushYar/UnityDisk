@@ -26,5 +26,10 @@ namespace UnityDisk.GroupTree.Registry
         {
             _originGroup = group;
         }
+
+        public IGroupTreeItemProjection Clone()
+        {
+            return new GroupProjection(_originGroup);
+        }
     }
 }

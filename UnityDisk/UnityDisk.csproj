@@ -195,7 +195,6 @@
     <Folder Include="FileStorages\Yandex\FileStorageAccount\" />
     <Folder Include="FileStorages\Yandex\FileStorageFactory\" />
     <Folder Include="FileStorages\Yandex\FileStorageItem\" />
-    <Folder Include="GroupTree\Requests\" />
     <Folder Include="Settings\BackgroundOperations\" />
     <Folder Include="Settings\Groups\" />
     <Folder Include="StorageItems\FileManagers\" />

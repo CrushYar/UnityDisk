@@ -21,7 +21,13 @@ namespace UnityDisk.GroupTree.Registry
         public event EventHandler<GroupTreeStructureChangedEventArg> ChangedStructureEvent;
         public event EventHandler<GroupTreeItemNameChangedEventArg> ChangedGroupTreeItemNameEvent;
 
+        /// <summary>
+        /// Загрузка дерева из настроек
+        /// </summary>
         private void LoadSittings() { }
+        /// <summary>
+        /// Сохранение дерева в настройках
+        /// </summary>
         private void SaveSittings() { }
 
         /// <summary>
