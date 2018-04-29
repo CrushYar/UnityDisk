@@ -184,5 +184,22 @@ namespace UnityDisk_Test.Settings.Groups
             _mockService.Verify(settings => settings.SetValueAsString(_parameterName, expectedStringForSave),
                 Occurred.Once());
         }
+        [TestMethod]
+        public void Can_Copy()
+        {
+            GroupSettings _settings = new GroupSettings(_mockService.Object, _parameterName, null);
+            string stubSettings =
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<GroupSettingsContainer xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>Room</Name>\r\n  <IsActive>false</IsActive>\r\n  <Items>\r\n    <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n      <Name>MainContainer</Name>\r\n      <IsActive>true</IsActive>\r\n      <Items>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n          <Name>Group</Name>\r\n          <Items>\r\n            <string>Account1</string>\r\n            <string>Account2</string>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n          <Name>Container</Name>\r\n          <IsActive>true</IsActive>\r\n          <Items>\r\n            <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n              <Name>Group2</Name>\r\n              <Items>\r\n                <string>Account1</string>\r\n              </Items>\r\n            </GroupSettingsItem>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n      </Items>\r\n    </GroupSettingsItem>\r\n  </Items>\r\n</GroupSettingsContainer>";
+            string expectedStringForSave =
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<GroupSettingsContainer xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>Room</Name>\r\n  <IsActive>false</IsActive>\r\n  <Items>\r\n    <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n      <Name>MainContainer</Name>\r\n      <IsActive>true</IsActive>\r\n      <Items>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n          <Name>Group</Name>\r\n          <Items>\r\n            <string>Account1</string>\r\n            <string>Account2</string>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n          <Name>Container</Name>\r\n          <IsActive>true</IsActive>\r\n          <Items>\r\n            <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n              <Name>Group2</Name>\r\n              <Items>\r\n                <string>Account1</string>\r\n              </Items>\r\n            </GroupSettingsItem>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n          <Name>Group2</Name>\r\n          <Items>\r\n            <string>Account1</string>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n      </Items>\r\n    </GroupSettingsItem>\r\n  </Items>\r\n</GroupSettingsContainer>";
+
+            _mockService.Setup(settings => settings.GetValueAsString(_parameterName)).Returns(stubSettings);
+            GroupSettingsContainer actuality = _settings.LoadGroupTree();
+
+            _settings.Copy(new List<string>() { "MainContainer", "Container" }, "Group2", GroupTreeTypeEnum.Group, new List<string>() { "MainContainer" });
+
+            _mockService.Verify(settings => settings.SetValueAsString(_parameterName, expectedStringForSave),
+                Occurred.Once());
+        }
     }
 }
