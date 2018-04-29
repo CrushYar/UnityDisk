@@ -305,7 +305,7 @@ namespace UnityDisk.GroupTree.Registry
             OnChangedActivetyEvent(itemForSetActive, oldValue, value, path);
         }
 
-        public void Load()
+        public void Initialization()
         {
             LoadSittings();
         }

@@ -103,6 +103,6 @@ namespace UnityDisk.GroupTree.Registry
         /// <summary>
         /// Загрузка данных
         /// </summary>
-        void Load();
+        void Initialization();
     }
 }
