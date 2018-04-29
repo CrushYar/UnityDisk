@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UnityDisk.GroupTree.Registry
 {
-   public class GroupTreeItemNameChangedEventArg:EventArgs
+   public sealed class GroupTreeItemNameChangedEventArg:EventArgs
     {
         public GroupTreeItemNameChangedEventArg(IGroupTreeItem item, string oldName, string newName)
         {

@@ -13,7 +13,7 @@ namespace UnityDisk.GroupTree.Registry
     /// <summary>
     /// Реестр групп
     /// </summary>
-    public class GroupTreeRegistry:IGroupTreeRegistry
+    public sealed class GroupTreeRegistry:IGroupTreeRegistry
     {
         private IContainer _groupTree;
 

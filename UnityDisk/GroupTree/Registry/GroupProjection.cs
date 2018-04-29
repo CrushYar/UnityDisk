@@ -7,7 +7,7 @@ using UnityDisk.Accounts;
 
 namespace UnityDisk.GroupTree.Registry
 {
-    public class GroupProjection : IGroupProjection
+    public sealed class GroupProjection : IGroupProjection
     {
         private IGroup _originGroup;
         public string Name => _originGroup.Name;

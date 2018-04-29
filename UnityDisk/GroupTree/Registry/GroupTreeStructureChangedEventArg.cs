@@ -10,7 +10,7 @@ namespace UnityDisk.GroupTree.Registry
     /// <summary>
     /// Параметр события об изменении структуры дерева групп
     /// </summary>
-    public class GroupTreeStructureChangedEventArg:EventArgs
+    public sealed class GroupTreeStructureChangedEventArg:EventArgs
     {
         public GroupTreeStructureChangedEventArg(IGroupTreeItem item, RegistryActionEnum action)
         {

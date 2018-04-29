@@ -17,7 +17,7 @@ namespace UnityDisk.GroupTree.Registry
     /// <summary>
     /// Параметр события об изменении размера
     /// </summary>
-    public class GroupTreeSizeChangedEventArg:EventArgs
+    public sealed class GroupTreeSizeChangedEventArg:EventArgs
     {
         public GroupTreeSizeChangedEventArg(IGroupTreeItem item, SpaceSize oldSize, SpaceSize newSize, GroupTreeSizeChangedEnum action)
         {
