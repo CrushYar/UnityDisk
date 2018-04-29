@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using UnityDisk.GroupTree;
 
 namespace UnityDisk.Settings.Groups
 {
@@ -12,5 +13,7 @@ namespace UnityDisk.Settings.Groups
     public abstract class GroupSettingsItem
     {
         public abstract string Name { get; set; }
+        [XmlIgnore]
+        public abstract GroupTreeTypeEnum Type { get; }
     }
 }

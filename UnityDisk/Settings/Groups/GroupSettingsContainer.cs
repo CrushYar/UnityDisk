@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using UnityDisk.GroupTree;
 
 namespace UnityDisk.Settings.Groups
 {
@@ -12,7 +13,27 @@ namespace UnityDisk.Settings.Groups
         public override string Name { get; set; }
         public bool IsActive { get; set; }
         public List<GroupSettingsItem> Items { get; set; }
+        [XmlIgnore]
+        public override GroupTreeTypeEnum Type => GroupTreeTypeEnum.Container;
 
+        public GroupSettingsContainer(IContainer container)
+        {
+            Name = container.Name;
+            IsActive = container.IsActive;
+            Items = new List<GroupSettingsItem>();
+            foreach (var item in container.Items)
+            {
+                switch (item)
+                {
+                    case IContainer nextContainer:
+                        Items.Add(new GroupSettingsContainer(nextContainer));
+                        break;
+                    case IGroup nextGroup:
+                        Items.Add(new GroupSettingsGroup(nextGroup));
+                        break;
+                }
+            }
+        }
         public bool Equals(GroupSettingsContainer other)
         {
             if (other == null) return false;

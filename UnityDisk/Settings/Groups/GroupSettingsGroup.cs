@@ -4,13 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using UnityDisk.GroupTree;
 
 namespace UnityDisk.Settings.Groups
 {
     public sealed class GroupSettingsGroup : GroupSettingsItem, IEquatable<GroupSettingsGroup>
     {
+        public GroupSettingsGroup(IGroup group)
+        {
+            Name = group.Name;
+            Items = new List<string>();
+
+            foreach (var item in group.Items)
+            {
+                Items.Add(item.Login);
+            }
+        }
+
         public override string Name { get; set; }
         public List<string> Items { get; set; }
+        [XmlIgnore]
+        public override GroupTreeTypeEnum Type=> GroupTreeTypeEnum.Group;
+
         public bool Equals(GroupSettingsGroup other)
         {
             if (other == null) return false;
