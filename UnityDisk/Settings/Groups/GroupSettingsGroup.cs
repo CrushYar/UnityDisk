@@ -20,6 +20,7 @@ namespace UnityDisk.Settings.Groups
                 Items.Add(item.Login);
             }
         }
+        public GroupSettingsGroup() { }
 
         public override string Name { get; set; }
         public List<string> Items { get; set; }

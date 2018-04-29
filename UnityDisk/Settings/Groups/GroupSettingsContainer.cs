@@ -16,6 +16,7 @@ namespace UnityDisk.Settings.Groups
         [XmlIgnore]
         public override GroupTreeTypeEnum Type => GroupTreeTypeEnum.Container;
 
+        public GroupSettingsContainer() { }
         public GroupSettingsContainer(IContainer container)
         {
             Name = container.Name;
