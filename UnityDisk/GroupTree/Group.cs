@@ -18,7 +18,10 @@ namespace UnityDisk.GroupTree
 
         public IContainer Parent { get; set; }
 
-        public Group() { }
+        public Group()
+        {
+            Items=new List<IAccountProjection>();
+        }
 
         public IGroupTreeItem Clone()
         {
