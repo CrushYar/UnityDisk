@@ -33,6 +33,10 @@ namespace UnityDisk.GroupTree.Registry
         /// </summary>
         public IGroupTreeItemProjection Item { get; private set; }
         /// <summary>
+        /// Путь к элементу
+        /// </summary>
+        public Queue<string> Path { get; set; }
+        /// <summary>
         /// Тип действия
         /// </summary>
         public RegistryActionEnum Action { get;private set; }

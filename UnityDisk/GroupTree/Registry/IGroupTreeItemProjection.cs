@@ -7,7 +7,7 @@ using UnityDisk.Accounts;
 
 namespace UnityDisk.GroupTree.Registry
 {
-   public interface IGroupTreeItemProjection
+   public interface IGroupTreeItemProjection:ICloneable<IGroupTreeItemProjection>
     {
         /// <summary>
         /// Название элемента

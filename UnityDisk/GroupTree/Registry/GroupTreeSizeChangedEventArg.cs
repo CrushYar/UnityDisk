@@ -21,7 +21,17 @@ namespace UnityDisk.GroupTree.Registry
     {
         public GroupTreeSizeChangedEventArg(IGroupTreeItem item, SpaceSize oldSize, SpaceSize newSize, GroupTreeSizeChangedEnum action)
         {
-            Item = item;
+            switch (item)
+            {
+                case IGroup group:
+                    Item = new GroupProjection(group);
+                    break;
+                case IContainer container:
+                    Item = new ContainerProjection(container);
+                    break;
+                default:
+                    throw new ArgumentException("Unknown type");
+            }
             OldSize = oldSize;
             NewSize = newSize;
             Action = action;
@@ -34,7 +44,11 @@ namespace UnityDisk.GroupTree.Registry
         /// <summary>
         /// Элемент, который вызвал событие
         /// </summary>
-        public IGroupTreeItem Item { get; private set; }
+        public IGroupTreeItemProjection Item { get; private set; }
+        /// <summary>
+        /// Путь к элементу
+        /// </summary>
+        public Queue<string> Path { get; set; }
         /// <summary>
         /// Старый размер
         /// </summary>

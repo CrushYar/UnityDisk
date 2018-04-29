@@ -20,18 +20,23 @@ namespace UnityDisk.GroupTree.Registry
         /// </summary>
         event EventHandler<GroupTreeStructureChangedEventArg> ChangedStructureEvent;
         /// <summary>
+        /// Событие при изменении имени элемента дерева групп
+        /// </summary>
+        event EventHandler<GroupTreeItemNameChangedEventArg> ChangedGroupTreeItemNameEvent;
+        /// <summary>
         /// Добавление нового элемента по указанному пути
         /// </summary>
         /// <param name="path">Пусть, относительно которого нужно добавить группу</param>
         /// <param name="item">Добавляемый элемент</param>
         void Add(Queue<string> path, IGroupTreeItem item);
-       
+
         /// <summary>
         /// Удаление элемента по указанному пути
         /// </summary>
-        /// <param name="fullPath">Полный путь к элементу включая имя элемента</param>
+        /// <param name="path">Путь к элементу</param>
+        /// <param name="name">Имя элемента</param>
         /// <param name="type">Тип элемента</param>
-       void Delete(Queue<string> fullPath, GroupTreeTypeEnum type);
+        void Delete(Queue<string> path,string name, GroupTreeTypeEnum type);
         /// <summary>
         /// Удаление элемента по указанному пути
         /// </summary>
@@ -57,10 +62,11 @@ namespace UnityDisk.GroupTree.Registry
         /// <summary>
         /// Перемещение элемента
         /// </summary>
-        /// <param name="oldFullPath">Полный путь к элементу, включая имя элемента</param>
+        /// <param name="path">Полный путь к элементу, включая имя элемента</param>
+        /// <param name="name">Имя элемента</param>
         /// <param name="type">Тип элемента</param>
         /// <param name="newPath">Целевой путь, не включая имя</param>
-        void Move(Queue<string> oldFullPath, GroupTreeTypeEnum type, Queue<string> newPath);
+        void Move(Queue<string> path,string name, GroupTreeTypeEnum type, Queue<string> newPath);
         /// <summary>
         /// Перемещение элемента
         /// </summary>
@@ -78,10 +84,11 @@ namespace UnityDisk.GroupTree.Registry
         /// <summary>
         /// Копирование элемента
         /// </summary>
-        /// <param name="fullPath">Полный путь к элементу, включая имя</param>
+        /// <param name="path">Полный путь к элементу, включая имя</param>
+        /// <param name="name">Имя элемента</param>
         /// <param name="type">Тип элемента</param>
         /// <param name="otherPath">Целевой путь</param>
-        void Copy(Queue<string> fullPath, GroupTreeTypeEnum type, Queue<string> otherPath);
+        void Copy(Queue<string> path, string name,GroupTreeTypeEnum type, Queue<string> otherPath);
         /// <summary>
         /// Загрузка данных
         /// </summary>

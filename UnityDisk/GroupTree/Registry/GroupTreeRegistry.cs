@@ -19,6 +19,7 @@ namespace UnityDisk.GroupTree.Registry
 
         public event EventHandler<GroupTreeSizeChangedEventArg> ChangedSizeEvent;
         public event EventHandler<GroupTreeStructureChangedEventArg> ChangedStructureEvent;
+        public event EventHandler<GroupTreeItemNameChangedEventArg> ChangedGroupTreeItemNameEvent;
 
         private void LoadSittings() { }
         private void SaveSittings() { }
@@ -42,29 +43,36 @@ namespace UnityDisk.GroupTree.Registry
             return false;
         }
 
-        public void Add(Queue<string> path, IGroupTreeItem item)
+        private IContainer FindItemDirectory(Queue<string> path)
         {
             string fullCurrentPath = String.Empty;
-            IContainer walkerToBottom= _groupTree;
+            IContainer walkerToBottom = _groupTree;
 
-
-            string name = path.Count > 0 ? path.Dequeue() : null ;
-            while (name != null)
+            while (path.Count > 0)
             {
-                fullCurrentPath += "/" + name;
-                walkerToBottom = walkerToBottom.Items.First(it => it.Name == name && it.Type == GroupTreeTypeEnum.Container) as IContainer;
+                string containernNme = path.Dequeue();
+                fullCurrentPath += "/" + containernNme;
+                walkerToBottom = walkerToBottom.Items.First(it => it.Name == containernNme && it.Type == GroupTreeTypeEnum.Container) as IContainer;
                 if (walkerToBottom == null)
                     throw new InvalidDataException(String.Concat("Don't found the container: '{0}'", fullCurrentPath));
-                name = path.Count > 0 ? path.Dequeue() : null;
             }
+            return walkerToBottom;
+        }
 
-            if (NameScan(walkerToBottom, item.Name,item.Type))
+        public void Add(Queue<string> path, IGroupTreeItem item)
+        {
+            Queue<string> copyPath = new Queue<string>(path);
+
+            string fullCurrentPath = String.Empty;
+            IContainer itemDirectory = FindItemDirectory(path);
+
+            if (NameScan(itemDirectory, item.Name,item.Type))
                 throw new ArgumentException("Element has already been");
 
-            item.Parent = walkerToBottom;
-            walkerToBottom.Items.Add(item);
+            item.Parent = itemDirectory;
+            itemDirectory.Items.Add(item);
 
-            IContainer walkerToTop= walkerToBottom;
+            IContainer walkerToTop= itemDirectory;
             SpaceSize oldSize = new SpaceSize(walkerToTop.Size);
             walkerToTop.Size.Addition(item.Size);
             SpaceSize newSize = new SpaceSize(walkerToTop.Size);
@@ -76,113 +84,147 @@ namespace UnityDisk.GroupTree.Registry
                 walkerToTop = walkerToTop.Parent;
             }
 
-            OnChangedStructureEvent(item, RegistryActionEnum.Added);
-            OnChangedSizeEvent(item, oldSize, newSize, GroupTreeSizeChangedEnum.ItemAdded);
-        }
+            SaveSittings();
 
-        public void Delete(Queue<string> fullPath, GroupTreeTypeEnum type)
-        {
-            string fullCurrentPath = String.Empty;
-            IContainer walkerToBottom = _groupTree;
-
-
-            while (fullPath.Count > 1)
-            {
-                string containernNme = fullPath.Dequeue();
-                fullCurrentPath += "/" + containernNme;
-                walkerToBottom = walkerToBottom.Items.First(it => it.Name == containernNme && it.Type==GroupTreeTypeEnum.Container) as IContainer;
-                if (walkerToBottom == null)
-                    throw new InvalidDataException(String.Concat("Don't found the container: '{0}'", fullCurrentPath));
-            }
-
-            string itemName = fullPath.Count > 0 
-                ? fullPath.Dequeue() : throw new ArgumentException("There isn't the name of item");
-
-            IGroupTreeItem itemForDelete= walkerToBottom.Items.FirstOrDefault(it => it.Name == itemName && it.Type == type);
-
-            if(itemForDelete==null) throw new DirectoryNotFoundException();
-
-            walkerToBottom.Items.Remove(itemForDelete);
-            SpaceSize oldSize = new SpaceSize(walkerToBottom.Size);
-            walkerToBottom.Size.Subtraction(itemForDelete.Size);
-            SpaceSize newSize = new SpaceSize(walkerToBottom.Size);
-
-            OnChangedStructureEvent(itemForDelete, RegistryActionEnum.Removed);
-            OnChangedSizeEvent(itemForDelete, oldSize, newSize, GroupTreeSizeChangedEnum.ItemAdded);
+            OnChangedStructureEvent(item, copyPath, RegistryActionEnum.Added);
+            OnChangedSizeEvent(item, copyPath, oldSize, newSize, GroupTreeSizeChangedEnum.ItemAdded);
         }
 
         public void Delete(Queue<string> path, IGroupTreeItem item)
         {
+            Delete(path, item.Name, item.Type);
+        }
+        public void Delete(Queue<string> path, string name, GroupTreeTypeEnum type)
+        {
+            Queue<string> copyPath = new Queue<string>(path);
+
             string fullCurrentPath = String.Empty;
-            IContainer walkerToBottom = _groupTree;
+            IContainer itemDirectory = FindItemDirectory(path);
 
-
-            while (path.Count > 0)
-            {
-                string containernNme = path.Dequeue();
-                fullCurrentPath += "/" + containernNme;
-                walkerToBottom = walkerToBottom.Items.First(it => it.Name == containernNme && it.Type == GroupTreeTypeEnum.Container) as IContainer;
-                if (walkerToBottom == null)
-                    throw new InvalidDataException(String.Concat("Don't found the container: '{0}'", fullCurrentPath));
-            }
-
-            IGroupTreeItem itemForDelete = walkerToBottom.Items.FirstOrDefault(it => it.Name == item.Name && it.Type == item.Type);
+            IGroupTreeItem itemForDelete = itemDirectory.Items.FirstOrDefault(it => it.Name == name && it.Type == type);
 
             if (itemForDelete == null) throw new DirectoryNotFoundException();
 
-            walkerToBottom.Items.Remove(itemForDelete);
-            SpaceSize oldSize = new SpaceSize(walkerToBottom.Size);
-            walkerToBottom.Size.Subtraction(itemForDelete.Size);
-            SpaceSize newSize = new SpaceSize(walkerToBottom.Size);
+            itemDirectory.Items.Remove(itemForDelete);
+            SpaceSize oldSize = new SpaceSize(itemDirectory.Size);
+            itemDirectory.Size.Subtraction(itemForDelete.Size);
+            SpaceSize newSize = new SpaceSize(itemDirectory.Size);
 
-            OnChangedStructureEvent(itemForDelete, RegistryActionEnum.Removed);
-            OnChangedSizeEvent(itemForDelete, oldSize, newSize, GroupTreeSizeChangedEnum.ItemAdded);
+            SaveSittings();
+
+            OnChangedStructureEvent(itemForDelete, copyPath, RegistryActionEnum.Removed);
+            OnChangedSizeEvent(itemForDelete, copyPath,oldSize, newSize, GroupTreeSizeChangedEnum.ItemAdded);
         }
 
         public void Rename(Queue<string> path, string oldName, GroupTreeTypeEnum type, string newName)
         {
-            throw new NotImplementedException();
+            Queue<string> copyPath = new Queue<string>(path);
+
+            string fullCurrentPath = String.Empty;
+            IContainer itemDirectory = FindItemDirectory(path);
+
+            IGroupTreeItem itemForRename = itemDirectory.Items.FirstOrDefault(it => it.Name == oldName && it.Type == type);
+
+            if (itemForRename == null) throw new DirectoryNotFoundException();
+            
+            if(NameScan(itemDirectory, newName,type))
+                throw new ArgumentException("Element has already been");
+
+            itemForRename.Name = newName;
+
+            SaveSittings();
+
+            OnChangedGroupTreeItemNameEvent(itemForRename, copyPath, oldName, newName);
         }
 
         public void Rename(Queue<string> path, IGroupTreeItem item, string newName)
         {
-            throw new NotImplementedException();
+          Rename(path,item.Name,item.Type,newName);
         }
 
-        public void Move(Queue<string> oldFullPath, GroupTreeTypeEnum type, Queue<string> newPath)
+        public void Move(Queue<string> path, string name, GroupTreeTypeEnum type, Queue<string> newPath)
         {
-            throw new NotImplementedException();
+            Queue<string> copyPathFrom = new Queue<string>(path);
+            Queue<string> copyPathTo = new Queue<string>(newPath);
+
+            string fullCurrentPath = String.Empty;
+            IContainer itemDirectoryFrom = FindItemDirectory(path);
+            IContainer itemDirectoryTo= FindItemDirectory(newPath);
+
+            IGroupTreeItem itemForMove = itemDirectoryFrom.Items.FirstOrDefault(it => it.Name == name && it.Type == type);
+
+            if (itemForMove == null) throw new DirectoryNotFoundException();
+
+            if (NameScan(itemDirectoryTo, itemForMove.Name, itemForMove.Type))
+                throw new ArgumentException("Element has already been");
+
+            itemDirectoryTo.Items.Add(itemForMove);
+            OnChangedStructureEvent(itemForMove, copyPathFrom, RegistryActionEnum.Removed);
+
+            itemForMove.Parent = itemDirectoryTo;
+            itemDirectoryFrom.Items.Remove(itemForMove);
+
+            SaveSittings();
+
+            OnChangedStructureEvent(itemForMove, copyPathTo, RegistryActionEnum.Added);
         }
 
         public void Move(Queue<string> path, IGroupTreeItem item, Queue<string> newPath)
         {
-            throw new NotImplementedException();
+            Move(path,item.Name,item.Type,newPath);
         }
 
         public void Copy(Queue<string> path, IGroupTreeItem item, Queue<string> newPath)
         {
-            throw new NotImplementedException();
+           Copy(path,item.Name,item.Type,newPath);
         }
 
-        public void Copy(Queue<string> fullPath, GroupTreeTypeEnum type, Queue<string> otherPath)
+        public void Copy(Queue<string> path, string name, GroupTreeTypeEnum type, Queue<string> otherPath)
         {
-            throw new NotImplementedException();
+            Queue<string> copyPathFrom = new Queue<string>(path);
+            Queue<string> copyPathTo = new Queue<string>(path);
+
+            string fullCurrentPath = String.Empty;
+            IContainer itemDirectoryFrom = FindItemDirectory(path);
+            IContainer itemDirectoryTo = FindItemDirectory(otherPath);
+
+            IGroupTreeItem itemForCopy = itemDirectoryFrom.Items.FirstOrDefault(it => it.Name == name && it.Type == type);
+
+            if (itemForCopy == null) throw new DirectoryNotFoundException();
+
+            if (NameScan(itemDirectoryTo, itemForCopy.Name, itemForCopy.Type))
+                throw new ArgumentException("Element has already been");
+
+            IGroupTreeItem newItem = itemForCopy.Clone();
+
+            newItem.Parent = itemDirectoryTo;
+            itemDirectoryTo.Items.Add(newItem);
+
+            SaveSittings();
+
+            OnChangedStructureEvent(newItem, copyPathTo, RegistryActionEnum.Added);
         }
 
         public void Load()
         {
-            throw new NotImplementedException();
+            LoadSittings();
         }
 
 
-        void OnChangedStructureEvent(IGroupTreeItem item, RegistryActionEnum action)
+        void OnChangedStructureEvent(IGroupTreeItem item, Queue<string> path, RegistryActionEnum action)
         {
-            ChangedStructureEvent?.Invoke(this, new GroupTreeStructureChangedEventArg(item, action));
+            ChangedStructureEvent?.Invoke(this, new GroupTreeStructureChangedEventArg(item, action){Path = path});
         }
 
-        void OnChangedSizeEvent(IGroupTreeItem item, SpaceSize oldSize, SpaceSize newSize, GroupTreeSizeChangedEnum action)
+        void OnChangedSizeEvent(IGroupTreeItem item, Queue<string> path, SpaceSize oldSize, SpaceSize newSize, GroupTreeSizeChangedEnum action)
         {
-            ChangedSizeEvent?.Invoke(this, new GroupTreeSizeChangedEventArg(item, oldSize, newSize, action));
+            ChangedSizeEvent?.Invoke(this, new GroupTreeSizeChangedEventArg(item, oldSize, newSize, action) { Path = path });
         }
+
+        void OnChangedGroupTreeItemNameEvent(IGroupTreeItem item, Queue<string> path, string oldName, string newName)
+        {
+            ChangedGroupTreeItemNameEvent?.Invoke(this, new GroupTreeItemNameChangedEventArg(item, oldName, newName) { Path = path });
+        }
+
     }
 }
