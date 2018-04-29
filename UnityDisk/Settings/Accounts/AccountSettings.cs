@@ -35,8 +35,8 @@ namespace UnityDisk.Settings.Accounts
         {
            string strValue= _settings.GetValueAsString(_parameterName);
 
-            AccountSettingsItem[] forGetType =
-            {
+            object forGetType =
+                new []{
                 new AccountSettingsItem()
             };
 
