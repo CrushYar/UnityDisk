@@ -77,7 +77,64 @@ namespace UnityDisk_Test.Settings.Groups
             GroupSettingsContainer actuality = _settings.LoadGroupTree();
             Assert.IsNotNull(actuality);
             Assert.IsNotNull(actuality.Items);
-            Assert.AreEqual(expected,actuality);
+            Assert.AreEqual(expected, actuality);
         }
+        [TestMethod]
+        public void Can_AddGroup()
+        {
+            GroupSettings _settings = new GroupSettings(_mockService.Object, _parameterName, null);
+            string expectedStringForSave =
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<GroupSettingsContainer xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>Room</Name>\r\n  <IsActive>false</IsActive>\r\n  <Items>\r\n    <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n      <Name>Group</Name>\r\n      <Items>\r\n        <string>Account1</string>\r\n        <string>Account2</string>\r\n      </Items>\r\n    </GroupSettingsItem>\r\n  </Items>\r\n</GroupSettingsContainer>";
+
+            var expected = new GroupSettingsGroup() { Items = new List<string>() { "Account1", "Account2" }, Name = "Group" };
+            _mockService.Setup(settings => settings.GetValueAsString(_parameterName)).Returns(String.Empty);
+            GroupSettingsContainer actuality = _settings.LoadGroupTree();
+
+            _settings.Add(new List<string>(), expected);
+
+            _mockService.Verify(settings => settings.SetValueAsString(_parameterName, expectedStringForSave), Occurred.Once());
+
+            Assert.IsNotNull(actuality);
+            Assert.IsNotNull(actuality.Items);
+        }
+
+        [TestMethod]
+        public void Can_AddContainer()
+        {
+            GroupSettings _settings = new GroupSettings(_mockService.Object, _parameterName, null);
+            string expectedStringForSave =
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<GroupSettingsContainer xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>Room</Name>\r\n  <IsActive>false</IsActive>\r\n  <Items>\r\n    <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n      <Name>MainContainer</Name>\r\n      <IsActive>true</IsActive>\r\n      <Items>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n          <Name>Group</Name>\r\n          <Items>\r\n            <string>Account1</string>\r\n            <string>Account2</string>\r\n          </Items>\r\n        </GroupSettingsItem>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n          <Name>Container</Name>\r\n          <IsActive>true</IsActive>\r\n          <Items />\r\n        </GroupSettingsItem>\r\n      </Items>\r\n    </GroupSettingsItem>\r\n  </Items>\r\n</GroupSettingsContainer>";
+
+            var expected = new GroupSettingsContainer()
+            {
+                Name = "MainContainer", IsActive = true,
+                Items = new List<GroupSettingsItem>()
+                {
+                    new GroupSettingsGroup()
+                    {
+                        Items = new List<string>() {"Account1", "Account2"},
+                        Name = "Group"
+                    },
+                    new GroupSettingsContainer()
+                    {
+                        Name = "Container",
+                        Items = new List<GroupSettingsItem>(),
+                        IsActive = true
+                    }
+                }
+            };
+
+            _mockService.Setup(settings => settings.GetValueAsString(_parameterName)).Returns(String.Empty);
+            GroupSettingsContainer actuality = _settings.LoadGroupTree();
+
+            _settings.Add(new List<string>(), expected);
+
+            _mockService.Verify(settings => settings.SetValueAsString(_parameterName, expectedStringForSave),
+                Occurred.Once());
+
+            Assert.IsNotNull(actuality);
+            Assert.IsNotNull(actuality.Items);
+        }
+
     }
 }

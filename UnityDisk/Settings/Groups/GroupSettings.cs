@@ -36,7 +36,11 @@ namespace UnityDisk.Settings.Groups
         public GroupSettingsContainer LoadGroupTree()
         {
             string strValue = _settings.GetValueAsString(_parameterName);
-
+            if (String.IsNullOrEmpty(strValue))
+            {
+                _container=new GroupSettingsContainer(){ Items = new List<GroupSettingsItem>(), Name = "Room", IsActive = false};
+                return _container;
+            }
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(GroupSettingsContainer), new[]{
                 typeof(GroupSettingsItem),
                 typeof(GroupSettingsGroup)
