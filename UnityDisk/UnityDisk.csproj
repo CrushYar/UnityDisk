@@ -139,6 +139,13 @@
     <Compile Include="Settings\Accounts\IAccountSettings.cs" />
     <Compile Include="Settings\Accounts\IAccountSettingsItem.cs" />
     <Compile Include="ContainerConfiguration.cs" />
+    <Compile Include="Settings\Groups\GroupSettings.cs" />
+    <Compile Include="Settings\Groups\GroupSettingsContainer.cs" />
+    <Compile Include="Settings\Groups\GroupSettingsGroup.cs" />
+    <Compile Include="Settings\Groups\IGroupSettings.cs" />
+    <Compile Include="Settings\Groups\GroupSettingsContainerTemplate.cs" />
+    <Compile Include="Settings\Groups\GroupSettingsGroupTemplate.cs" />
+    <Compile Include="Settings\Groups\IGroupSettingsItem.cs" />
     <Compile Include="Settings\ISettings.cs" />
     <Compile Include="Settings\RemoteSettings.cs" />
   </ItemGroup>
@@ -196,7 +203,6 @@
     <Folder Include="FileStorages\Yandex\FileStorageFactory\" />
     <Folder Include="FileStorages\Yandex\FileStorageItem\" />
     <Folder Include="Settings\BackgroundOperations\" />
-    <Folder Include="Settings\Groups\" />
     <Folder Include="StorageItems\FileManagers\" />
   </ItemGroup>
   <ItemGroup>

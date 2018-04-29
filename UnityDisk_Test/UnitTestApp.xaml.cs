@@ -18,6 +18,7 @@ using HyperMock;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UnityDisk.Settings;
 using UnityDisk.Settings.Accounts;
+using UnityDisk.Settings.Groups;
 
 namespace UnityDisk_Test
 {
@@ -32,28 +33,8 @@ namespace UnityDisk_Test
         /// </summary>
         public App()
         {
-            Can_LoadAccounts();
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-        }
-        private Mock<ISettings> _mockService;
-        private AccountSettings _settings;
-        private string _parameterName;
-
-        public void Can_LoadAccounts()
-        {
-            _mockService = Mock.Create<ISettings>();
-            _parameterName = "accountSettings";
-            _settings = new AccountSettings(_mockService.Object, _parameterName);
-
-            string stub =
-                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<ArrayOfAccountSettingsItem xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <AccountSettingsItem>\r\n    <Login>myLogin</Login>\r\n    <Token>123</Token>\r\n    <ServerName>Yandex</ServerName>\r\n  </AccountSettingsItem>\r\n</ArrayOfAccountSettingsItem>";
-            var expected = new[]
-            {
-                new AccountSettingsItem() {Login = "myLogin", ServerName = "Yandex", Token = "123"},
-            };
-            _mockService.Setup(settings => settings.GetValueAsString(_parameterName)).Returns(stub);
-            IAccountSettingsItem[] actuality = _settings.LoadAccounts();
         }
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
