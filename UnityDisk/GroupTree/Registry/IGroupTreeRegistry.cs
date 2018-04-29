@@ -16,6 +16,10 @@ namespace UnityDisk.GroupTree.Registry
         /// </summary>
         event EventHandler<GroupTreeSizeChangedEventArg> ChangedSizeEvent;
         /// <summary>
+        /// Событие при изменении состояния активности одного из контейнеров дерева групп
+        /// </summary>
+        event EventHandler<GroupTreeActivetyChangedEventArg> ChangedActivetyEvent;
+        /// <summary>
         /// Событие при изменении структуры дерева групп
         /// </summary>
         event EventHandler<GroupTreeStructureChangedEventArg> ChangedStructureEvent;
@@ -33,16 +37,16 @@ namespace UnityDisk.GroupTree.Registry
         /// <summary>
         /// Удаление элемента по указанному пути
         /// </summary>
-        /// <param name="path">Путь к элементу</param>
+        /// <param name="path">Путь к элементу, не включая имя элемента</param>
         /// <param name="name">Имя элемента</param>
         /// <param name="type">Тип элемента</param>
         void Delete(IList<string> path,string name, GroupTreeTypeEnum type);
         /// <summary>
         /// Удаление элемента по указанному пути
         /// </summary>
-        /// <param name="path">Полный путь к элементу</param>
+        /// <param name="path">Путь к элементу, не включая имя элемента</param>
         /// <param name="item">Удаляемый элемент</param>
-        void Delete(IList<string> path, IGroupTreeItem item);
+        void Delete(IList<string> path, IGroupTreeItemProjection item);
       
         /// <summary>
         /// Переименование элемента
@@ -55,14 +59,14 @@ namespace UnityDisk.GroupTree.Registry
         /// <summary>
         /// Переименование элемента
         /// </summary>
-        /// <param name="path">Путь к элементу</param>
+        /// <param name="path">Путь к элементу, не включая имя элемента</param>
         /// <param name="item">Элемент для переименования</param>
         /// <param name="newName">Новое имя элемента</param>
-        void Rename(IList<string> path, IGroupTreeItem item, string newName);
+        void Rename(IList<string> path, IGroupTreeItemProjection item, string newName);
         /// <summary>
         /// Перемещение элемента
         /// </summary>
-        /// <param name="path">Полный путь к элементу, включая имя элемента</param>
+        /// <param name="path">Путь к элементу, не включая имя элемента</param>
         /// <param name="name">Имя элемента</param>
         /// <param name="type">Тип элемента</param>
         /// <param name="newPath">Целевой путь, не включая имя</param>
@@ -70,25 +74,32 @@ namespace UnityDisk.GroupTree.Registry
         /// <summary>
         /// Перемещение элемента
         /// </summary>
-        /// <param name="path">Путь к элементу</param>
+        /// <param name="path">Путь к элементу, не включая имя элемента</param>
         /// <param name="item">Элемент для перемещения</param>
         /// <param name="newPath">Целевой путь</param>
-        void Move(IList<string> path, IGroupTreeItem item, IList<string> newPath);
+        void Move(IList<string> path, IGroupTreeItemProjection item, IList<string> newPath);
         /// <summary>
         /// Копирование элемента
         /// </summary>
-        /// <param name="path">Путь к элементу</param>
+        /// <param name="path">Путь к элементу, не включая имя элемента</param>
         /// <param name="item">Элемент для копирования</param>
         /// <param name="newPath">Целевой путь</param>
-        void Copy(IList<string> path, IGroupTreeItem item, IList<string> newPath);
+        void Copy(IList<string> path, IGroupTreeItemProjection item, IList<string> newPath);
         /// <summary>
         /// Копирование элемента
         /// </summary>
-        /// <param name="path">Полный путь к элементу, включая имя</param>
+        /// <param name="path">Путь к элементу, не включая имя элемента</param>
         /// <param name="name">Имя элемента</param>
         /// <param name="type">Тип элемента</param>
         /// <param name="otherPath">Целевой путь</param>
         void Copy(IList<string> path, string name,GroupTreeTypeEnum type, IList<string> otherPath);
+        /// <summary>
+        /// Изменение состояния контейнера
+        /// </summary>
+        /// <param name="path">Путь к элементу, не включая имя элемента</param>
+        /// <param name="name">Имя элемента</param>
+        /// <param name="value">Значение</param>
+        void SetActive(IList<string> path, string name, bool value);
         /// <summary>
         /// Загрузка данных
         /// </summary>

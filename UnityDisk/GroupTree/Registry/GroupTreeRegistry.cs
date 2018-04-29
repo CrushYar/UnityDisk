@@ -22,6 +22,7 @@ namespace UnityDisk.GroupTree.Registry
         private IUnityContainer _container;
 
         public event EventHandler<GroupTreeSizeChangedEventArg> ChangedSizeEvent;
+        public event EventHandler<GroupTreeActivetyChangedEventArg> ChangedActivetyEvent;
         public event EventHandler<GroupTreeStructureChangedEventArg> ChangedStructureEvent;
         public event EventHandler<GroupTreeItemNameChangedEventArg> ChangedGroupTreeItemNameEvent;
 
@@ -32,14 +33,6 @@ namespace UnityDisk.GroupTree.Registry
         {
             _container = ContainerConfiguration.GetContainer().Container;
             _settings = _container.Resolve<IGroupSettings>();
-        }
-
-        /// <summary>
-        /// Сохранение дерева в настройках
-        /// </summary>
-        private void SaveSittings()
-        {
-            _settings.SaveGroupTree();
         }
 
         /// <summary>
@@ -82,8 +75,6 @@ namespace UnityDisk.GroupTree.Registry
 
         public void Add(IList<string> path, IGroupTreeItem item)
         {
-            List<string> copyPath = new List<string>(path);
-
             string fullCurrentPath = String.Empty;
             IContainer itemDirectory = FindItemDirectory(path);
 
@@ -105,13 +96,23 @@ namespace UnityDisk.GroupTree.Registry
                 walkerToTop = walkerToTop.Parent;
             }
 
-            SaveSittings();
+            switch (item)
+            {
+                case IContainer container:
+                    _settings.Add(path,new GroupSettingsContainer(container));
+                    break;
+                case IGroup group:
+                    _settings.Add(path, new GroupSettingsGroup(group));
+                    break;
+                default:
+                    throw new ArgumentException("Unknown type");
+            }
 
-            OnChangedStructureEvent(item, copyPath, RegistryActionEnum.Added);
-            OnChangedSizeEvent(item, copyPath, oldSize, newSize, GroupTreeSizeChangedEnum.ItemAdded);
+            OnChangedStructureEvent(item, path, RegistryActionEnum.Added);
+            OnChangedSizeEvent(item, path, oldSize, newSize, GroupTreeSizeChangedEnum.ItemAdded);
         }
 
-        public void Delete(IList<string> path, IGroupTreeItem item)
+        public void Delete(IList<string> path, IGroupTreeItemProjection item)
         {
             Delete(path, item.Name, item.Type);
         }
@@ -129,7 +130,7 @@ namespace UnityDisk.GroupTree.Registry
             itemDirectory.Size.Subtraction(itemForDelete.Size);
             SpaceSize newSize = new SpaceSize(itemDirectory.Size);
 
-            SaveSittings();
+           _settings.Delete(path,name,type);
 
             OnChangedStructureEvent(itemForDelete, path, RegistryActionEnum.Removed);
             OnChangedSizeEvent(itemForDelete, path, oldSize, newSize, GroupTreeSizeChangedEnum.ItemAdded);
@@ -149,12 +150,12 @@ namespace UnityDisk.GroupTree.Registry
 
             itemForRename.Name = newName;
 
-            SaveSittings();
+            _settings.Rename(path, oldName, type, newName);
 
             OnChangedGroupTreeItemNameEvent(itemForRename, path, oldName, newName);
         }
 
-        public void Rename(IList<string> path, IGroupTreeItem item, string newName)
+        public void Rename(IList<string> path, IGroupTreeItemProjection item, string newName)
         {
           Rename(path,item.Name,item.Type,newName);
         }
@@ -178,17 +179,17 @@ namespace UnityDisk.GroupTree.Registry
             itemForMove.Parent = itemDirectoryTo;
             itemDirectoryFrom.Items.Remove(itemForMove);
 
-            SaveSittings();
+            _settings.Move(path,name,type,newPath);
 
             OnChangedStructureEvent(itemForMove, newPath, RegistryActionEnum.Added);
         }
 
-        public void Move(IList<string> path, IGroupTreeItem item, IList<string> newPath)
+        public void Move(IList<string> path, IGroupTreeItemProjection item, IList<string> newPath)
         {
             Move(path,item.Name,item.Type,newPath);
         }
 
-        public void Copy(IList<string> path, IGroupTreeItem item, IList<string> newPath)
+        public void Copy(IList<string> path, IGroupTreeItemProjection item, IList<string> newPath)
         {
            Copy(path,item.Name,item.Type,newPath);
         }
@@ -211,9 +212,26 @@ namespace UnityDisk.GroupTree.Registry
             newItem.Parent = itemDirectoryTo;
             itemDirectoryTo.Items.Add(newItem);
 
-            SaveSittings();
+            _settings.Copy(path,name,type,otherPath);
 
             OnChangedStructureEvent(newItem, otherPath, RegistryActionEnum.Added);
+        }
+
+        public void SetActive(IList<string> path, string name, bool value)
+        {
+            string fullCurrentPath = String.Empty;
+            IContainer itemDirectory = FindItemDirectory(path);
+
+            IContainer itemForSetActive = itemDirectory.Items.FirstOrDefault(it => it.Name == name && it.Type == GroupTreeTypeEnum.Container)as IContainer;
+
+            if (itemForSetActive == null) throw new DirectoryNotFoundException();
+
+            bool oldValue = itemForSetActive.IsActive;
+            itemForSetActive.IsActive = value;
+
+            _settings.SetActive(path,name,value);
+
+            OnChangedActivetyEvent(itemForSetActive, oldValue, value, path);
         }
 
         public void Load()
@@ -237,5 +255,9 @@ namespace UnityDisk.GroupTree.Registry
             ChangedGroupTreeItemNameEvent?.Invoke(this, new GroupTreeItemNameChangedEventArg(item, oldName, newName) { Path = path });
         }
 
+        void OnChangedActivetyEvent(IContainer container,bool oldValue, bool newValue, IList<string> path)
+        {
+            ChangedActivetyEvent?.Invoke(this,new GroupTreeActivetyChangedEventArg(container,oldValue,newValue){Path = path });
+        }
     }
 }
