@@ -74,7 +74,7 @@ namespace UnityDisk_Test.Settings.Groups
                 }
             };
             _mockService.Setup(settings => settings.GetValueAsString(_parameterName)).Returns(stub);
-            GroupSettingsContainerTemplate actuality = _settings.LoadGroupTree();
+            GroupSettingsContainer actuality = _settings.LoadGroupTree();
             Assert.IsNotNull(actuality);
             Assert.IsNotNull(actuality.Items);
             Assert.AreEqual(expected,actuality);
