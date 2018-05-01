@@ -55,11 +55,36 @@ namespace UnityDisk_Test.GroupTree.Registry
                     new GroupSettingsGroup() {Name = "Group", Items = new List<string>() {"Account1"}}
                 }
             };
+
             SpaceSize expectedSize = new SpaceSize() {TotalSize = 100, FreelSize = 30, UsedSize = 70};
+
+            var expectedContainer = new ContainerProjection(new Container()
+            {
+                Name = "Root",
+                Size = expectedSize,
+                Items = new List<IGroupTreeItem>()
+                {
+                    new Container()
+                    {
+                        Name = "Container1",
+                        IsActive = true,
+                        Items = new List<IGroupTreeItem>()
+                        {
+                            new Container(){Name = "Container2", Size = new SpaceSize()},
+                            new Group(){Name = "Group2", Size = new SpaceSize()}
+                        },Size = new SpaceSize()
+                    },
+                    new Group(){Name = "Group", Size = expectedSize, Items = new List<IAccountProjection>()
+                    {
+                        _accountStub.Object
+                    }}
+                }
+            });
             _mockService.Setup(settings =>settings.LoadGroupTree()).Returns(groupSettingsStub);
             _accountRegistryStub.Setup(accountRegistry => accountRegistry.Find("Account1")).Returns(_accountStub.Object);
             _accountStub.SetupGet(accountProjection => accountProjection.Size).Returns(() => expectedSize);
-            _groupContainerStub =new UnityContainer();
+            _accountStub.SetupGet(accountProjection => accountProjection.Login).Returns(() => "Account1");
+            _groupContainerStub = new UnityContainer();
             _groupContainerStub.RegisterInstance<IGroupSettings>(_mockService.Object);
             _groupContainerStub.RegisterInstance<IAccountRegistry>(_accountRegistryStub.Object);
             _groupContainerStub.RegisterType<IContainer, Container>(new InjectionConstructor());
@@ -71,6 +96,7 @@ namespace UnityDisk_Test.GroupTree.Registry
 
             IContainerProjection rootProjection = registry.GetContainerProjection(new List<string>(), null);
             IContainerProjection containerProjection = registry.GetContainerProjection(new List<string>(){ "Container1",}, "Container2");
+            Assert.IsTrue(expectedContainer.Equals(rootProjection));
             Assert.IsNotNull(rootProjection);
             Assert.IsNotNull(containerProjection);
             Assert.AreEqual(rootProjection.Name, "Root");
