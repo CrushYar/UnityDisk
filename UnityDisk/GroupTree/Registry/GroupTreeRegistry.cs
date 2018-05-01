@@ -165,18 +165,6 @@ namespace UnityDisk.GroupTree.Registry
             item.Parent = itemDirectory;
             itemDirectory.Items.Add(item);
 
-            IContainer walkerToTop = itemDirectory;
-            SpaceSize oldSize = new SpaceSize(walkerToTop.Size);
-            walkerToTop.Size.Addition(item.Size);
-            SpaceSize newSize = new SpaceSize(walkerToTop.Size);
-            walkerToTop = walkerToTop.Parent;
-
-            while (walkerToTop != null)
-            {
-                walkerToTop.Size.Addition(item.Size);
-                walkerToTop = walkerToTop.Parent;
-            }
-
             switch (item)
             {
                 case IContainer container:
@@ -189,8 +177,12 @@ namespace UnityDisk.GroupTree.Registry
                     throw new ArgumentException("Unknown type");
             }
 
+            SpaceSize oldSize = new SpaceSize(_groupTree.Size);
+            _groupTree.LoadSizeInfo();
+            SpaceSize newSize = new SpaceSize(_groupTree.Size);
+
             OnChangedStructureEvent(item, path, RegistryActionEnum.Added);
-            OnChangedSizeEvent(item, path, oldSize, newSize, GroupTreeSizeChangedEnum.ItemAdded);
+            OnChangedSizeEvent(oldSize, newSize, GroupTreeSizeChangedEnum.ItemMoved);
         }
 
         public void Delete(IList<string> path, IGroupTreeItemProjection item)
@@ -208,14 +200,14 @@ namespace UnityDisk.GroupTree.Registry
             if (itemForDelete == null) throw new DirectoryNotFoundException();
 
             itemDirectory.Items.Remove(itemForDelete);
-            SpaceSize oldSize = new SpaceSize(itemDirectory.Size);
-            itemDirectory.Size.Subtraction(itemForDelete.Size);
-            SpaceSize newSize = new SpaceSize(itemDirectory.Size);
-
             _settings.Delete(path, name, type);
 
+            SpaceSize oldSize = new SpaceSize(_groupTree.Size);
+            _groupTree.LoadSizeInfo();
+            SpaceSize newSize = new SpaceSize(_groupTree.Size);
+
             OnChangedStructureEvent(itemForDelete, path, RegistryActionEnum.Removed);
-            OnChangedSizeEvent(itemForDelete, path, oldSize, newSize, GroupTreeSizeChangedEnum.ItemAdded);
+            OnChangedSizeEvent(oldSize, newSize, GroupTreeSizeChangedEnum.ItemDeleted);
         }
 
         public void Rename(IList<string> path, string oldName, GroupTreeTypeEnum type, string newName)
@@ -258,14 +250,19 @@ namespace UnityDisk.GroupTree.Registry
                 throw new ArgumentException("Element has already been");
 
             itemDirectoryTo.Items.Add(itemForMove);
-            OnChangedStructureEvent(itemForMove, path, RegistryActionEnum.Removed);
 
             itemForMove.Parent = itemDirectoryTo;
             itemDirectoryFrom.Items.Remove(itemForMove);
 
             _settings.Move(path, name, type, newPath);
 
+            SpaceSize oldSize=new SpaceSize(_groupTree.Size);
+            _groupTree.LoadSizeInfo();
+            SpaceSize newSize = new SpaceSize(_groupTree.Size);
+
             OnChangedStructureEvent(itemForMove, newPath, RegistryActionEnum.Added);
+            OnChangedStructureEvent(itemForMove, path, RegistryActionEnum.Removed);
+            OnChangedSizeEvent(oldSize, newSize, GroupTreeSizeChangedEnum.ItemMoved);
         }
 
         public void Move(IList<string> path, IGroupTreeItemProjection item, IList<string> newPath)
@@ -299,7 +296,13 @@ namespace UnityDisk.GroupTree.Registry
 
             _settings.Copy(path, name, type, otherPath);
 
+            SpaceSize oldSize = new SpaceSize(_groupTree.Size);
+            _groupTree.LoadSizeInfo();
+            SpaceSize newSize = new SpaceSize(_groupTree.Size);
+
             OnChangedStructureEvent(newItem, otherPath, RegistryActionEnum.Added);
+            OnChangedSizeEvent(oldSize, newSize, GroupTreeSizeChangedEnum.ItemCopied);
+
         }
 
         public void SetActive(IList<string> path, string name, bool value)
@@ -346,11 +349,11 @@ namespace UnityDisk.GroupTree.Registry
             ChangedStructureEvent?.Invoke(this, new GroupTreeStructureChangedEventArg(item, action) {Path = path});
         }
 
-        void OnChangedSizeEvent(IGroupTreeItem item, IList<string> path, SpaceSize oldSize, SpaceSize newSize,
+        void OnChangedSizeEvent(SpaceSize oldSize, SpaceSize newSize,
             GroupTreeSizeChangedEnum action)
         {
             ChangedSizeEvent?.Invoke(this,
-                new GroupTreeSizeChangedEventArg(item, oldSize, newSize, action) {Path = path});
+                new GroupTreeSizeChangedEventArg(oldSize, newSize, action));
         }
 
         void OnChangedGroupTreeItemNameEvent(IGroupTreeItem item, IList<string> path, string oldName, string newName)
