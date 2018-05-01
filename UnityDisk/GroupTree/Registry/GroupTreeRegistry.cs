@@ -44,7 +44,6 @@ namespace UnityDisk.GroupTree.Registry
         /// </summary>
         private void LoadSittings()
         {
-            _unityContainer = ContainerConfiguration.GetContainer().Container;
             _settings = _unityContainer.Resolve<IGroupSettings>();
             _accountRegistry = _unityContainer.Resolve<IAccountRegistry>();
 
@@ -136,6 +135,16 @@ namespace UnityDisk.GroupTree.Registry
             }
 
             return walkerToBottom;
+        }
+
+        public GroupTreeRegistry()
+        {
+            _unityContainer = ContainerConfiguration.GetContainer().Container;
+        }
+
+        public GroupTreeRegistry(IUnityContainer unityContainer)
+        {
+            _unityContainer = unityContainer;
         }
 
         public void Add(IList<string> path, IGroupTreeItem item)

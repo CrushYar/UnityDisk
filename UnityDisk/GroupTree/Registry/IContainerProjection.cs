@@ -17,5 +17,10 @@ namespace UnityDisk.GroupTree.Registry
         /// </summary>
         /// <param name="container">Источник данных</param>
         void SetDataContext(IContainer container);
+        /// <summary>
+        /// Получение списка дочерних элементов
+        /// </summary>
+        /// <returns></returns>
+        List<IGroupTreeItemProjection> GetChildren();
     }
 }

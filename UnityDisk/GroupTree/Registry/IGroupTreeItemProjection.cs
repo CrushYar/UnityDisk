@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityDisk.Accounts;
+using UnityDisk.Accounts.Registry;
 
 namespace UnityDisk.GroupTree.Registry
 {
@@ -21,5 +22,10 @@ namespace UnityDisk.GroupTree.Registry
         /// Тип элемента
         /// </summary>
         GroupTreeTypeEnum Type { get; }
+        /// <summary>
+        /// Получение коллекции аккаунтов находящийся внутри элемента
+        /// </summary>
+        /// <returns>Список аккаунтов</returns>
+        List<IAccountProjection> GetAccountProjections();
     }
 }

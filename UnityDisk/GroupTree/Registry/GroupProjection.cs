@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityDisk.Accounts;
+using UnityDisk.Accounts.Registry;
 
 namespace UnityDisk.GroupTree.Registry
 {
@@ -30,6 +31,11 @@ namespace UnityDisk.GroupTree.Registry
         public IGroupTreeItemProjection Clone()
         {
             return new GroupProjection(_originGroup);
+        }
+
+        public List<IAccountProjection> GetAccountProjections()
+        {
+            return new List<IAccountProjection>(_originGroup.Items);;
         }
     }
 }
