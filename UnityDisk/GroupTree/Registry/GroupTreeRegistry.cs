@@ -52,6 +52,8 @@ namespace UnityDisk.GroupTree.Registry
             if (root == null)
             {
                 _groupTree= _unityContainer.Resolve<IContainer>();
+                _groupTree.Name = "Root";
+                _groupTree.Size=new SpaceSize();
                 return;
             }
 

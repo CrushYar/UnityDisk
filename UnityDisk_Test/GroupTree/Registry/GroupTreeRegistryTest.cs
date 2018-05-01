@@ -56,7 +56,7 @@ namespace UnityDisk_Test.GroupTree.Registry
                 }
             };
 
-            SpaceSize expectedSize = new SpaceSize() {TotalSize = 100, FreelSize = 30, UsedSize = 70};
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 30, UsedSize = 70 };
 
             var expectedContainer = new ContainerProjection(new Container()
             {
@@ -80,7 +80,7 @@ namespace UnityDisk_Test.GroupTree.Registry
                     }}
                 }
             });
-            _mockService.Setup(settings =>settings.LoadGroupTree()).Returns(groupSettingsStub);
+            _mockService.Setup(settings => settings.LoadGroupTree()).Returns(groupSettingsStub);
             _accountRegistryStub.Setup(accountRegistry => accountRegistry.Find("Account1")).Returns(_accountStub.Object);
             _accountStub.SetupGet(accountProjection => accountProjection.Size).Returns(() => expectedSize);
             _accountStub.SetupGet(accountProjection => accountProjection.Login).Returns(() => "Account1");
@@ -95,14 +95,51 @@ namespace UnityDisk_Test.GroupTree.Registry
             registry.Initialization();
 
             IContainerProjection rootProjection = registry.GetContainerProjection(new List<string>(), null);
-            IContainerProjection containerProjection = registry.GetContainerProjection(new List<string>(){ "Container1",}, "Container2");
             Assert.IsTrue(expectedContainer.Equals(rootProjection));
-            Assert.IsNotNull(rootProjection);
-            Assert.IsNotNull(containerProjection);
-            Assert.AreEqual(rootProjection.Name, "Root");
-            Assert.AreEqual(rootProjection.Size, expectedSize);
-            Assert.AreEqual(containerProjection.Name, "Container2");
-            Assert.AreEqual(containerProjection.Size, new SpaceSize());
         }
+        [TestMethod]
+        public void Can_Add()
+        {
+            GroupSettingsContainer groupSettingsStub = null;
+
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 30, UsedSize = 70 };
+
+            var forAdd = new Container()
+            {
+                Name = "Container1",
+                IsActive = true,
+                Items = new List<IGroupTreeItem>()
+                {
+                    new Container() {Name = "Container2", Size = new SpaceSize()},
+                    new Group() {Name = "Group2", Size = expectedSize}
+                },
+                Size = expectedSize
+            };
+
+            var expectedContainer = new ContainerProjection(new Container()
+            {
+                Name = "Root",
+                Size = expectedSize,
+                Items = new List<IGroupTreeItem>()
+                {
+                    forAdd
+                }
+            });
+            _mockService.Setup(settings => settings.LoadGroupTree()).Returns(groupSettingsStub);
+            _groupContainerStub = new UnityContainer();
+            _groupContainerStub.RegisterInstance<IGroupSettings>(_mockService.Object);
+            _groupContainerStub.RegisterInstance<IAccountRegistry>(_accountRegistryStub.Object);
+            _groupContainerStub.RegisterType<IContainer, Container>(new InjectionConstructor());
+            _groupContainerStub.RegisterType<IGroup, Group>(new InjectionConstructor());
+
+            GroupTreeRegistry registry = new GroupTreeRegistry(_groupContainerStub);
+
+            registry.Initialization();
+            registry.Add(new List<string>(), forAdd);
+
+            IContainerProjection rootProjection = registry.GetContainerProjection(new List<string>(), null);
+            Assert.IsTrue(expectedContainer.Equals(rootProjection));
+        }
+
     }
 }
