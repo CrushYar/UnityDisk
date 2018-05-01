@@ -69,6 +69,8 @@ namespace UnityDisk.GroupTree.Registry
         {
             container.Name = settingsContainer.Name;
             container.IsActive = settingsContainer.IsActive;
+            if(settingsContainer.Items==null)return;
+
             foreach (var item in settingsContainer.Items)
             {
                 switch (item)
@@ -81,8 +83,11 @@ namespace UnityDisk.GroupTree.Registry
                         break;
                     case GroupSettingsGroup settingsGroup:
                         IGroup childGroup= _unityContainer.Resolve<IGroup>();
-                        childGroup.Name = settingsContainer.Name;
+                        childGroup.Name = settingsGroup.Name;
                         childGroup.Parent = container;
+                        container.Items.Add(childGroup);
+                        if (settingsGroup.Items==null)continue;
+
                         foreach (var account in settingsGroup.Items)
                         {
                             childGroup.Items.Add(_accountRegistry.Find(account));
