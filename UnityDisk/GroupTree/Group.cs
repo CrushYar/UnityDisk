@@ -39,15 +39,17 @@ namespace UnityDisk.GroupTree
 
         public void LoadSizeInfo()
         {
-            SpaceSize size = new SpaceSize();
+            if (Size == null)
+                Size = new SpaceSize();
+            else
+                Size.TotalSize = Size.UsedSize = Size.FreelSize = 0;
+
             foreach (var item in Items)
             {
-                size.TotalSize += item.Size.TotalSize;
-                size.UsedSize += item.Size.UsedSize;
-                size.FreelSize += item.Size.FreelSize;
+                Size.TotalSize += item.Size.TotalSize;
+                Size.UsedSize += item.Size.UsedSize;
+                Size.FreelSize += item.Size.FreelSize;
             }
-
-            Size = size;
         }
 
         public List<IAccountProjection> GetAccountProjections()

@@ -46,7 +46,11 @@ namespace UnityDisk.GroupTree
         public void LoadSizeInfo()
         {
             var accounts = GetAccountProjections();
-            Size = new SpaceSize();
+            if(Size==null)
+                Size = new SpaceSize();
+            else
+                Size.TotalSize =Size.UsedSize =Size.FreelSize = 0;
+
             foreach (var item in accounts)
             {
                 Size.TotalSize += item.Size.TotalSize;
