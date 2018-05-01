@@ -51,6 +51,10 @@ namespace UnityDisk.GroupTree
             else
                 Size.TotalSize =Size.UsedSize =Size.FreelSize = 0;
 
+            foreach (var item in Items)
+            {
+                item.LoadSizeInfo();
+            }
             foreach (var item in accounts)
             {
                 Size.TotalSize += item.Size.TotalSize;
