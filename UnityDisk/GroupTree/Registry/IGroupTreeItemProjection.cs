@@ -27,5 +27,11 @@ namespace UnityDisk.GroupTree.Registry
         /// </summary>
         /// <returns>Список аккаунтов</returns>
         List<IAccountProjection> GetAccountProjections();
+        /// <summary>
+        /// Проверка элементов на равенство (использовать только для тестов)
+        /// </summary>
+        /// <param name="projection">Элемент с которым нужно сравнить</param>
+        /// <returns>Результат равенства</returns>
+        bool Equals(IGroupTreeItemProjection projection);
     }
 }

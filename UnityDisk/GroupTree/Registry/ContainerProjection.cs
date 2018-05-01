@@ -31,6 +31,41 @@ namespace UnityDisk.GroupTree.Registry
             _originContainer = container;
         }
 
+        public bool Equals(IGroupTreeItemProjection projection)
+        {
+            var container = projection as ContainerProjection;
+            if (container == null) return false;
+
+            if (Name != container.Name) return false;
+            if (Type != container.Type) return false;
+            if (IsActive != container.IsActive) return false;
+            if (!Size.Equals(container.Size)) return false;
+
+            var myChildren = GetChildren();
+            var otheChildren= container.GetChildren();
+            if ((myChildren == null && otheChildren != null) ||
+                (myChildren != null && otheChildren == null)) return false;
+            if (myChildren == null) return true;
+
+            if (myChildren.Count != otheChildren.Count) return false;
+            var myEnum = myChildren.GetEnumerator();
+            var otherEnum = otheChildren.GetEnumerator();
+
+            bool canMyEnumNext = myEnum.MoveNext();
+            bool canOtherEnumNext = otherEnum.MoveNext();
+            if (canOtherEnumNext != canMyEnumNext) return false;
+
+            while (canMyEnumNext)
+            {
+                if (!myEnum.Current.Equals(otherEnum.Current)) return false;
+
+                canMyEnumNext = myEnum.MoveNext();
+                canOtherEnumNext = otherEnum.MoveNext();
+                if (canOtherEnumNext != canMyEnumNext) return false;
+            }
+            return true;
+        }
+
         public IGroupTreeItemProjection Clone()
         {
             return new ContainerProjection(_originContainer);
