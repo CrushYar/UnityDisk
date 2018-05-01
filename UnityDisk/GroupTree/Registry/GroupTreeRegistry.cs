@@ -318,7 +318,19 @@ namespace UnityDisk.GroupTree.Registry
         {
             LoadSittings();
         }
+        public IContainerProjection GetContainerProjection(IList<string> path,string name)
+        {
+            string fullCurrentPath = String.Empty;
+            IContainer itemDirectory = FindItemDirectory(path);
 
+            IContainer container =
+                itemDirectory.Items.FirstOrDefault(it => it.Name == name && it.Type == GroupTreeTypeEnum.Container) as
+                    IContainer;
+
+            if (container == null) throw new DirectoryNotFoundException();
+
+            return new ContainerProjection(container);
+        }
 
         void OnChangedStructureEvent(IGroupTreeItem item, IList<string> path, RegistryActionEnum action)
         {

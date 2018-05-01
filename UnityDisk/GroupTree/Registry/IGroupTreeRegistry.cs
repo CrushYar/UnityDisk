@@ -104,5 +104,12 @@ namespace UnityDisk.GroupTree.Registry
         /// Загрузка данных
         /// </summary>
         void Initialization();
+        /// <summary>
+        /// Получение контейнера по указанному пути
+        /// </summary>
+        /// <param name="path">Путь к контейнеру</param>
+        /// <param name="name">Имя контейнера</param>
+        /// <returns>Найденный контейнер</returns>
+        IContainerProjection GetContainerProjection(IList<string> path,string name);
     }
 }
