@@ -94,33 +94,7 @@ namespace UnityDisk.GroupTree.Registry
 
         public List<IAccountProjection> GetAccountProjections()
         {
-            List<IAccountProjection> result=new List<IAccountProjection>();
-
-            GetChildren(_originContainer, result);
-            return result;
-        }
-
-        private void GetChildren(IGroupTreeItem item, List<IAccountProjection> result)
-        {
-            switch (item)
-            {
-                case IGroup group:
-                    foreach (var groupAccount in group.Items)
-                    {
-                        if(result.Contains(groupAccount)) continue;
-
-                        result.Add(groupAccount);
-                    }
-                    break;
-                case IContainer container:
-                    foreach (var containerItem in container.Items)
-                    {
-                        GetChildren(containerItem, result);
-                    }
-                    break;
-                default:
-                    throw new ArgumentException("Unknown type");
-            }
+            return _originContainer.GetAccountProjections();
         }
     }
 }

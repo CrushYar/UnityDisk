@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityDisk.Accounts;
+using UnityDisk.Accounts.Registry;
 
 namespace UnityDisk.GroupTree
 {
@@ -51,6 +52,36 @@ namespace UnityDisk.GroupTree
                 Size.TotalSize += item.Size.TotalSize;
                 Size.UsedSize += item.Size.UsedSize;
                 Size.FreelSize += item.Size.FreelSize;
+            }
+        }
+
+        public List<IAccountProjection> GetAccountProjections()
+        {
+            List<IAccountProjection> result = new List<IAccountProjection>();
+
+            GetChildrenAccounts(this, result);
+            return result;
+        }
+        private void GetChildrenAccounts(IGroupTreeItem item, List<IAccountProjection> result)
+        {
+            switch (item)
+            {
+                case IGroup group:
+                    foreach (var groupAccount in group.Items)
+                    {
+                        if (result.Contains(groupAccount)) continue;
+
+                        result.Add(groupAccount);
+                    }
+                    break;
+                case IContainer container:
+                    foreach (var containerItem in container.Items)
+                    {
+                        GetChildrenAccounts(containerItem, result);
+                    }
+                    break;
+                default:
+                    throw new ArgumentException("Unknown type");
             }
         }
     }

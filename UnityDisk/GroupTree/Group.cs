@@ -49,5 +49,10 @@ namespace UnityDisk.GroupTree
 
             Size = size;
         }
+
+        public List<IAccountProjection> GetAccountProjections()
+        {
+            return new List<IAccountProjection>(Items); ;
+        }
     }
 }

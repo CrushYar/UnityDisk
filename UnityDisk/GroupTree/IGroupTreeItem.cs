@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityDisk.Accounts;
+using UnityDisk.Accounts.Registry;
 
 namespace UnityDisk.GroupTree
 {
@@ -40,5 +41,10 @@ namespace UnityDisk.GroupTree
         /// Загрузка корневой директории всех аккаунтов ниже по дереву
         /// </summary>
         void /*IList<IStorageItem>*/ LoadDirectory();
+        /// <summary>
+        /// Получение коллекции аккаунтов находящийся внутри элемента
+        /// </summary>
+        /// <returns>Список аккаунтов</returns>
+        List<IAccountProjection> GetAccountProjections();
     }
 }

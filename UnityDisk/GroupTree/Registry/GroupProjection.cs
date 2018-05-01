@@ -35,7 +35,7 @@ namespace UnityDisk.GroupTree.Registry
 
         public List<IAccountProjection> GetAccountProjections()
         {
-            return new List<IAccountProjection>(_originGroup.Items);;
+            return _originGroup.GetAccountProjections();
         }
 
         public bool Equals(IGroupTreeItemProjection projection)
