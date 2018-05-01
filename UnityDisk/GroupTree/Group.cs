@@ -26,6 +26,7 @@ namespace UnityDisk.GroupTree
         public IGroupTreeItem Clone()
         {
             var clone=new Group();
+            clone.Name = Name;
             clone.Size = new SpaceSize(Size);
             clone.Items=new List<IAccountProjection>(Items);
             clone.Parent = Parent;
