@@ -328,6 +328,8 @@ namespace UnityDisk.GroupTree.Registry
             string fullCurrentPath = String.Empty;
             IContainer itemDirectory = FindItemDirectory(path);
 
+            if(String.IsNullOrEmpty(name)) return  new ContainerProjection(itemDirectory);
+
             IContainer container =
                 itemDirectory.Items.FirstOrDefault(it => it.Name == name && it.Type == GroupTreeTypeEnum.Container) as
                     IContainer;
