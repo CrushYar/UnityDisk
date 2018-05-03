@@ -102,6 +102,9 @@
     <Compile Include="FileStorages\FactoryRagistry\FactoryRagistry.cs" />
     <Compile Include="FileStorages\FactoryRagistry\IFactoryRagistry.cs" />
     <Compile Include="FileStorages\IFileStorageFactory.cs" />
+    <Compile Include="FileStorages\IFileStorageFile.cs" />
+    <Compile Include="FileStorages\IFileStorageFolder.cs" />
+    <Compile Include="FileStorages\IFileStorageItem.cs" />
     <Compile Include="GroupTree\Container.cs" />
     <Compile Include="GroupTree\Group.cs" />
     <Compile Include="GroupTree\IContainer.cs" />
@@ -147,6 +150,15 @@
     <Compile Include="Settings\Groups\IGroupSettingsItem.cs" />
     <Compile Include="Settings\ISettings.cs" />
     <Compile Include="Settings\RemoteSettings.cs" />
+    <Compile Include="StorageItems\IStorageFile.cs" />
+    <Compile Include="StorageItems\IStorageFolder.cs" />
+    <Compile Include="StorageItems\IStorageFolder2.cs" />
+    <Compile Include="StorageItems\IStorageItem.cs" />
+    <Compile Include="StorageItems\IStorageItem2.cs" />
+    <Compile Include="StorageItems\IStorageProjectionFolder.cs" />
+    <Compile Include="StorageItems\StorageFile.cs" />
+    <Compile Include="StorageItems\StorageFolde.cs" />
+    <Compile Include="StorageItems\StorageProjectionFolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

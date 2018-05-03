@@ -26,15 +26,15 @@ namespace UnityDisk.Accounts
         /// <summary>
         /// Общий размер
         /// </summary>
-        public long TotalSize { get; set; }
+        public ulong TotalSize { get; set; }
         /// <summary>
         /// Используемый размер
         /// </summary>
-        public long UsedSize { get; set; }
+        public ulong UsedSize { get; set; }
         /// <summary>
         /// Свободный размер
         /// </summary>
-        public long FreelSize { get; set; }
+        public ulong FreelSize { get; set; }
 
         /// <summary>
         /// Прибавляет переданное значение к текущему 
