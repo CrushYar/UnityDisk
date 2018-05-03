@@ -156,6 +156,10 @@
     <Compile Include="StorageItems\IStorageItem.cs" />
     <Compile Include="StorageItems\IStorageItem2.cs" />
     <Compile Include="StorageItems\IStorageProjectionFolder.cs" />
+    <Compile Include="StorageItems\PreviewImageManager\ILoadPreviewImageManager.cs" />
+    <Compile Include="StorageItems\PreviewImageManager\IStandardPreviewImagesRegistry.cs" />
+    <Compile Include="StorageItems\PreviewImageManager\LoadPreviewImageManager.cs" />
+    <Compile Include="StorageItems\PreviewImageManager\StandardPreviewImagesRegistry.cs" />
     <Compile Include="StorageItems\StorageFile.cs" />
     <Compile Include="StorageItems\StorageFolde.cs" />
     <Compile Include="StorageItems\StorageProjectionFolder.cs" />
@@ -214,7 +218,6 @@
     <Folder Include="FileStorages\Yandex\FileStorageFactory\" />
     <Folder Include="FileStorages\Yandex\FileStorageItem\" />
     <Folder Include="Settings\BackgroundOperations\" />
-    <Folder Include="StorageItems\FileManagers\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework">
