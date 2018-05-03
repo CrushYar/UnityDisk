@@ -85,7 +85,7 @@ namespace UnityDisk_Test.Accounts
             _mockService.Verify(fileStorage => fileStorage.Update(), Occurred.Once());
         }
         [TestMethod]
-        public async Task Can_Clone()
+        public void Can_Clone()
         {
             string expectedToken = "simpleToken";
             string expectedLogin = "test@gmail.com";

@@ -42,38 +42,38 @@ namespace UnityDisk.FileStorages
         /// <summary>
         /// Удаление элемента
         /// </summary>
-        void Delete();
+        Task Delete();
         /// <summary>
         /// Переименование элемента
         /// </summary>
         /// <param name="newName">Новое имя</param>
-        void Rename(string newName);
+        Task Rename(string newName);
         /// <summary>
         /// Перемещение элемента
         /// </summary>
         /// <param name="folder">Папка в которую нужно переместить элемент</param>
-        void Move(IFileStorageFolder folder);
+        Task Move(IFileStorageFolder folder);
         /// <summary>
         /// Копирование элемента
         /// </summary>
         /// <param name="othePath">Целевой путь</param>
-        void Copy(IFileStorageFolder othePath);
+        Task Copy(IFileStorageFolder othePath);
         /// <summary>
         /// Загрузка изображения предварительного просмотра
         /// </summary>
-        void LoadPreviewImage();
+        Task LoadPreviewImage();
         /// <summary>
         /// Загрузка публичной ссылки
         /// </summary>
-        void LoadPublicUrl();
+        Task LoadPublicUrl();
         /// <summary>
         /// Создание публичной ссылки
         /// </summary>
-        void CreatePublicUrl();
+        Task CreatePublicUrl();
         /// <summary>
         /// Удаление публичной ссылки
         /// </summary>
-        void DeletePublicUrl();
+        Task DeletePublicUrl();
         /// <summary>
         /// Импортирует данные из строки
         /// </summary>

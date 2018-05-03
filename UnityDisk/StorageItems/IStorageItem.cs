@@ -53,36 +53,36 @@ namespace UnityDisk.StorageItems
         /// Переименование элемента
         /// </summary>
         /// <param name="newName">Новое имя</param>
-        void Rename(string newName);
+        Task Rename(string newName);
         /// <summary>
         /// Удаление элемента
         /// </summary>
-        void Delete();
+        Task Delete();
         /// <summary>
         /// Перемещение элемента
         /// </summary>
         /// <param name="folder">Целевая папка</param>
-        void Move(IStorageProjectionFolder folder);
+        Task Move(IStorageProjectionFolder folder);
         /// <summary>
         /// Копирование элемента
         /// </summary>
         /// <param name="folder">Целевая папка</param>
-        void Copy(IStorageProjectionFolder folder);
+        Task Copy(IStorageProjectionFolder folder);
         /// <summary>
         /// Загрузка картинки предварительно просмотра
         /// </summary>
-        void LoadPreviewImage();
+        Task LoadPreviewImage();
         /// <summary>
         /// Загрузка публичной ссылки
         /// </summary>
-        void LoadPublicUrl();
+        Task LoadPublicUrl();
         /// <summary>
         /// Создание публичной ссылки
         /// </summary>
-        void CreatePublicUrl();
+        Task CreatePublicUrl();
         /// <summary>
         /// Удаление публичной ссылки
         /// </summary>
-        void DeletePublicUrl();
+        Task DeletePublicUrl();
     }
 }

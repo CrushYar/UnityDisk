@@ -20,39 +20,39 @@ namespace UnityDisk.StorageItems
         /// Удаление папок
         /// </summary>
         /// <param name="folders">Папки для удаления</param>
-        void Delete(IList<IStorageFolder2> folders);
+        Task Delete(IList<IStorageFolder2> folders);
         /// <summary>
         /// Переименование
         /// </summary>
         /// <param name="folders">Папки для переименования</param>
-        void Rename(IList<IStorageFolder2> folders, string newName);
+        Task Rename(IList<IStorageFolder2> folders, string newName);
         /// <summary>
         /// Перемещение
         /// </summary>
         /// <param name="folders">Папки для перемещения</param>
         /// <param name="folder">Целевая папка</param>
-        void Move(IList<IStorageFolder2> folders, IStorageProjectionFolder folder);
+        Task Move(IList<IStorageFolder2> folders, IStorageProjectionFolder folder);
         /// <summary>
         /// Копирование
         /// </summary>
         /// <param name="folders">Папки для копирования</param>
         /// <param name="folder">Целевая папка</param>
-        void Copy(IList<IStorageFolder2> folders, IStorageProjectionFolder folder);
+        Task Copy(IList<IStorageFolder2> folders, IStorageProjectionFolder folder);
         /// <summary>
         /// Создание публичных ссылок
         /// </summary>
         /// <param name="folders">Папки для которых нужно создать публичную ссылку</param>
-        void CreatePublicUrl(IList<IStorageFolder2> folders);
+        Task CreatePublicUrl(IList<IStorageFolder2> folders);
         /// <summary>
         /// Загрузка публичных ссылок
         /// </summary>
         /// <param name="folders">Папки для которых нужно загрузить публичные ссылки</param>
-        void LoadPublicUrl(IList<IStorageFolder2> folders);
+        Task LoadPublicUrl(IList<IStorageFolder2> folders);
         /// <summary>
         /// Удаление публичных ссылок
         /// </summary>
         /// <param name="folders">Папки на которые нужно удалить публичные ссылки</param>
-        void DeletePublicUrl(IList<IStorageFolder2> folders);
+        Task DeletePublicUrl(IList<IStorageFolder2> folders);
 
     }
 }

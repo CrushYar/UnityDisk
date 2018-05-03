@@ -27,77 +27,77 @@ namespace UnityDisk.StorageItems
             Folders=new List<IStorageFolder2>();
             State = StorageItemStateEnum.Exist;
         }
-        public void Rename(string newName)
+        public async Task Rename(string newName)
         {
             foreach (var folder in Folders)
             {
-                folder.Rename(newName);
+               await folder.Rename(newName);
             }
         }
 
-        public void Delete()
+        public async Task Delete()
         {
             foreach (var folder in Folders)
             {
-                folder.Delete();
+                await folder.Delete();
             }
         }
 
-        public void Move(IStorageProjectionFolder folder)
+        public async Task Move(IStorageProjectionFolder folder)
         {
             foreach (var item in Folders)
             {
-                item.Move(folder);
+                await item.Move(folder);
             }
         }
 
-        public void Copy(IStorageProjectionFolder folder)
+        public async Task Copy(IStorageProjectionFolder folder)
         {
             foreach (var item in Folders)
             {
-                item.Copy(folder);
+                await item.Copy(folder);
             }
         }
 
-        public void LoadPreviewImage()
+        public async Task LoadPreviewImage()
         {
             foreach (var item in Folders)
             {
-                item.LoadPreviewImage();
+                await item.LoadPreviewImage();
             }
         }
 
-        public void LoadPublicUrl()
+        public async Task LoadPublicUrl()
         {
             foreach (var item in Folders)
             {
-                item.LoadPublicUrl();
+                await item.LoadPublicUrl();
             }
         }
 
-        public void CreatePublicUrl()
+        public async Task CreatePublicUrl()
         {
             foreach (var item in Folders)
             {
-                item.CreatePublicUrl();
+                await item.CreatePublicUrl();
             }
         }
 
-        public void DeletePublicUrl()
+        public async Task DeletePublicUrl()
         {
             foreach (var item in Folders)
             {
-                item.DeletePublicUrl();
+              await  item.DeletePublicUrl();
             }
         }
 
-        public List<IStorageItem> LoadDirectory()
+        public async Task<List<IStorageItem>>LoadDirectory()
         {
             List<IStorageItem> result = new List<IStorageItem>();
 
             foreach (var item in Folders)
             {
-                var directory = item.LoadDirectory();
+                var directory = await item.LoadDirectory();
                 foreach (var item2 in directory)
                 {
                     if (item2.Attribute.HasFlag(StorageItemAttributeEnum.Directory))
@@ -125,7 +125,7 @@ namespace UnityDisk.StorageItems
             return result;
         }
 
-        public async void Upload(Windows.Storage.IStorageFile storageFile)
+        public async Task Upload(Windows.Storage.IStorageFile storageFile)
         {
             BasicProperties basicProperties=await storageFile.GetBasicPropertiesAsync().AsTask();
             var folders = from f1 in Folders
@@ -135,10 +135,10 @@ namespace UnityDisk.StorageItems
             if(folder==null)
                 throw new InvalidOperationException("You have not enough memory");
 
-            folder.Upload(storageFile);
+            await folder.Upload(storageFile);
         }
 
-        public IStorageFolder CreateFolder(string name)
+        public async Task<IStorageFolder> CreateFolder(string name)
         {
             var newFolder=new StorageProjectionFolder()
             {
@@ -149,13 +149,13 @@ namespace UnityDisk.StorageItems
             };
             foreach (var item in Folders)
             {
-                newFolder.Folders.Add(item.CreateFolder2(name));
+                newFolder.Folders.Add(await item.CreateFolder2(name));
             }
 
             return newFolder;
         }
 
-        public void MakeProjection()
+        public async Task MakeProjection()
         {
             List<IStorageProjectionFolder> myPath = new List<IStorageProjectionFolder>();
 
@@ -166,10 +166,10 @@ namespace UnityDisk.StorageItems
                 topParent = topParent.Parent;
             }
 
-            MakeBranch(myPath);
+            await MakeBranch(myPath);
         }
 
-        private void MakeBranch(IList<IStorageProjectionFolder> path)
+        private async Task MakeBranch(IList<IStorageProjectionFolder> path)
         {
             var fistItem = path.GetEnumerator();
             if (path.Count < 2) return;
@@ -192,14 +192,14 @@ namespace UnityDisk.StorageItems
                         select f1;
                     foreach (var forCreateFolder in needCreateFolderIn)
                     {
-                        var newFolder = forCreateFolder.CreateFolder2(secondItem.Current.Name);
+                        var newFolder = await forCreateFolder.CreateFolder2(secondItem.Current.Name);
                         secondItem.Current.Folders.Add(newFolder);
                     }
                 }
             }
         }
 
-        public void Delete(IList<IStorageFolder2> folders)
+        public async Task Delete(IList<IStorageFolder2> folders)
         {
             var foldersForDelete = from f1 in Folders
                 from f2 in folders
@@ -208,11 +208,11 @@ namespace UnityDisk.StorageItems
 
             foreach (var item in foldersForDelete)
             {
-                item.DeletePublicUrl();
+                await item.DeletePublicUrl();
             }
         }
 
-        public void Rename(IList<IStorageFolder2> folders,string newName)
+        public async Task Rename(IList<IStorageFolder2> folders,string newName)
         {
             var foldersForDelete = from f1 in Folders
                 from f2 in folders
@@ -221,11 +221,11 @@ namespace UnityDisk.StorageItems
 
             foreach (var item in foldersForDelete)
             {
-                item.Rename(newName);
+                await item.Rename(newName);
             }
         }
 
-        public void Move(IList<IStorageFolder2> folders, IStorageProjectionFolder folder)
+        public async Task Move(IList<IStorageFolder2> folders, IStorageProjectionFolder folder)
         {
             var foldersForDelete = from f1 in Folders
                 from f2 in folders
@@ -234,11 +234,11 @@ namespace UnityDisk.StorageItems
 
             foreach (var item in foldersForDelete)
             {
-                item.Move(folder);
+                await item.Move(folder);
             }
         }
 
-        public void Copy(IList<IStorageFolder2> folders, IStorageProjectionFolder folder)
+        public async Task Copy(IList<IStorageFolder2> folders, IStorageProjectionFolder folder)
         {
             var foldersForDelete = from f1 in Folders
                 from f2 in folders
@@ -247,11 +247,11 @@ namespace UnityDisk.StorageItems
 
             foreach (var item in foldersForDelete)
             {
-                item.Copy(folder);
+                await item.Copy(folder);
             }
         }
 
-        public void CreatePublicUrl(IList<IStorageFolder2> folders)
+        public async Task CreatePublicUrl(IList<IStorageFolder2> folders)
         {
             var foldersForDelete = from f1 in Folders
                 from f2 in folders
@@ -260,11 +260,11 @@ namespace UnityDisk.StorageItems
 
             foreach (var item in foldersForDelete)
             {
-                item.CreatePublicUrl();
+                await item.CreatePublicUrl();
             }
         }
 
-        public void LoadPublicUrl(IList<IStorageFolder2> folders)
+        public Task LoadPublicUrl(IList<IStorageFolder2> folders)
         {
             //var foldersForDelete = from f1 in Folders
             //    from f2 in folders
@@ -275,9 +275,10 @@ namespace UnityDisk.StorageItems
             //{
             //    item.LoadPublicUrl();
             //}
+            return new Task(() => { });
         }
 
-        public void DeletePublicUrl(IList<IStorageFolder2> folders)
+        public async Task DeletePublicUrl(IList<IStorageFolder2> folders)
         {
             var foldersForDelete = from f1 in Folders
                 from f2 in folders
@@ -286,7 +287,7 @@ namespace UnityDisk.StorageItems
 
             foreach (var item in foldersForDelete)
             {
-                item.DeletePublicUrl();
+                await item.DeletePublicUrl();
             }
         }
     }

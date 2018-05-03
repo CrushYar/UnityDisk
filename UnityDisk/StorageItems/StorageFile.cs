@@ -35,58 +35,58 @@ namespace UnityDisk.StorageItems
         public StorageItemAttributeEnum Attribute => DataContext.Attribute;
         public StorageItemStateEnum State { get; private set; }
         public IStorageProjectionFolder Parent { get; set; }
-        public void Rename(string newName)
+        public async Task Rename(string newName)
         {
-            DataContext.Rename(newName);
+            await DataContext.Rename(newName);
         }
 
-        public void Delete()
+        public async Task Delete()
         {
-            DataContext.Delete();
+            await DataContext.Delete();
         }
 
-        public void Move(IStorageProjectionFolder folder)
+        public async Task Move(IStorageProjectionFolder folder)
         {
            IStorageFolder2 toFolder= folder.Folders.FirstOrDefault(folder2 => folder2.Account.Login == Account.Login);
             if (toFolder == null)
                 throw new ArgumentException("Not found Account");
-            
-            DataContext.Move(toFolder.DataContext);
+
+            await DataContext.Move(toFolder.DataContext);
             
         }
 
-        public void Copy(IStorageProjectionFolder folder)
+        public async Task Copy(IStorageProjectionFolder folder)
         {
             IStorageFolder2 toFolder = folder.Folders.FirstOrDefault(folder2 => folder2.Account.Login == Account.Login);
             if (toFolder == null)
                 throw new ArgumentException("Not found Account");
 
-            DataContext.Copy(toFolder.DataContext);
+            await DataContext.Copy(toFolder.DataContext);
         }
 
-        public void LoadPreviewImage()
+        public async Task LoadPreviewImage()
         {
-            DataContext.LoadPreviewImage();
+            await DataContext.LoadPreviewImage();
         }
 
-        public void LoadPublicUrl()
+        public async Task LoadPublicUrl()
         {
-            DataContext.LoadPublicUrl();
+            await DataContext.LoadPublicUrl();
         }
 
-        public void CreatePublicUrl()
+        public async Task CreatePublicUrl()
         {
-            DataContext.CreatePublicUrl();
+            await DataContext.CreatePublicUrl();
         }
 
-        public void DeletePublicUrl()
+        public async Task DeletePublicUrl()
         {
-            DataContext.DeletePublicUrl();
+            await DataContext.DeletePublicUrl();
         }
 
-        public void Download(Windows.Storage.IStorageFile storageFile)
+        public async Task Download(Windows.Storage.IStorageFile storageFile)
         {
-            DataContext.Download(storageFile);
+            await DataContext.Download(storageFile);
         }
 
         public void Parse(string data)

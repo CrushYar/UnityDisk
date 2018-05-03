@@ -21,6 +21,6 @@ namespace UnityDisk.StorageItems
         /// </summary>
         /// <param name="name">Имя папки</param>
         /// <returns></returns>
-        IStorageFolder2 CreateFolder2(string name);
+        Task<IStorageFolder2> CreateFolder2(string name);
     }
 }

@@ -12,6 +12,7 @@ using Unity.Injection;
 using Unity.Lifetime;
 using UnityDisk.Accounts.Registry;
 using UnityDisk.Settings.Groups;
+using UnityDisk.StorageItems.PreviewImageManager;
 
 namespace UnityDisk
 {
@@ -30,7 +31,9 @@ namespace UnityDisk
                 .RegisterType<IAccountSettingsItem, AccountSettingsItem>(new InjectionConstructor())
                 .RegisterType<IFactoryRagistry, FactoryRagistry>(new InjectionConstructor())
                 .RegisterType<IGroupSettings, Settings.Groups.GroupSettings>(new InjectionConstructor())
+                .RegisterType<IStandardPreviewImagesRegistry,StandardPreviewImagesRegistry>(new ContainerControlledLifetimeManager(),new InjectionConstructor())
                 .RegisterType<IAccountProjection, AccountProjection>(new InjectionConstructor());
+            
         }
 
         public static ContainerConfiguration GetContainer()

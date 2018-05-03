@@ -22,14 +22,12 @@ namespace UnityDisk_Test.GroupTree.Registry
         private Mock<IGroupSettings> _mockService;
         private Mock<IAccountRegistry> _accountRegistryStub;
         private Mock<IAccountProjection> _accountStub;
-        private string _parameterName;
         private IUnityContainer _groupContainerStub;
 
         [TestInitialize]
         public void BeforeEachTest()
         {
             _mockService = Mock.Create<IGroupSettings>();
-            _parameterName = "GroupTreeSettings";
             _accountRegistryStub = Mock.Create<IAccountRegistry>();
             _accountStub = Mock.Create<IAccountProjection>();
         }
