@@ -20,7 +20,7 @@ namespace UnityDisk.FileStorages
         /// <summary>
         /// Имя сервера
         /// </summary>
-        string ServerName { get; set; }
+        string ServerName { get;}
         /// <summary>
         /// Токен для работы с файловым хранилищем аккаунта
         /// </summary>
