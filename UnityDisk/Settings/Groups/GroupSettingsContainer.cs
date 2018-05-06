@@ -58,5 +58,10 @@ namespace UnityDisk.Settings.Groups
             return Items.OrderBy(kvp => kvp.Name, StringComparer.Ordinal)
                 .SequenceEqual(container.Items.OrderBy(kvp => kvp.Name, StringComparer.Ordinal));
         }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(Name,IsActive,Items).GetHashCode();
+        }
     }
 }

@@ -81,5 +81,10 @@ namespace UnityDisk.Accounts
                    && Token.Equals(other.Token)
                    && ServerName.Equals(other.ServerName);
         }
+
+        public override int GetHashCode()
+        {
+            return _fileStorageAccount.GetHashCode();
+        }
     }
 }

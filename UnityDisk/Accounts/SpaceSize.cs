@@ -66,5 +66,10 @@ namespace UnityDisk.Accounts
         {
             return other.FreelSize == FreelSize && other.TotalSize == TotalSize && other.UsedSize == UsedSize;
         }
+
+        public override int GetHashCode()
+        {
+           return Tuple.Create(TotalSize, UsedSize, FreelSize).GetHashCode();
+        }
     }
 }

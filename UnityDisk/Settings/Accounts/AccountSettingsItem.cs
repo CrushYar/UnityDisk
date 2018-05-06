@@ -9,7 +9,6 @@ namespace UnityDisk.Settings.Accounts
 {
     public sealed class AccountSettingsItem : IAccountSettingsItem
     {
-
         public AccountSettingsItem() { }
         public AccountSettingsItem(IAccount account)
         {
@@ -41,6 +40,11 @@ namespace UnityDisk.Settings.Accounts
             IAccountSettingsItem other = o as IAccountSettingsItem;
             if (other == null) return false;
             return Login.Equals(other.Login) && Token.Equals(other.Token) && ServerName.Equals(other.ServerName);
+        }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(Login,Token,ServerName).GetHashCode();
         }
     }
 }
