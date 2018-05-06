@@ -157,7 +157,6 @@ namespace UnityDisk.Accounts.Registry
                 var account = _container.Resolve<IAccount>();
                 account.Login = settingsItem.Login;
                 account.Token = settingsItem.Token;
-                account.ServerName = settingsItem.ServerName;
 
                 if (account.LoadConnector(settingsItem.ServerName))
                 {

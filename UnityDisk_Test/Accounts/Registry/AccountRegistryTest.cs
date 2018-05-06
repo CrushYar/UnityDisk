@@ -74,7 +74,6 @@ namespace UnityDisk_Test.Accounts.Registry
                 Assert.AreEqual(e.Accounts.Length, 1);
                 _mockAccount.Verify(acc => acc.LoadConnector(expectedServerName), Occurred.Once());
                 _mockAccount.VerifySet(acc => acc.Login, expectedLogin, Occurred.Once());
-                _mockAccount.VerifySet(acc => acc.ServerName, expectedServerName, Occurred.Once());
                 _mockAccount.VerifySet(acc => acc.Token, expectedToken, Occurred.Once());
                 Assert.AreEqual(e.Size, expectedSize);
             };
@@ -106,7 +105,6 @@ namespace UnityDisk_Test.Accounts.Registry
             IAccountProjection accountFound = _accountRegistry.Find(expectedLogin);
 
             _mockAccount.VerifySet(acc => acc.Login, expectedLogin, Occurred.Once());
-            _mockAccount.VerifySet(acc => acc.ServerName, expectedServerName, Occurred.Once());
             _mockAccount.VerifySet(acc => acc.Token, expectedToken, Occurred.Once());
             Assert.AreEqual(expectedLogin, accountFound.Login);
             Assert.AreEqual(expectedServerName, accountFound.ServerName);

@@ -17,7 +17,7 @@ namespace UnityDisk.Accounts
 
         public string Login { get =>_fileStorageAccount.Login; set => _fileStorageAccount.Login=value; }
         public SpaceSize Size { get => _fileStorageAccount.Size; set => _fileStorageAccount.Size = value; }
-        public string ServerName { get => _fileStorageAccount.ServerName; set => _fileStorageAccount.ServerName = value; }
+        public string ServerName => _fileStorageAccount.ServerName;
         public string Token { get => _fileStorageAccount.Token; set => _fileStorageAccount.Token = value; }
         public bool IsFree => Groups.Count==0;
         public ConnectionStatusEnum Status { get => _fileStorageAccount.Status; set => _fileStorageAccount.Status = value; }
@@ -65,7 +65,6 @@ namespace UnityDisk.Accounts
         {
             Account account=new Account(_fileStorageAccount.Clone());
             account.Login = Login;
-            account.ServerName = ServerName;
             account.Size=new SpaceSize(Size);
             account.Status = Status;
             account.Token = Token;
