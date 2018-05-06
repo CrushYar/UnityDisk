@@ -13,10 +13,6 @@ namespace UnityDisk.Accounts.Registry
         /// </summary>
         string Login { get;}
         /// <summary>
-        /// Дата создания
-        /// </summary>
-        DateTime CreateDate { get; }
-        /// <summary>
         /// Информация о состоянии памяти файлового хранилища аккаунта
         /// </summary>
         SpaceSize Size { get;  }

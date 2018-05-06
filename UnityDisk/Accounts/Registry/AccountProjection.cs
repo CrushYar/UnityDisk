@@ -11,7 +11,6 @@ namespace UnityDisk.Accounts.Registry
         private IAccount _originAccount;
 
         public string Login => _originAccount.Login;
-        public DateTime CreateDate => _originAccount.CreateDate;
         public SpaceSize Size =>new SpaceSize(_originAccount.Size);
         public string ServerName => _originAccount.ServerName;
         public string Token => _originAccount.Token;

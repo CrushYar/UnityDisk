@@ -16,7 +16,6 @@ namespace UnityDisk.Accounts
         private IFileStorageAccount _fileStorageAccount;
 
         public string Login { get =>_fileStorageAccount.Login; set => _fileStorageAccount.Login=value; }
-        public DateTime CreateDate { get => _fileStorageAccount.CreateDate; set => _fileStorageAccount.CreateDate = value; }
         public SpaceSize Size { get => _fileStorageAccount.Size; set => _fileStorageAccount.Size = value; }
         public string ServerName { get => _fileStorageAccount.ServerName; set => _fileStorageAccount.ServerName = value; }
         public string Token { get => _fileStorageAccount.Token; set => _fileStorageAccount.Token = value; }
@@ -65,7 +64,6 @@ namespace UnityDisk.Accounts
         public IAccount Clone()
         {
             Account account=new Account(_fileStorageAccount.Clone());
-            account.CreateDate=CreateDate;
             account.Login = Login;
             account.ServerName = ServerName;
             account.Size=new SpaceSize(Size);
