@@ -16,7 +16,7 @@ namespace UnityDisk.StorageItems
         /// <summary>
         /// Размер элемента в байтах
         /// </summary>
-        long Size { get; }
+        ulong Size { get; }
         /// <summary>
         /// Тип элемента
         /// </summary>

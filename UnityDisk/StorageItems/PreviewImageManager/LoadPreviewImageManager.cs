@@ -40,6 +40,7 @@ namespace UnityDisk.StorageItems.PreviewImageManager
         public void Reset()
         {
             Lock();
+            isRun = false;
             _inQueue.Clear();
             _inProccess.Clear();
             UnLock();
@@ -81,6 +82,7 @@ namespace UnityDisk.StorageItems.PreviewImageManager
                             var token = new TaskCompletionSource<CoordinationStatus>();
                             await m_ac.AllBegun(token);
                         }
+                        if(!isRun)return;
                     }
                 }
                 catch (Exception)

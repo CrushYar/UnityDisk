@@ -30,7 +30,7 @@ namespace UnityDisk.StorageItems
             set => DataContext.Account = value;
         }
         public DateTime CreateDate => DataContext.CreateDate;
-        public long Size => DataContext.Size;
+        public ulong Size => DataContext.Size;
         public string Type => DataContext.Type;
         public StorageItemAttributeEnum Attribute => DataContext.Attribute;
         public StorageItemStateEnum State { get; private set; }
