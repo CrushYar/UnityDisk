@@ -14,7 +14,7 @@ namespace UnityDisk.StorageItems
 {
     public class StorageFolder:IStorageFolder2
     {
-        private IUnityContainer _container;
+        private readonly IUnityContainer _container;
         public IFileStorageFolder DataContext { get; set; }
 
         public string PublicUrl => DataContext.PublicUrl;
@@ -38,6 +38,7 @@ namespace UnityDisk.StorageItems
         public StorageFolder()
         {
             State = StorageItemStateEnum.Exist;
+            _container = ContainerConfiguration.GetContainer().Container;
         }
 
         public StorageFolder(IFileStorageFolder dataContext)

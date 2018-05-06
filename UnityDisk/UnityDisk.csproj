@@ -110,6 +110,9 @@
     <Compile Include="FileStorages\IFileStorageFile.cs" />
     <Compile Include="FileStorages\IFileStorageFolder.cs" />
     <Compile Include="FileStorages\IFileStorageItem.cs" />
+    <Compile Include="FileStorages\OneDrive\FileStorageFactory.cs" />
+    <Compile Include="FileStorages\OneDrive\FileStorageFile.cs" />
+    <Compile Include="FileStorages\OneDrive\FileStorageFolder.cs" />
     <Compile Include="GroupTree\Container.cs" />
     <Compile Include="GroupTree\Group.cs" />
     <Compile Include="GroupTree\IContainer.cs" />
@@ -203,6 +206,9 @@
     <PackageReference Include="NETStandard.Library">
       <Version>2.0.2</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>11.0.2</Version>
+    </PackageReference>
     <PackageReference Include="Unity">
       <Version>5.8.6</Version>
     </PackageReference>
@@ -214,8 +220,6 @@
     <Folder Include="FileStorages\Google\FileStorageAccount\" />
     <Folder Include="FileStorages\Google\FileStorageFactory\" />
     <Folder Include="FileStorages\Google\FileStorageItem\" />
-    <Folder Include="FileStorages\OneDrive\FileStorageFactory\" />
-    <Folder Include="FileStorages\OneDrive\FileStorageItem\" />
     <Folder Include="FileStorages\pCloud\FileStorageAccount\" />
     <Folder Include="FileStorages\pCloud\FileStorageFactory\" />
     <Folder Include="FileStorages\pCloud\FileStorageItem\" />
