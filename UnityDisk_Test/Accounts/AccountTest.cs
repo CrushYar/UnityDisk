@@ -39,14 +39,12 @@ namespace UnityDisk_Test.Accounts
 
             _mockService.SetupGet(account => account.Token).Returns(expectedToken);
             _mockService.SetupGet(account => account.Login).Returns(expectedLogin);
-            _mockService.SetupGet(account => account.CreateDate).Returns(expectedCreaDate);
             _mockService.SetupGet(account => account.ServerName).Returns(expectedServerName);
             _mockService.SetupGet(account => account.Status).Returns(expectedStatus);
             _mockService.SetupGet(account => account.Size).Returns(expectedSize);
 
             Assert.AreEqual(_account.Token, expectedToken);
             Assert.AreEqual(_account.Login, expectedLogin);
-            Assert.AreEqual(_account.CreateDate, expectedCreaDate);
             Assert.AreEqual(_account.ServerName, expectedServerName);
             Assert.AreEqual(_account.Size, expectedSize);
             Assert.AreEqual(_account.Status, expectedStatus);
@@ -98,7 +96,6 @@ namespace UnityDisk_Test.Accounts
 
             _mockService.SetupGet(account => account.Token).Returns(expectedToken);
             _mockService.SetupGet(account => account.Login).Returns(expectedLogin);
-            _mockService.SetupGet(account => account.CreateDate).Returns(expectedCreaDate);
             _mockService.SetupGet(account => account.ServerName).Returns(expectedServerName);
             _mockService.SetupGet(account => account.Status).Returns(expectedStatus);
             _mockService.SetupGet(account => account.Size).Returns(expectedSize);
@@ -111,7 +108,6 @@ namespace UnityDisk_Test.Accounts
             CollectionAssert.AreEqual((List<string>)_account.Groups, expectedGroups);
             Assert.AreEqual(accountClone.Token, expectedToken);
             Assert.AreEqual(accountClone.Login, expectedLogin);
-            Assert.AreEqual(accountClone.CreateDate, expectedCreaDate);
             Assert.AreEqual(accountClone.ServerName, expectedServerName);
             Assert.AreEqual(accountClone.Size, expectedSize);
             Assert.AreEqual(accountClone.Status, expectedStatus);
