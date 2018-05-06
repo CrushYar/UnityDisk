@@ -14,7 +14,7 @@ namespace UnityDisk.FileStorages
         /// <summary>
         /// Размер в байтах
         /// </summary>
-        long Size { get; }
+        ulong Size { get; }
         /// <summary>
         /// Тип элемента
         /// </summary>

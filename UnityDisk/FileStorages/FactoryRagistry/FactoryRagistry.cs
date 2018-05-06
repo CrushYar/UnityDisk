@@ -41,6 +41,22 @@ namespace UnityDisk.FileStorages.FactoryRagistry
             return factory?.CreateAccount(serverName);
         }
 
+        public IFileStorageFolder CreateFolder(string serverName)
+        {
+            Lock();
+            _ragistries.TryGetValue(serverName, out IFileStorageFactory factory);
+            UnLock();
+            return factory?.CreateFolder(serverName);
+        }
+
+        public IFileStorageFile CreateFile(string serverName)
+        {
+            Lock();
+            _ragistries.TryGetValue(serverName, out IFileStorageFactory factory);
+            UnLock();
+            return factory?.CreateFile(serverName);
+        }
+
         public bool Registry(string serverName, IFileStorageFactory factory)
         {
             bool isContains;
