@@ -38,7 +38,7 @@ namespace UnityDisk.FileStorages.FactoryRagistry
             Lock();
             _ragistries.TryGetValue(serverName,out IFileStorageFactory factory);
             UnLock();
-            return factory?.CreateAccount(serverName);
+            return factory?.CreateAccount();
         }
 
         public IFileStorageFolder CreateFolder(string serverName)
@@ -46,7 +46,7 @@ namespace UnityDisk.FileStorages.FactoryRagistry
             Lock();
             _ragistries.TryGetValue(serverName, out IFileStorageFactory factory);
             UnLock();
-            return factory?.CreateFolder(serverName);
+            return factory?.CreateFolder();
         }
 
         public IFileStorageFile CreateFile(string serverName)
@@ -54,7 +54,7 @@ namespace UnityDisk.FileStorages.FactoryRagistry
             Lock();
             _ragistries.TryGetValue(serverName, out IFileStorageFactory factory);
             UnLock();
-            return factory?.CreateFile(serverName);
+            return factory?.CreateFile();
         }
 
         public bool Registry(string serverName, IFileStorageFactory factory)

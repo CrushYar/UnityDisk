@@ -1,30 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UnityDisk.Accounts;
 
 namespace UnityDisk.FileStorages.OneDrive
 {
+    [Serializable]
+    [DataContract]
     public sealed class Account : IFileStorageAccount
     {
-        public string Login { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public DateTime CreateDate { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public SpaceSize Size { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string ServerName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Token { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsFree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public ConnectionStatusEnum Status { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public IFileStorageAccount Clone()
+        [JsonProperty(PropertyName = "userPrincipalName")]
+        public string Login { get; set; }
+        public SpaceSize Size { get; set; }
+        public string ServerName { get; set; }
+        public string Token { get; set; }
+        public ConnectionStatusEnum Status { get; set; }
+        public async Task SignIn(string key)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task SignIn(string key)
-        {
-            throw new NotImplementedException();
+            using (var stream = await GetDataStream(key))
+            {
+                Account deserializedAccount = new Account();
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedAccount.GetType());
+                deserializedAccount = ser.ReadObject(stream) as Account;
+                if(deserializedAccount==null) throw new NullReferenceException("Couldn't deserialized the data");
+                Login = deserializedAccount.Login;
+                Login = deserializedAccount.Login;
+            }
         }
 
         public Task SignOut()
@@ -35,6 +41,21 @@ namespace UnityDisk.FileStorages.OneDrive
         public Task Update()
         {
             throw new NotImplementedException();
+        }
+        public IFileStorageAccount Clone()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task<System.IO.Stream> GetDataStream(string url)
+        {
+            var httpClient = new System.Net.Http.HttpClient();
+            
+            var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Token);
+
+            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
+           return await response.Content.ReadAsStreamAsync();
         }
     }
 }
