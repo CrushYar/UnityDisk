@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityDisk.Accounts;
 using UnityDisk.Accounts.Registry;
+using UnityDisk.FileStorages;
 
 namespace UnityDisk.GroupTree.Registry
 {
@@ -36,6 +37,11 @@ namespace UnityDisk.GroupTree.Registry
         public List<IAccountProjection> GetAccountProjections()
         {
             return _originGroup.GetAccountProjections();
+        }
+
+        public Task<IList<IFileStorageItem>> LoadDirectory()
+        {
+            return _originGroup.LoadDirectory();
         }
 
         public bool Equals(IGroupTreeItemProjection projection)

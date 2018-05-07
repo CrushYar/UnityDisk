@@ -28,6 +28,10 @@ namespace UnityDisk.GroupTree.Registry
         /// <returns>Список аккаунтов</returns>
         List<IAccountProjection> GetAccountProjections();
         /// <summary>
+        /// Загрузка корневой директории всех аккаунтов ниже по дереву
+        /// </summary>
+        Task<IList<FileStorages.IFileStorageItem>> LoadDirectory();
+        /// <summary>
         /// Проверка элементов на равенство (использовать только для тестов)
         /// </summary>
         /// <param name="projection">Элемент с которым нужно сравнить</param>
