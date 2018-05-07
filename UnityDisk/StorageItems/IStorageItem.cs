@@ -11,7 +11,6 @@ namespace UnityDisk.StorageItems
     {
         Directory   = 2,   
         File        = 4,
-        Image       = 6,
     }
     /// <summary>
     /// перечисление состояний элемента файловой системы
