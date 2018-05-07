@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityDisk.Accounts;
 using UnityDisk.FileStorages.OneDrive.Deserialized;
+using Microsoft.Identity.Client;
 
 namespace UnityDisk.FileStorages.OneDrive
 {
@@ -21,9 +22,13 @@ namespace UnityDisk.FileStorages.OneDrive
         public string ServerName => "OneDrive";
         public string Token { get; set; }
         public ConnectionStatusEnum Status { get; set; }
+
         public async Task SignIn(string key)
         {
-            Token = key;
+            var authenticationResult = await App.PublicClientApp.AcquireTokenSilentAsync(App.Scopes,
+                App.PublicClientApp.Users.FirstOrDefault(user => user.DisplayableId== key));
+
+            Token = authenticationResult.AccessToken;
             using (var stream = await GetDataStream("https://graph.microsoft.com/v1.0/me"))
             {
                 DeserializedAccount deserializedAccount = new DeserializedAccount();
@@ -47,12 +52,10 @@ namespace UnityDisk.FileStorages.OneDrive
 
             Status = ConnectionStatusEnum.Connected;
         }
-
         public Task SignOut()
         {
             throw new NotImplementedException();
         }
-
         public async Task Update()
         {
             using (var stream = await GetDataStream("https://graph.microsoft.com/v1.0/me/drive"))
@@ -72,7 +75,6 @@ namespace UnityDisk.FileStorages.OneDrive
         {
             return new Account(){Login = Login,Id = Id, Size = new SpaceSize(Size), Status = Status, Token = Token};
         }
-
         private async Task<System.IO.Stream> GetDataStream(string url)
         {
             var httpClient = new System.Net.Http.HttpClient();

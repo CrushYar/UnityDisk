@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
+using UnityDisk.Accounts;
 using UnityDisk.Accounts.Registry;
 using UnityDisk.StorageItems;
 using IStorageFile = Windows.Storage.IStorageFile;
@@ -15,13 +16,31 @@ namespace UnityDisk.FileStorages.OneDrive
         public string Name { get; }
         public string Path { get; }
         public BitmapImage PreviewImage { get; set; }
-        public StorageItemAttributeEnum Attribute { get; }
+        public StorageItemAttributeEnum Attribute => StorageItemAttributeEnum.File;
         public string PublicUrl { get; }
         public IAccountProjection Account { get; set; }
         public DateTime CreateDate { get; }
         public Task Delete()
         {
             throw new NotImplementedException();
+        }
+
+        public FileStorageFile() { }
+
+        public FileStorageFile(FileBuilder builder)
+        {
+            Name = builder.Name;
+            Path = builder.Path;
+            PreviewImage = builder.PreviewImage;
+            PublicUrl = builder.PublicUrl;
+            Account = builder.Account;
+            CreateDate = builder.CreateDate;
+            Type = builder.Type;
+        }
+
+        public FileStorageFile(IAccountProjection account)
+        {
+            Account = account;
         }
 
         public Task Rename(string newName)
