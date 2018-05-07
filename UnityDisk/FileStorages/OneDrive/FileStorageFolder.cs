@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,13 +20,13 @@ namespace UnityDisk.FileStorages.OneDrive
     public class FileStorageFolder:IFileStorageFolder
     {
         public string Id { get; set; }
-        public string Name { get; }
-        public string Path { get; }
+        public string Name { get; private set; }
+        public string Path { get; private set; }
         public BitmapImage PreviewImage { get; set; }
         public StorageItemAttributeEnum Attribute => StorageItemAttributeEnum.Directory;
-        public string PublicUrl { get; }
+        public string PublicUrl { get; private set; }
         public IAccountProjection Account { get; set; }
-        public DateTime CreateDate { get; }
+        public DateTime CreateDate { get; private set; }
         public string DownloadUrl { get; set; }
 
         public FileStorageFolder() { }
@@ -61,9 +63,27 @@ namespace UnityDisk.FileStorages.OneDrive
             if(response.StatusCode!= HttpStatusCode.NoContent) throw new InvalidOperationException("Item did not delete");
         }
 
-        public Task Rename(string newName)
+        public async Task Rename(string newName)
         {
-            throw new NotImplementedException();
+            var httpClient = new System.Net.Http.HttpClient();
+            string path = Path;
+            if (path[path.Length - 1] != '/')
+                path += "/";
+
+            path += Name;
+            string url = "https://graph.microsoft.com/v1.0/me" + path;
+            var request = new System.Net.Http.HttpRequestMessage(new HttpMethod("PATCH"), url);
+            request.Version = Version.Parse("1.0");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
+            string content= "{\r\n  \"parentReference\": {\r\n    \"path\": \""+ Path + "\"\r\n  },\r\n  \"name\": \""+ newName+"\"\r\n}";
+             request.Content=new StringContent(content);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
+
+            string test = await response.Content.ReadAsStringAsync();
+
+            if (response.StatusCode != HttpStatusCode.OK) throw new InvalidOperationException("Item did not delete");
+            Name = newName;
         }
 
         public Task Move(IFileStorageFolder folder)

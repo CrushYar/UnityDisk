@@ -27,7 +27,7 @@ namespace UnityDisk
         //You have to replace the below with the Application Id for your app registration
         private static string ClientId = "adf1161c-33d5-41e3-83e4-6e3452f91edb";
         public static PublicClientApplication PublicClientApp = new PublicClientApplication(ClientId);
-        public static string[] Scopes = new string[] { "user.read", "files.readwrite.all" };
+        public static string[] Scopes = new string[] { "user.read", "files.readwrite.all", "Files.ReadWrite.All" };
 
         /// <summary>
         /// Инициализирует одноэлементный объект приложения.  Это первая выполняемая строка разрабатываемого

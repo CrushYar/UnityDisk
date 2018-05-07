@@ -35,7 +35,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.IsTrue(list.Count>0);
         }
         [TestMethod]
-        public async Task Can_Delete()
+        public async Task Can_DeleteFolder()
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
@@ -50,6 +50,25 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             };
 
             await folder.Delete();
+        }
+        [TestMethod]
+        public async Task Can_RenameFolder()
+        {
+            string expectedName = "TestFolder3";
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn(_login);
+            FileStorageFolder folder = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = "TestFolder2",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+
+            await folder.Rename(expectedName);
+            Assert.AreEqual(folder.Name, expectedName);
         }
     }
 }
