@@ -98,6 +98,7 @@
     <Compile Include="Accounts\AccountTest.cs" />
     <Compile Include="Accounts\Registry\AccountRegistryTest.cs" />
     <Compile Include="FileStorages\OneDrive\AccountTest.cs" />
+    <Compile Include="FileStorages\OneDrive\FileStorageFolderTest.cs" />
     <Compile Include="GroupTree\Registry\GroupTreeRegistryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\Accounts\AccountSettingsTest.cs" />
@@ -132,6 +133,9 @@
   <ItemGroup>
     <PackageReference Include="HyperMock.Universal">
       <Version>2.0.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>1.1.2-preview0008</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.0.8</Version>
