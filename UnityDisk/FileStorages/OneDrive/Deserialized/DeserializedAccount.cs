@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace UnityDisk.FileStorages.OneDrive.Deserialized
 {
     [DataContract]
-    public class ForDeserializedAccount
+    public class DeserializedAccount
     {
         [DataMember]
         public string userPrincipalName { get; set; }

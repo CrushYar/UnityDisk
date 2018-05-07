@@ -113,7 +113,7 @@
     <Compile Include="FileStorages\OneDrive\FileStorageFactory.cs" />
     <Compile Include="FileStorages\OneDrive\FileStorageFile.cs" />
     <Compile Include="FileStorages\OneDrive\FileStorageFolder.cs" />
-    <Compile Include="FileStorages\OneDrive\Deserialized\ForDeserializedAccount.cs" />
+    <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedAccount.cs" />
     <Compile Include="GroupTree\Container.cs" />
     <Compile Include="GroupTree\Group.cs" />
     <Compile Include="GroupTree\IContainer.cs" />

@@ -26,18 +26,18 @@ namespace UnityDisk.FileStorages.OneDrive
             Token = key;
             using (var stream = await GetDataStream("https://graph.microsoft.com/v1.0/me"))
             {
-                ForDeserializedAccount deserializedAccount = new ForDeserializedAccount();
+                DeserializedAccount deserializedAccount = new DeserializedAccount();
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedAccount.GetType());
-                deserializedAccount = ser.ReadObject(stream) as ForDeserializedAccount;
+                deserializedAccount = ser.ReadObject(stream) as DeserializedAccount;
                 if (deserializedAccount == null) throw new NullReferenceException("Couldn't deserialized the data");
                 Login = deserializedAccount.userPrincipalName;
                 Id = deserializedAccount.id;
             }
             using (var stream = await GetDataStream("https://graph.microsoft.com/v1.0/me/drive"))
             {
-                ForDeserializedAccount deserializedAccount = new ForDeserializedAccount();
+                DeserializedAccount deserializedAccount = new DeserializedAccount();
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedAccount.GetType());
-                deserializedAccount = ser.ReadObject(stream) as ForDeserializedAccount;
+                deserializedAccount = ser.ReadObject(stream) as DeserializedAccount;
                 if (deserializedAccount == null) throw new NullReferenceException("Couldn't deserialized the data");
                 Size=new SpaceSize();
                 Size.TotalSize = deserializedAccount.quota.total;
@@ -57,9 +57,9 @@ namespace UnityDisk.FileStorages.OneDrive
         {
             using (var stream = await GetDataStream("https://graph.microsoft.com/v1.0/me/drive"))
             {
-                ForDeserializedAccount deserializedAccount = new ForDeserializedAccount();
+                DeserializedAccount deserializedAccount = new DeserializedAccount();
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedAccount.GetType());
-                deserializedAccount = ser.ReadObject(stream) as ForDeserializedAccount;
+                deserializedAccount = ser.ReadObject(stream) as DeserializedAccount;
                 if (deserializedAccount == null) throw new NullReferenceException("Couldn't deserialized the data");
                 Size = new SpaceSize();
                 Size.TotalSize = deserializedAccount.quota.total;
