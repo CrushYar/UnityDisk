@@ -15,32 +15,11 @@ namespace UnityDisk_Test.FileStorages.OneDrive
     public class AccountTest
     {
         private string _login = "shazhko.artem@gmail.com";
-        private AuthenticationResult _authenticationResult ;
+
         [TestInitialize]
         public async Task BeforeEachTest()
         {
-            try
-            {
-                _authenticationResult =
-                    await UnityDisk.App.PublicClientApp.AcquireTokenSilentAsync(UnityDisk.App.Scopes,
-                        UnityDisk.App.PublicClientApp.Users.FirstOrDefault());
-            }
-            catch (MsalUiRequiredException ex)
-            {
-                Debug.WriteLine($"MsalUiRequiredException: {ex.Message}");
-                try
-                {
-                    _authenticationResult = await UnityDisk.App.PublicClientApp.AcquireTokenAsync(UnityDisk.App.Scopes);
-                }
-                catch (MsalException msalex)
-                {
-                    Debug.WriteLine($"Error Acquiring Token:{System.Environment.NewLine}{msalex}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error Acquiring Token Silently:{System.Environment.NewLine}{ex}");
-            }
+            await UnityDisk.RemoteInitialization.Start();
         }
 
         [TestMethod]
