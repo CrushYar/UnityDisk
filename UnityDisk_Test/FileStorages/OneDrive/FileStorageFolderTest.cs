@@ -30,8 +30,26 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             FileStorageFolder folder=new FileStorageFolder(new AccountProjection(
                 new UnityDisk.Accounts.Account(account)));
             var list=await folder.LoadDirectory();
+
             Assert.IsNotNull(list);
             Assert.IsTrue(list.Count>0);
+        }
+        [TestMethod]
+        public async Task Can_Delete()
+        {
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn(_login);
+            FileStorageFolder folder = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = "TestFolder",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+
+            await folder.Delete();
         }
     }
 }

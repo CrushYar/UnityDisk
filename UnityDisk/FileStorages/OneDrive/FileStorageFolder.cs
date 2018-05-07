@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,9 +45,20 @@ namespace UnityDisk.FileStorages.OneDrive
         {
             Account = account;
         }
-        public Task Delete()
+        public async Task Delete()
         {
-            throw new NotImplementedException();
+            var httpClient = new System.Net.Http.HttpClient();
+            string path = Path;
+            if (path[path.Length - 1] != '/')
+                path += "/";
+
+            path += Name;
+            string url = "https://graph.microsoft.com/v1.0/me"+ path;
+           var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Delete, url);
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
+
+            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
+            if(response.StatusCode!= HttpStatusCode.NoContent) throw new InvalidOperationException("Item did not delete");
         }
 
         public Task Rename(string newName)
@@ -93,7 +105,7 @@ namespace UnityDisk.FileStorages.OneDrive
         {
             List<IFileStorageItem> result=new List<IFileStorageItem>();
             DeserializedItemList deserializedItemList = new DeserializedItemList();
-            string path = string.IsNullOrEmpty(Path) ? "/drive/root" : String.Concat("/{0}{1}:",Path,Name);
+            string path = string.IsNullOrEmpty(Path) ? "/drive/root" : String.Concat("{0}{1}:",Path,Name);
             using (var stream = await GetDataStream("https://graph.microsoft.com/v1.0/me"+path+"/children"))
             {
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedItemList.GetType());
