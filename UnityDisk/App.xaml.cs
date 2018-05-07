@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.Identity.Client;
 
 namespace UnityDisk
 {
@@ -22,6 +23,12 @@ namespace UnityDisk
     /// </summary>
     sealed partial class App : Application
     {
+        //Below is the clientId of your app registration. 
+        //You have to replace the below with the Application Id for your app registration
+        private static string ClientId = "adf1161c-33d5-41e3-83e4-6e3452f91edb";
+        public static PublicClientApplication PublicClientApp = new PublicClientApplication(ClientId);
+        public static string[] Scopes = new string[] { "user.read", "files.readwrite.all" };
+
         /// <summary>
         /// Инициализирует одноэлементный объект приложения.  Это первая выполняемая строка разрабатываемого
         /// кода; поэтому она является логическим эквивалентом main() или WinMain().
