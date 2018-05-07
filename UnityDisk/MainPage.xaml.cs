@@ -28,7 +28,13 @@ namespace UnityDisk
     {
         public MainPage()
         {
+            Loaded += MainPage_Loaded;
             this.InitializeComponent();
+        }
+
+        private async void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+             await RemoteInitialization.Start();
         }
     }
 }

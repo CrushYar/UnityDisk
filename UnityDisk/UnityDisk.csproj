@@ -110,10 +110,14 @@
     <Compile Include="FileStorages\IFileStorageFile.cs" />
     <Compile Include="FileStorages\IFileStorageFolder.cs" />
     <Compile Include="FileStorages\IFileStorageItem.cs" />
+    <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedItem.cs" />
+    <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedItemList.cs" />
+    <Compile Include="FileStorages\OneDrive\FileBuilder.cs" />
     <Compile Include="FileStorages\OneDrive\FileStorageFactory.cs" />
     <Compile Include="FileStorages\OneDrive\FileStorageFile.cs" />
     <Compile Include="FileStorages\OneDrive\FileStorageFolder.cs" />
     <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedAccount.cs" />
+    <Compile Include="FileStorages\OneDrive\FolderBuilder.cs" />
     <Compile Include="GroupTree\Container.cs" />
     <Compile Include="GroupTree\Group.cs" />
     <Compile Include="GroupTree\IContainer.cs" />
@@ -147,6 +151,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoteInitialization.cs" />
     <Compile Include="Settings\Accounts\AccountSettings.cs" />
     <Compile Include="Settings\Accounts\AccountSettingsItem.cs" />
     <Compile Include="Settings\Accounts\IAccountSettings.cs" />
@@ -201,6 +206,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>1.1.2-preview0008</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.0.8</Version>
     </PackageReference>
