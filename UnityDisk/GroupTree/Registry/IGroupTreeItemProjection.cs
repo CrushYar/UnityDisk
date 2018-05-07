@@ -30,7 +30,7 @@ namespace UnityDisk.GroupTree.Registry
         /// <summary>
         /// Загрузка корневой директории всех аккаунтов ниже по дереву
         /// </summary>
-        Task<IList<FileStorages.IFileStorageItem>> LoadDirectory();
+        Task<FileStorages.IFileStorageFolder> LoadDirectory();
         /// <summary>
         /// Проверка элементов на равенство (использовать только для тестов)
         /// </summary>

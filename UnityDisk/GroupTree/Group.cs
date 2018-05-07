@@ -33,7 +33,7 @@ namespace UnityDisk.GroupTree
             return clone;
         }
 
-        public void LoadDirectory()
+        public Task<FileStorages.IFileStorageFolder> LoadDirectory()
         {
             throw new NotImplementedException();
         }

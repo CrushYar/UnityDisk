@@ -96,7 +96,7 @@ namespace UnityDisk.GroupTree.Registry
         {
             return _originContainer.GetAccountProjections();
         }
-        public Task<IList<FileStorages.IFileStorageItem>> LoadDirectory()
+        public Task<FileStorages.IFileStorageFolder> LoadDirectory()
         {
             return _originContainer.LoadDirectory();
         }

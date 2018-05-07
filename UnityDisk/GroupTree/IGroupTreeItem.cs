@@ -40,8 +40,8 @@ namespace UnityDisk.GroupTree
         /// <summary>
         /// Загрузка корневой директории всех аккаунтов ниже по дереву
         /// </summary>
-        void /*IList<IStorageItem>*/ LoadDirectory();
-        /// <summary>
+        Task<FileStorages.IFileStorageFolder> LoadDirectory();
+        /// <summary> 
         /// Получение коллекции аккаунтов находящийся внутри элемента
         /// </summary>
         /// <returns>Список аккаунтов</returns>
