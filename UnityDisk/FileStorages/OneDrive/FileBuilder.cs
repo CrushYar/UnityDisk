@@ -22,6 +22,7 @@ namespace UnityDisk.FileStorages.OneDrive
         public DateTime CreateDate { get; set; }
         public string DownloadUrl { get; set; }
         public string Type { get; set; }
+        public ulong Size { get; set; }
 
         public FileBuilder() { }
 
@@ -30,10 +31,12 @@ namespace UnityDisk.FileStorages.OneDrive
             Id = item.id;
             Name = item.name;
             Attribute = StorageItemAttributeEnum.File;
-
+            Size = item.size;
+            Type = (item.file!=null)? item.file.mimeType: item.package.type;
             PublicUrl = item.webUrl;
             CreateDate = DateTime.Parse(item.createdDateTime);
             DownloadUrl = item.downloadUrl;
+            Path = item.parentReference.path;
         }
     }
 }

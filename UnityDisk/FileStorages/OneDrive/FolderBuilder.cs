@@ -31,6 +31,7 @@ namespace UnityDisk.FileStorages.OneDrive
             PublicUrl = item.webUrl;
             CreateDate = DateTime.Parse(item.createdDateTime);
             DownloadUrl = item.downloadUrl;
+            Path = item.parentReference.path;
         }
     }
 }

@@ -16,6 +16,7 @@ namespace UnityDisk.FileStorages.OneDrive
 {
     public class FileStorageFolder:IFileStorageFolder
     {
+        public string Id { get; set; }
         public string Name { get; }
         public string Path { get; }
         public BitmapImage PreviewImage { get; set; }
@@ -23,6 +24,7 @@ namespace UnityDisk.FileStorages.OneDrive
         public string PublicUrl { get; }
         public IAccountProjection Account { get; set; }
         public DateTime CreateDate { get; }
+        public string DownloadUrl { get; set; }
 
         public FileStorageFolder() { }
 
@@ -34,6 +36,8 @@ namespace UnityDisk.FileStorages.OneDrive
             PublicUrl = folderBuilder.PublicUrl;
             Account = folderBuilder.Account;
             CreateDate = folderBuilder.CreateDate;
+            DownloadUrl = folderBuilder.DownloadUrl;
+            Id = folderBuilder.Id;
         }
 
         public FileStorageFolder(IAccountProjection account)
@@ -89,7 +93,8 @@ namespace UnityDisk.FileStorages.OneDrive
         {
             List<IFileStorageItem> result=new List<IFileStorageItem>();
             DeserializedItemList deserializedItemList = new DeserializedItemList();
-            using (var stream = await GetDataStream("https://graph.microsoft.com/v1.0/me/drive"))
+            string path = string.IsNullOrEmpty(Path) ? "/drive/root" : String.Concat("/{0}{1}:",Path,Name);
+            using (var stream = await GetDataStream("https://graph.microsoft.com/v1.0/me"+path+"/children"))
             {
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedItemList.GetType());
                 deserializedItemList = ser.ReadObject(stream) as DeserializedItemList;
@@ -99,7 +104,7 @@ namespace UnityDisk.FileStorages.OneDrive
             foreach (var item in deserializedItemList.value)
             {
                 IFileStorageItem storageItem;
-                if (item.folder == null)
+                if (item.folder != null)
                     storageItem =new FileStorageFolder(new FolderBuilder(item){PreviewImage = PreviewImage});
                 else
                     storageItem = new FileStorageFile(new FileBuilder(item));

@@ -13,6 +13,7 @@ namespace UnityDisk.FileStorages.OneDrive
 {
     public class FileStorageFile:IFileStorageFile
     {
+        public string Id { get; set; }
         public string Name { get; }
         public string Path { get; }
         public BitmapImage PreviewImage { get; set; }
@@ -20,6 +21,9 @@ namespace UnityDisk.FileStorages.OneDrive
         public string PublicUrl { get; }
         public IAccountProjection Account { get; set; }
         public DateTime CreateDate { get; }
+        public ulong Size { get; }
+        public string Type { get; }
+
         public Task Delete()
         {
             throw new NotImplementedException();
@@ -36,6 +40,7 @@ namespace UnityDisk.FileStorages.OneDrive
             Account = builder.Account;
             CreateDate = builder.CreateDate;
             Type = builder.Type;
+            Size = builder.Size;
         }
 
         public FileStorageFile(IAccountProjection account)
@@ -83,8 +88,6 @@ namespace UnityDisk.FileStorages.OneDrive
             throw new NotImplementedException();
         }
 
-        public ulong Size { get; }
-        public string Type { get; }
         public Task Download(IStorageFile file)
         {
             throw new NotImplementedException();
