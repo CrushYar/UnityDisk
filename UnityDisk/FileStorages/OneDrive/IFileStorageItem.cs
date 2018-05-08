@@ -14,10 +14,10 @@ namespace UnityDisk.FileStorages.OneDrive
         /// <summary>
         /// ID файла
         /// </summary>
-        string Id { get; set; }
+        string Id { get;}
         /// <summary>
         /// ID публичной ссылки
         /// </summary>
-        string PublicUrlId { get; set; }
+        string PublicUrlId { get;}
     }
 }

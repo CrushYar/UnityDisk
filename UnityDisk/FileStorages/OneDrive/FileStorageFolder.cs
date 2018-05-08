@@ -19,8 +19,8 @@ namespace UnityDisk.FileStorages.OneDrive
 {
     public class FileStorageFolder: OneDrive.IFileStorageFolder
     {
-        public string Id { get; set; }
-        public string PublicUrlId { get; set; }
+        public string Id { get; private set; }
+        public string PublicUrlId { get; private set; }
         public string Name { get; private set; }
         public string Path { get; private set; }
         public BitmapImage PreviewImage { get; set; }
@@ -28,7 +28,7 @@ namespace UnityDisk.FileStorages.OneDrive
         public string PublicUrl { get; private set; }
         public IAccountProjection Account { get; set; }
         public DateTime CreateDate { get; private set; }
-        public string DownloadUrl { get; set; }
+        public string DownloadUrl { get; private set; }
 
         public FileStorageFolder() { }
 
@@ -182,9 +182,39 @@ namespace UnityDisk.FileStorages.OneDrive
             }
         }
 
-        public Task CreatePublicUrl()
+        public async Task CreatePublicUrl()
         {
-            throw new NotImplementedException();
+            if (!String.IsNullOrEmpty(PublicUrl)) return;
+
+            var httpClient = new System.Net.Http.HttpClient();
+            string fullPathFrom = AddBackslash(Path);
+            fullPathFrom += Name;
+
+            string url = "https://graph.microsoft.com/v1.0/me" + fullPathFrom + ":/createLink";
+            var request = new System.Net.Http.HttpRequestMessage(HttpMethod.Post, url);
+            request.Version = Version.Parse("1.0");
+            string content = "{\r\n\t\"type\": \"view\"\r\n}";
+            request.Content = new StringContent(content);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
+            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
+
+            if (response.StatusCode != HttpStatusCode.Created && response.StatusCode != HttpStatusCode.OK)
+                throw new InvalidOperationException("Item did not create the public url");
+
+            using (System.IO.Stream stream = await response.Content.ReadAsStreamAsync())
+            {
+                DeserializedPublicUrlItem deserializedPublicUrlItem = new DeserializedPublicUrlItem();
+
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedPublicUrlItem.GetType());
+                deserializedPublicUrlItem = ser.ReadObject(stream) as DeserializedPublicUrlItem;
+
+                if (deserializedPublicUrlItem?.link == null)
+                    throw new NullReferenceException("Couldn't deserialized the data");
+
+                PublicUrl = deserializedPublicUrlItem.link.webUrl;
+                PublicUrlId = deserializedPublicUrlItem.id;
+            }
         }
 
         public Task DeletePublicUrl()

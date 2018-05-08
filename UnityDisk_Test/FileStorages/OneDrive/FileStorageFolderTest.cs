@@ -41,7 +41,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             await account.SignIn(_login);
             FileStorageFolder folder = new FileStorageFolder(new FolderBuilder()
             {
-                Name = "TestFolder",
+                Name = "ForTestDeleteFolder",
                 Path = "/drive/root:"
             })
             {
@@ -54,12 +54,12 @@ namespace UnityDisk_Test.FileStorages.OneDrive
         [TestMethod]
         public async Task Can_RenameFolder()
         {
-            string expectedName = "TestFolder3";
+            string expectedName = "ForTestRename_DONE";
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
             FileStorageFolder folder = new FileStorageFolder(new FolderBuilder()
             {
-                Name = "TestFolder2",
+                Name = "ForTestRename",
                 Path = "/drive/root:"
             })
             {
@@ -146,6 +146,26 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             };
 
             await folder.LoadPublicUrl();
+
+            Assert.IsFalse(String.IsNullOrEmpty(folder.PublicUrl));
+            Assert.IsFalse(String.IsNullOrEmpty(folder.PublicUrlId));
+        }
+        [TestMethod]
+        public async Task Can_CreatePublicUrl()
+        {
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn(_login);
+            FileStorageFolder folder = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = "ForTestCreatePublicUrl",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+
+            await folder.CreatePublicUrl();
 
             Assert.IsFalse(String.IsNullOrEmpty(folder.PublicUrl));
             Assert.IsFalse(String.IsNullOrEmpty(folder.PublicUrlId));
