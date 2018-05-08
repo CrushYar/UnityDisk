@@ -131,7 +131,7 @@ namespace UnityDisk.StorageItems
                         var folder = new StorageFolder();
                         folder.DataContext = fileStorageFolder;
                         storageItem = folder;
-                        folder.PreviewImage = imagesRegistry.FindPreviewImage(StorageItemTypeEnum.Directory);
+                        folder.PreviewImage = PreviewImage;
                         break;
                     default:
                         throw new ArgumentException("Unknown type");

@@ -182,7 +182,7 @@ namespace UnityDisk.FileStorages.OneDrive
             {
                 FileStorages.IFileStorageItem storageItem;
                 if (item.folder != null)
-                    storageItem =new FileStorageFolder(new FolderBuilder(item){PreviewImage = PreviewImage});
+                    storageItem =new FileStorageFolder(new FolderBuilder(item));
                 else
                     storageItem = new FileStorageFile(new FileBuilder(item));
                 result.Add(storageItem);
