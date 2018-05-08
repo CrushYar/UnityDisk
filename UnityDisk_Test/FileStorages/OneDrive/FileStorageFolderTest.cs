@@ -130,5 +130,25 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.AreEqual(expectedPath, result.Path);
             Assert.AreEqual(folder.Name,result.Name);
         }
+        [TestMethod]
+        public async Task Can_LoadPublicUrl()
+        {
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn(_login);
+            FileStorageFolder folder = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = "ForTestLoadPublicUrl",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+
+            await folder.LoadPublicUrl();
+
+            Assert.IsFalse(String.IsNullOrEmpty(folder.PublicUrl));
+            Assert.IsFalse(String.IsNullOrEmpty(folder.PublicUrlId));
+        }
     }
 }

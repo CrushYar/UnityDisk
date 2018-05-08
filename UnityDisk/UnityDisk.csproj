@@ -115,6 +115,7 @@
     <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedImage.cs" />
     <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedItem.cs" />
     <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedItemList.cs" />
+    <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedPublicUrl.cs" />
     <Compile Include="FileStorages\OneDrive\FileBuilder.cs" />
     <Compile Include="FileStorages\OneDrive\FileStorageFactory.cs" />
     <Compile Include="FileStorages\OneDrive\FileStorageFile.cs" />

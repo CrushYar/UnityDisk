@@ -20,6 +20,7 @@ namespace UnityDisk.FileStorages.OneDrive
     public class FileStorageFolder: OneDrive.IFileStorageFolder
     {
         public string Id { get; set; }
+        public string PublicUrlId { get; set; }
         public string Name { get; private set; }
         public string Path { get; private set; }
         public BitmapImage PreviewImage { get; set; }
@@ -146,9 +147,39 @@ namespace UnityDisk.FileStorages.OneDrive
             throw new NotImplementedException();
         }
 
-        public Task LoadPublicUrl()
+        public async Task LoadPublicUrl()
         {
-            throw new NotImplementedException();
+            if (!String.IsNullOrEmpty(PublicUrl)) return;
+
+            var httpClient = new System.Net.Http.HttpClient();
+            string fullPathFrom = AddBackslash(Path);
+            fullPathFrom += Name;
+
+            string url = "https://graph.microsoft.com/v1.0/me" + fullPathFrom+ ":/permissions";
+            var request = new System.Net.Http.HttpRequestMessage(HttpMethod.Get, url);
+            request.Version = Version.Parse("1.0");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
+            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new InvalidOperationException("Item did not load the public url");
+
+            using (System.IO.Stream stream = await response.Content.ReadAsStreamAsync())
+            {
+                DeserializedPublicUrl deserializedPublicUrl = new DeserializedPublicUrl();
+
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedPublicUrl.GetType());
+                deserializedPublicUrl = ser.ReadObject(stream) as DeserializedPublicUrl;
+
+                if (deserializedPublicUrl?.value == null)
+                    throw new NullReferenceException("Couldn't deserialized the data");
+
+                var link = deserializedPublicUrl.value.FirstOrDefault(item => item.link.type == "view") ??
+                           deserializedPublicUrl.value[0];
+
+                PublicUrl = link.link.webUrl;
+                PublicUrlId = link.id;
+            }
         }
 
         public Task CreatePublicUrl()
@@ -209,7 +240,9 @@ namespace UnityDisk.FileStorages.OneDrive
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
 
             System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
-            string test = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new InvalidOperationException("Item did not copy");
+
             return await response.Content.ReadAsStreamAsync();
         }
 

@@ -23,6 +23,7 @@ namespace UnityDisk.FileStorages.OneDrive
     public class FileStorageFile:OneDrive.IFileStorageFile
     {
         public string Id { get; set; }
+        public string PublicUrlId { get; set; }
         public string Name { get; }
         public string Path { get; }
         public BitmapImage PreviewImage { get; set; }
