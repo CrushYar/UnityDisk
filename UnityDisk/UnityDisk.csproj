@@ -20,7 +20,7 @@
     <PackageCertificateKeyFile>UnityDisk_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -112,6 +112,7 @@
     <Compile Include="FileStorages\IFileStorageFolder.cs" />
     <Compile Include="FileStorages\IFileStorageItem.cs" />
     <Compile Include="FileStorages\IStandardPreviewImages.cs" />
+    <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedImage.cs" />
     <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedItem.cs" />
     <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedItemList.cs" />
     <Compile Include="FileStorages\OneDrive\FileBuilder.cs" />

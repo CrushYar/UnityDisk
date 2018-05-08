@@ -16,6 +16,9 @@ using UnityDisk.Accounts;
 using UnityDisk.FileStorages;
 using UnityDisk.Settings.Accounts;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
+using Windows.UI.Xaml.Media.Imaging;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -32,9 +35,9 @@ namespace UnityDisk
             this.InitializeComponent();
         }
 
-        private async void MainPage_Loaded(object sender, RoutedEventArgs e)
+        private  void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-             await RemoteInitialization.Start();
+            
         }
     }
 }
