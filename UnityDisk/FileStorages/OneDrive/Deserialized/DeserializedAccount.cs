@@ -10,25 +10,25 @@ namespace UnityDisk.FileStorages.OneDrive.Deserialized
     [DataContract]
     public class DeserializedAccount
     {
-        [DataMember]
-        public string userPrincipalName { get; set; }
-        [DataMember]
-        public string id { get; set; }
-        [DataMember]
-        public ForDeserializedSize quota { get; set; }
+        [DataMember(Name = "userPrincipalName")]
+        public string UserPrincipalName { get; set; }
+        [DataMember(Name = "id")]
+        public string Id { get; set; }
+        [DataMember(Name = "quota")]
+        public ForDeserializedSize Quota { get; set; }
     }
     [DataContract]
     public class ForDeserializedSize
     {
-        [DataMember]
-        public ulong deleted { get; set; }
-        [DataMember]
-        public ulong remaining { get; set; }
-        [DataMember]
-        public string state { get; set; }
-        [DataMember]
-        public ulong total { get; set; }
-        [DataMember]
-        public ulong used { get; set; }
+        [DataMember(Name = "deleted")]
+        public ulong Deleted { get; set; }
+        [DataMember(Name = "remaining")]
+        public ulong Remaining { get; set; }
+        [DataMember(Name = "state")]
+        public string State { get; set; }
+        [DataMember(Name = "total")]
+        public ulong Total { get; set; }
+        [DataMember(Name = "used")]
+        public ulong Used { get; set; }
     }
 }

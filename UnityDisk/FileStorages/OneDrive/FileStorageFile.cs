@@ -95,9 +95,9 @@ namespace UnityDisk.FileStorages.OneDrive
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedImage.GetType());
                 deserializedImage = ser.ReadObject(stream) as DeserializedImage;
 
-                if (deserializedImage == null || String.IsNullOrEmpty(deserializedImage.url))
+                if (deserializedImage == null || String.IsNullOrEmpty(deserializedImage.Url))
                     throw new NullReferenceException("Couldn't deserialized the data");
-                urlImage = deserializedImage.url;
+                urlImage = deserializedImage.Url;
             }
 
             // Download image

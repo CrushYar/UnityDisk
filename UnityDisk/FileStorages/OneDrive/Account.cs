@@ -35,8 +35,8 @@ namespace UnityDisk.FileStorages.OneDrive
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedAccount.GetType());
                 deserializedAccount = ser.ReadObject(stream) as DeserializedAccount;
                 if (deserializedAccount == null) throw new NullReferenceException("Couldn't deserialized the data");
-                Login = deserializedAccount.userPrincipalName;
-                Id = deserializedAccount.id;
+                Login = deserializedAccount.UserPrincipalName;
+                Id = deserializedAccount.Id;
             }
             using (var stream = await GetDataStream("https://graph.microsoft.com/v1.0/me/drive"))
             {
@@ -45,9 +45,9 @@ namespace UnityDisk.FileStorages.OneDrive
                 deserializedAccount = ser.ReadObject(stream) as DeserializedAccount;
                 if (deserializedAccount == null) throw new NullReferenceException("Couldn't deserialized the data");
                 Size=new SpaceSize();
-                Size.TotalSize = deserializedAccount.quota.total;
-                Size.UsedSize = deserializedAccount.quota.used;
-                Size.FreelSize = deserializedAccount.quota.remaining;
+                Size.TotalSize = deserializedAccount.Quota.Total;
+                Size.UsedSize = deserializedAccount.Quota.Used;
+                Size.FreelSize = deserializedAccount.Quota.Remaining;
             }
 
             Status = ConnectionStatusEnum.Connected;
@@ -65,9 +65,9 @@ namespace UnityDisk.FileStorages.OneDrive
                 deserializedAccount = ser.ReadObject(stream) as DeserializedAccount;
                 if (deserializedAccount == null) throw new NullReferenceException("Couldn't deserialized the data");
                 Size = new SpaceSize();
-                Size.TotalSize = deserializedAccount.quota.total;
-                Size.UsedSize = deserializedAccount.quota.used;
-                Size.FreelSize = deserializedAccount.quota.remaining;
+                Size.TotalSize = deserializedAccount.Quota.Total;
+                Size.UsedSize = deserializedAccount.Quota.Used;
+                Size.FreelSize = deserializedAccount.Quota.Remaining;
             }
             Status = ConnectionStatusEnum.Connected;
         }

@@ -255,10 +255,10 @@ namespace UnityDisk.FileStorages.OneDrive
             }
             if (deserializedItemList == null) throw new NullReferenceException("Couldn't deserialized the data");
 
-            foreach (var item in deserializedItemList.value)
+            foreach (var item in deserializedItemList.Value)
             {
                 FileStorages.IFileStorageItem storageItem;
-                if (item.folder != null)
+                if (item.Folder != null)
                     storageItem =new FileStorageFolder(new FolderBuilder(item));
                 else
                     storageItem = new FileStorageFile(new FileBuilder(item));

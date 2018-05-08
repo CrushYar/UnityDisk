@@ -27,18 +27,18 @@ namespace UnityDisk.FileStorages.OneDrive
 
         public FileBuilder(DeserializedItem item)
         {
-            Id = item.id;
-            Name = item.name;
-            if (item.file != null)
-                Type = FileStorages.Convertor.ToStorageItemType(item.file.mimeType);
+            Id = item.Id;
+            Name = item.Name;
+            if (item.File != null)
+                Type = FileStorages.Convertor.ToStorageItemType(item.File.MimeType);
             else
-                Type = FileStorages.Convertor.ToStorageItemType(item.package.type);
+                Type = FileStorages.Convertor.ToStorageItemType(item.Package.Type);
             
-            Size = item.size;
-            PublicUrl = item.webUrl;
-            CreateDate = DateTime.Parse(item.createdDateTime);
-            DownloadUrl = item.downloadUrl;
-            Path = item.parentReference.path;
+            Size = item.Size;
+            PublicUrl = item.WebUrl;
+            CreateDate = DateTime.Parse(item.CreatedDateTime);
+            DownloadUrl = item.DownloadUrl;
+            Path = item.ParentReference.Path;
         }
     }
 }

@@ -25,13 +25,13 @@ namespace UnityDisk.FileStorages.OneDrive
 
         public FolderBuilder(DeserializedItem item)
         {
-            Id = item.id;
-            Name = item.name;
+            Id = item.Id;
+            Name = item.Name;
             Type = StorageItemTypeEnum.Directory;
-            PublicUrl = item.webUrl;
-            CreateDate = DateTime.Parse(item.createdDateTime);
-            DownloadUrl = item.downloadUrl;
-            Path = item.parentReference.path;
+            PublicUrl = item.WebUrl;
+            CreateDate = DateTime.Parse(item.CreatedDateTime);
+            DownloadUrl = item.DownloadUrl;
+            Path = item.ParentReference.Path;
         }
     }
 }

@@ -11,53 +11,52 @@ namespace UnityDisk.FileStorages.OneDrive.Deserialized
     [DataContract]
     public class DeserializedItem
     {
-        [DataMember]
-        public string createdDateTime { get; set; }
-        [DataMember]
-        public string id { get; set; }
-        [DataMember]
-        public string lastModifiedDateTime { get; set; }
-        [DataMember]
-        public string name { get; set; }
-        [DataMember]
-        public ulong size { get; set; }
-        [DataMember]
-        public string webUrl { get; set; }
-        [DataMember]
-        [JsonProperty(PropertyName = "@microsoft.graph.downloadUrl")]
-        public string downloadUrl { get; set; }
-        [DataMember]
-        public DeserializedType file { get; set; }
-        [DataMember]
-        public DeserializedFolder folder { get; set; }
-        [DataMember]
-        public DeserializedPath parentReference { get; set; }
-        [DataMember]
-        public DeserializedPackage package { get; set; }
+        [DataMember(Name = "createdDateTime")]
+        public string CreatedDateTime { get; set; }
+        [DataMember(Name = "id")]
+        public string Id { get; set; }
+        [DataMember(Name = "lastModifiedDateTime")]
+        public string LastModifiedDateTime { get; set; }
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+        [DataMember(Name = "size")]
+        public ulong Size { get; set; }
+        [DataMember(Name = "webUrl")]
+        public string WebUrl { get; set; }
+        [DataMember(Name = "@microsoft.graph.downloadUrl")]
+        public string DownloadUrl { get; set; }
+        [DataMember(Name = "file")]
+        public DeserializedType File { get; set; }
+        [DataMember(Name = "folder")]
+        public DeserializedFolder Folder { get; set; }
+        [DataMember(Name = "parentReference")]
+        public DeserializedPath ParentReference { get; set; }
+        [DataMember(Name = "package")]
+        public DeserializedPackage Package { get; set; }
     }
 
     [DataContract]
     public class DeserializedPath
     {
-        [DataMember]
-        public string path { get; set; }
+        [DataMember(Name = "path")]
+        public string Path { get; set; }
     }
     [DataContract]
     public class DeserializedPackage
     {
-        [DataMember]
-        public string type { get; set; }
+        [DataMember(Name = "type")]
+        public string Type { get; set; }
     }
     [DataContract]
     public class DeserializedType
     {
-        [DataMember]
-        public string mimeType { get; set; }
+        [DataMember(Name = "mimeType")]
+        public string MimeType { get; set; }
     }
     [DataContract]
     public class DeserializedFolder
     {
-        [DataMember]
-        public int childCount { get; set; }
+        [DataMember(Name = "childCount")]
+        public int ChildCount { get; set; }
     }
 }

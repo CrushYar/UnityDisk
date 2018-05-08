@@ -10,7 +10,7 @@ namespace UnityDisk.FileStorages.OneDrive.Deserialized
     [DataContract]
     public class DeserializedImage
     {
-        [DataMember]
-        public string url { get; set; }
+        [DataMember(Name = "url")]
+        public string Url { get; set; }
     }
 }

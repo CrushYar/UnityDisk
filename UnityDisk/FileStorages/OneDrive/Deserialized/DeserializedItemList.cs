@@ -10,7 +10,7 @@ namespace UnityDisk.FileStorages.OneDrive.Deserialized
     [DataContract]
     class DeserializedItemList
     {
-        [DataMember]
-        public DeserializedItem[] value { get; set; }
+        [DataMember(Name = "value")]
+        public DeserializedItem[] Value { get; set; }
     }
 }
