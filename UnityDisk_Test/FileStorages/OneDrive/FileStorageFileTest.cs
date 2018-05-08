@@ -66,7 +66,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
-            FileStorageFile file= new FileStorageFile(new FileBuilder()
+            FileStorageFile file = new FileStorageFile(new FileBuilder()
             {
                 Name = "Untitled.png",
                 Path = "/drive/root:"
@@ -80,6 +80,27 @@ namespace UnityDisk_Test.FileStorages.OneDrive
 
             Assert.IsFalse(String.IsNullOrEmpty(file.PublicUrl));
             Assert.IsFalse(String.IsNullOrEmpty(file.PublicUrlId));
+        }
+        [TestMethod]
+        public async Task Can_DeletePublicUrl()
+        {
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn(_login);
+            FileStorageFile file = new FileStorageFile(new FileBuilder()
+            {
+                Name = "Untitled.png",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+
+            await file.CreatePublicUrl();
+            await file.DeletePublicUrl();
+
+            Assert.IsTrue(String.IsNullOrEmpty(file.PublicUrl));
+            Assert.IsTrue(String.IsNullOrEmpty(file.PublicUrlId));
         }
     }
 }

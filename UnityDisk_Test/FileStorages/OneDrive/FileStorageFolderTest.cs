@@ -170,5 +170,26 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.IsFalse(String.IsNullOrEmpty(folder.PublicUrl));
             Assert.IsFalse(String.IsNullOrEmpty(folder.PublicUrlId));
         }
+        [TestMethod]
+        public async Task Can_DeletePublicUrl()
+        {
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn(_login);
+            FileStorageFile file = new FileStorageFile(new FileBuilder()
+            {
+                Name = "ForTestDeletePublicUrl",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+
+            await file.CreatePublicUrl();
+            await file.DeletePublicUrl();
+
+            Assert.IsTrue(String.IsNullOrEmpty(file.PublicUrl));
+            Assert.IsTrue(String.IsNullOrEmpty(file.PublicUrlId));
+        }
     }
 }

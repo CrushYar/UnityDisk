@@ -174,11 +174,10 @@ namespace UnityDisk.FileStorages.OneDrive
                 if (deserializedPublicUrl?.value == null)
                     throw new NullReferenceException("Couldn't deserialized the data");
 
-                var link = deserializedPublicUrl.value.FirstOrDefault(item => item.link.type == "view") ??
-                           deserializedPublicUrl.value[0];
+                var link = deserializedPublicUrl.value.FirstOrDefault(item => item.Link.Application?.DisplayName == "UnityDisk");
 
-                PublicUrl = link.link.webUrl;
-                PublicUrlId = link.id;
+                PublicUrl = link?.Link.WebUrl;
+                PublicUrlId = link?.Id;
             }
         }
 
@@ -209,17 +208,34 @@ namespace UnityDisk.FileStorages.OneDrive
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedPublicUrlItem.GetType());
                 deserializedPublicUrlItem = ser.ReadObject(stream) as DeserializedPublicUrlItem;
 
-                if (deserializedPublicUrlItem?.link == null)
+                if (deserializedPublicUrlItem?.Link == null)
                     throw new NullReferenceException("Couldn't deserialized the data");
 
-                PublicUrl = deserializedPublicUrlItem.link.webUrl;
-                PublicUrlId = deserializedPublicUrlItem.id;
+                PublicUrl = deserializedPublicUrlItem.Link.WebUrl;
+                PublicUrlId = deserializedPublicUrlItem.Id;
             }
         }
 
-        public Task DeletePublicUrl()
+        public async Task DeletePublicUrl()
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrEmpty(PublicUrl)) return;
+            if (String.IsNullOrEmpty(PublicUrlId)) await LoadPublicUrl();
+            if (String.IsNullOrEmpty(PublicUrlId))return;
+
+            var httpClient = new System.Net.Http.HttpClient();
+            string fullPathFrom = AddBackslash(Path);
+            fullPathFrom += Name;
+
+            string url = "https://graph.microsoft.com/v1.0/me" + fullPathFrom+ ":/permissions/" + PublicUrlId;
+            var request = new System.Net.Http.HttpRequestMessage(HttpMethod.Delete, url);
+            request.Version = Version.Parse("1.0");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
+            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
+
+            if (response.StatusCode != HttpStatusCode.NoContent && response.StatusCode != HttpStatusCode.OK)
+                throw new InvalidOperationException("Item did not create the public url");
+
+            PublicUrlId = PublicUrl = null;
         }
 
         public void Parse(string data)

@@ -16,18 +16,26 @@ namespace UnityDisk.FileStorages.OneDrive.Deserialized
     [DataContract]
     public class DeserializedPublicUrlItem
     {
-        [DataMember]
-        public string id { get; set; }
-        [DataMember]
-        public DeserializedLink link { get; set; }
+        [DataMember(Name = "id")]
+        public string Id { get; set; }
+        [DataMember(Name = "link")]
+        public DeserializedLink Link { get; set; }
     }
 
     [DataContract]
     public class DeserializedLink
     {
-        [DataMember]
-        public string type { get; set; }
-        [DataMember]
-        public string webUrl { get; set; }
+        [DataMember(Name = "type")]
+        public string Type { get; set; }
+        [DataMember(Name = "webUrl")]
+        public string WebUrl { get; set; }
+        [DataMember(Name = "application")]
+        public DeserializedApplication Application { get; set; }
+    }
+    [DataContract]
+    public class DeserializedApplication
+    {
+        [DataMember(Name = "displayName")]
+        public string DisplayName { get; set; }
     }
 }
