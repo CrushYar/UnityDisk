@@ -7,10 +7,9 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace UnityDisk.StorageItems
 {
-    public enum StorageItemAttributeEnum
+    public enum StorageItemTypeEnum
     {
-        Directory   = 2,   
-        File        = 4,
+        Directory,None, OneNote, Visio, PowerPoint, Folder, Image, Audio, Code, Dll, Exe, Excel, World, Pdf, Txt, Video, Zip
     }
     /// <summary>
     /// перечисление состояний элемента файловой системы
@@ -37,9 +36,9 @@ namespace UnityDisk.StorageItems
         /// </summary>
         BitmapImage PreviewImage { get; set; }
         /// <summary>
-        /// Атрибут элемента
+        /// Тип элемента
         /// </summary>
-        StorageItemAttributeEnum Attribute { get; }
+        StorageItemTypeEnum Type { get; }
         /// <summary>
         /// Состояние элемента
         /// </summary>

@@ -11,7 +11,7 @@ namespace UnityDisk.StorageItems.PreviewImageManager
 {
     public class StandardPreviewImagesRegistry:IStandardPreviewImagesRegistry
     {
-        private readonly System.Collections.Generic.Dictionary<string, BitmapImage> _images = new Dictionary<string, BitmapImage>();
+        private readonly System.Collections.Generic.Dictionary<StorageItemTypeEnum, BitmapImage> _images = new Dictionary<StorageItemTypeEnum, BitmapImage>();
         /// <summary>
         /// Объект синхронизации
         /// </summary>
@@ -19,7 +19,7 @@ namespace UnityDisk.StorageItems.PreviewImageManager
         public StandardPreviewImagesRegistry()
         {
         }
-        public BitmapImage FindPreviewImage(string type)
+        public BitmapImage FindPreviewImage(StorageItemTypeEnum type)
         {
             Lock();
             _images.TryGetValue(type, out BitmapImage value);
@@ -27,7 +27,7 @@ namespace UnityDisk.StorageItems.PreviewImageManager
             return value;
         }
 
-        public void Registry(BitmapImage image, string type)
+        public void Registry(BitmapImage image, StorageItemTypeEnum type)
         {
             Lock();
             if(_images.ContainsKey(type))throw new ArgumentException("This type has already registered");

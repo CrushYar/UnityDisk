@@ -31,8 +31,7 @@ namespace UnityDisk.StorageItems
         }
         public DateTime CreateDate => DataContext.CreateDate;
         public ulong Size => DataContext.Size;
-        public string Type => DataContext.Type;
-        public StorageItemAttributeEnum Attribute => DataContext.Attribute;
+        public StorageItemTypeEnum Type => DataContext.Type;
         public StorageItemStateEnum State { get; private set; }
         public IStorageProjectionFolder Parent { get; set; }
         public async Task Rename(string newName)

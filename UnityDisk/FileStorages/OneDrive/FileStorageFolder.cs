@@ -23,7 +23,7 @@ namespace UnityDisk.FileStorages.OneDrive
         public string Name { get; private set; }
         public string Path { get; private set; }
         public BitmapImage PreviewImage { get; set; }
-        public StorageItemAttributeEnum Attribute => StorageItemAttributeEnum.Directory;
+        public StorageItemTypeEnum Type => StorageItemTypeEnum.Directory;
         public string PublicUrl { get; private set; }
         public IAccountProjection Account { get; set; }
         public DateTime CreateDate { get; private set; }

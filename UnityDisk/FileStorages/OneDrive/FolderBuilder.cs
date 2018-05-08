@@ -16,7 +16,7 @@ namespace UnityDisk.FileStorages.OneDrive
         public string Name { get; set; }
         public string Path { get; set; }
         public BitmapImage PreviewImage { get; set; }
-        public StorageItemAttributeEnum Attribute { get; set; }
+        public StorageItemTypeEnum Type { get; set; }
         public string PublicUrl { get; set; }
         public IAccountProjection Account { get; set; }
         public DateTime CreateDate { get; set; }
@@ -27,7 +27,7 @@ namespace UnityDisk.FileStorages.OneDrive
         {
             Id = item.id;
             Name = item.name;
-            Attribute = StorageItemAttributeEnum.Directory;
+            Type = StorageItemTypeEnum.Directory;
             PublicUrl = item.webUrl;
             CreateDate = DateTime.Parse(item.createdDateTime);
             DownloadUrl = item.downloadUrl;

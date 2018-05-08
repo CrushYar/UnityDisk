@@ -104,12 +104,14 @@
     <Compile Include="BackgroundOperation\Dispatcher\IBackgroundOperationDispatcher.cs" />
     <Compile Include="BackgroundOperation\Dispatcher\UploadedEventArg.cs" />
     <Compile Include="BackgroundOperation\IBackgroundOperation.cs" />
+    <Compile Include="FileStorages\Convertor.cs" />
     <Compile Include="FileStorages\FactoryRagistry\FactoryRagistry.cs" />
     <Compile Include="FileStorages\FactoryRagistry\IFactoryRagistry.cs" />
     <Compile Include="FileStorages\IFileStorageFactory.cs" />
     <Compile Include="FileStorages\IFileStorageFile.cs" />
     <Compile Include="FileStorages\IFileStorageFolder.cs" />
     <Compile Include="FileStorages\IFileStorageItem.cs" />
+    <Compile Include="FileStorages\IStandardPreviewImages.cs" />
     <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedItem.cs" />
     <Compile Include="FileStorages\OneDrive\Deserialized\DeserializedItemList.cs" />
     <Compile Include="FileStorages\OneDrive\FileBuilder.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="FileStorages\OneDrive\IFileStorageFile.cs" />
     <Compile Include="FileStorages\OneDrive\IFileStorageFolder.cs" />
     <Compile Include="FileStorages\OneDrive\IFileStorageItem.cs" />
+    <Compile Include="FileStorages\OneDrive\StandardPreviewImages.cs" />
     <Compile Include="GroupTree\Container.cs" />
     <Compile Include="GroupTree\Group.cs" />
     <Compile Include="GroupTree\IContainer.cs" />

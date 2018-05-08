@@ -18,10 +18,6 @@ namespace UnityDisk.StorageItems
         /// </summary>
         ulong Size { get; }
         /// <summary>
-        /// Тип элемента
-        /// </summary>
-        string Type { get; }
-        /// <summary>
         /// Скачивание элемента
         /// </summary>
         /// <param name="storageFile">Файл в файловой системе компьютера, куда запишутся все байты</param>

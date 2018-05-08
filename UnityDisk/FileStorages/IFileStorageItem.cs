@@ -24,9 +24,9 @@ namespace UnityDisk.FileStorages
         /// </summary>
         BitmapImage PreviewImage { get; set; }
         /// <summary>
-        /// Атрибут элемента
+        /// Тип элемента
         /// </summary>
-        StorageItemAttributeEnum Attribute { get; }
+        StorageItemTypeEnum Type { get; }
         /// <summary>
         /// Публичная ссылка
         /// </summary>

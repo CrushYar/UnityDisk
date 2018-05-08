@@ -17,7 +17,7 @@ namespace UnityDisk.StorageItems
         public string Name { get; set; }
         public string Path { get; set; }
         public BitmapImage PreviewImage { get; set; }
-        public StorageItemAttributeEnum Attribute => StorageItemAttributeEnum.Directory;
+        public StorageItemTypeEnum Type => StorageItemTypeEnum.Directory;
         public StorageItemStateEnum State { get; private set; }
         public IStorageProjectionFolder Parent { get; set; }
         public IList<IStorageFolder2> Folders { get; }
@@ -112,10 +112,10 @@ namespace UnityDisk.StorageItems
                 var directory = await item.LoadDirectory();
                 foreach (var item2 in directory)
                 {
-                    if (item2.Attribute.HasFlag(StorageItemAttributeEnum.Directory))
+                    if (item2.Type.HasFlag(StorageItemTypeEnum.Directory))
                     {
                         var folder = result.FirstOrDefault(storageItem =>
-                            storageItem.Attribute.HasFlag(StorageItemAttributeEnum.Directory) &&
+                            storageItem.Type.HasFlag(StorageItemTypeEnum.Directory) &&
                             storageItem.Name == item2.Name) as IStorageProjectionFolder;
                         if (folder == null)
                             result.Add(new StorageProjectionFolder()

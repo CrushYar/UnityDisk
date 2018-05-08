@@ -16,10 +16,6 @@ namespace UnityDisk.FileStorages
         /// </summary>
         ulong Size { get; }
         /// <summary>
-        /// Тип элемента
-        /// </summary>
-        string Type { get; }
-        /// <summary>
         /// Зкачивание файла
         /// </summary>
         /// <param name="file">Локальный файл, куда буду записаны байты</param>

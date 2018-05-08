@@ -31,7 +31,7 @@ namespace UnityDisk.StorageItems
             get => DataContext.PreviewImage;
             set => DataContext.PreviewImage = value;
         }
-        public StorageItemAttributeEnum Attribute => DataContext.Attribute;
+        public StorageItemTypeEnum Type => StorageItemTypeEnum.Directory;
         public StorageItemStateEnum State { get; private set; }
         public IStorageProjectionFolder Parent { get;  set; }
 
@@ -131,7 +131,7 @@ namespace UnityDisk.StorageItems
                         var folder = new StorageFolder();
                         folder.DataContext = fileStorageFolder;
                         storageItem = folder;
-                        folder.PreviewImage = imagesRegistry.FindPreviewImage("folder");
+                        folder.PreviewImage = imagesRegistry.FindPreviewImage(StorageItemTypeEnum.Directory);
                         break;
                     default:
                         throw new ArgumentException("Unknown type");

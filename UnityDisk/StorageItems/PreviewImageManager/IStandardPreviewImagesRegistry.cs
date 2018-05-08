@@ -17,12 +17,12 @@ namespace UnityDisk.StorageItems.PreviewImageManager
         /// </summary>
         /// <param name="type">Тип элемента</param>
         /// <returns></returns>
-        BitmapImage FindPreviewImage(string type);
+        BitmapImage FindPreviewImage(StorageItemTypeEnum type);
         /// <summary>
         /// Регистрация стандартного изображения
         /// </summary>
         /// <param name="image">Изображение</param>
         /// <param name="type">Тип элемента</param>
-        void Registry(BitmapImage image, string type);
+        void Registry(BitmapImage image, StorageItemTypeEnum type);
     }
 }

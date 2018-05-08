@@ -17,12 +17,11 @@ namespace UnityDisk.FileStorages.OneDrive
         public string Name { get; }
         public string Path { get; }
         public BitmapImage PreviewImage { get; set; }
-        public StorageItemAttributeEnum Attribute => StorageItemAttributeEnum.File;
+        public StorageItemTypeEnum Type { get; }
         public string PublicUrl { get; }
         public IAccountProjection Account { get; set; }
         public DateTime CreateDate { get; }
         public ulong Size { get; }
-        public string Type { get; }
 
         public Task Delete()
         {
