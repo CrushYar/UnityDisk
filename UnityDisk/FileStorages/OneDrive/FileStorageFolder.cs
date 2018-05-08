@@ -17,7 +17,7 @@ using IStorageFile = Windows.Storage.IStorageFile;
 
 namespace UnityDisk.FileStorages.OneDrive
 {
-    public class FileStorageFolder:IFileStorageFolder
+    public class FileStorageFolder: OneDrive.IFileStorageFolder
     {
         public string Id { get; set; }
         public string Name { get; private set; }
@@ -82,7 +82,7 @@ namespace UnityDisk.FileStorages.OneDrive
             Name = newName;
         }
 
-        public async Task Move(IFileStorageFolder folder)
+        public async Task Move(FileStorages.IFileStorageFolder folder)
         {
             var httpClient = new System.Net.Http.HttpClient();
             string fullPathFrom = AddBackslash(Path);
@@ -107,7 +107,7 @@ namespace UnityDisk.FileStorages.OneDrive
             Path = pathTo;
         }
 
-        public async Task<IFileStorageItem> Copy(IFileStorageFolder othePath)
+        public async Task<FileStorages.IFileStorageItem> Copy(FileStorages.IFileStorageFolder othePath)
         {
             var httpClient = new System.Net.Http.HttpClient();
             string fullPathFrom = AddBackslash(Path);
@@ -166,9 +166,9 @@ namespace UnityDisk.FileStorages.OneDrive
             throw new NotImplementedException();
         }
 
-        public async Task<IList<IFileStorageItem>> LoadDirectory()
+        public async Task<IList<FileStorages.IFileStorageItem>> LoadDirectory()
         {
-            List<IFileStorageItem> result=new List<IFileStorageItem>();
+            List<FileStorages.IFileStorageItem> result=new List<FileStorages.IFileStorageItem>();
             DeserializedItemList deserializedItemList = new DeserializedItemList();
             string path = string.IsNullOrEmpty(Path) ? "/drive/root" : String.Concat("{0}{1}:",Path,Name);
             using (var stream = await GetDataStream("https://graph.microsoft.com/v1.0/me"+path+"/children"))
@@ -180,7 +180,7 @@ namespace UnityDisk.FileStorages.OneDrive
 
             foreach (var item in deserializedItemList.value)
             {
-                IFileStorageItem storageItem;
+                FileStorages.IFileStorageItem storageItem;
                 if (item.folder != null)
                     storageItem =new FileStorageFolder(new FolderBuilder(item){PreviewImage = PreviewImage});
                 else
@@ -196,7 +196,7 @@ namespace UnityDisk.FileStorages.OneDrive
             throw new NotImplementedException();
         }
 
-        public async Task<IFileStorageFolder> CreateFolder(string name)
+        public async Task<FileStorages.IFileStorageFolder> CreateFolder(string name)
         {
             throw new NotImplementedException();
         }

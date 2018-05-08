@@ -11,7 +11,7 @@ using IStorageFile = Windows.Storage.IStorageFile;
 
 namespace UnityDisk.FileStorages.OneDrive
 {
-    public class FileStorageFile:IFileStorageFile
+    public class FileStorageFile:OneDrive.IFileStorageFile
     {
         public string Id { get; set; }
         public string Name { get; }
@@ -53,12 +53,12 @@ namespace UnityDisk.FileStorages.OneDrive
             throw new NotImplementedException();
         }
 
-        public Task Move(IFileStorageFolder folder)
+        public Task Move(FileStorages.IFileStorageFolder folder)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IFileStorageItem> Copy(IFileStorageFolder othePath)
+        public Task<FileStorages.IFileStorageItem> Copy(FileStorages.IFileStorageFolder othePath)
         {
             throw new NotImplementedException();
         }

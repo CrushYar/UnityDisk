@@ -8,8 +8,8 @@ namespace UnityDisk.FileStorages
 {
     public interface IFileStorageFactory
     {
-        IFileStorageAccount CreateAccount();
-        IFileStorageFolder CreateFolder();
-        IFileStorageFile CreateFile();
+        FileStorages.IFileStorageAccount CreateAccount();
+        FileStorages.IFileStorageFolder CreateFolder();
+        FileStorages.IFileStorageFile CreateFile();
     }
 }

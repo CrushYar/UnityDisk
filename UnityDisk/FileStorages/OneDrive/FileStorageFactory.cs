@@ -8,19 +8,19 @@ namespace UnityDisk.FileStorages.OneDrive
 {
     public class FileStorageFactory:IFileStorageFactory
     {
-        public IFileStorageAccount CreateAccount()
+        public FileStorages.IFileStorageAccount CreateAccount()
         {
             return new OneDrive.Account();
         }
 
-        public IFileStorageFolder CreateFolder()
+        public FileStorages.IFileStorageFolder CreateFolder()
         {
-            throw new NotImplementedException();
+            return  new OneDrive.FileStorageFolder();
         }
 
-        public IFileStorageFile CreateFile()
+        public FileStorages.IFileStorageFile CreateFile()
         {
-            throw new NotImplementedException();
+            return new OneDrive.FileStorageFile();
         }
     }
 }
