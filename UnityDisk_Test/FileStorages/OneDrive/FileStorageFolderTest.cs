@@ -87,15 +87,48 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             FileStorageFolder folderTo = new FileStorageFolder(new FolderBuilder()
             {
                 Name = "ForTestMove",
-                Path = "/drive/root:/ForTestMove"
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+            string expectedPath = "/drive/root:/ForTestMove";
+            await folder.Move(folderTo);
+            Assert.AreEqual(expectedPath, folder.Path);
+        }
+
+        [TestMethod]
+        public async Task Can_CopyFolder()
+        {
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn(_login);
+            FileStorageFolder folder = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = "ForTestCopy1",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+            FileStorageFolder folderTo = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = "ForTestCopy2",
+                Path = "/drive/root:"
             })
             {
                 Account = new AccountProjection(
                     new UnityDisk.Accounts.Account(account))
             };
 
-            await folder.Move(folderTo);
-            Assert.AreEqual(folder.Path, folderTo.Path);
+            UnityDisk.FileStorages.IFileStorageFolder result =
+                await folder.Copy(folderTo) as UnityDisk.FileStorages.IFileStorageFolder;
+            string expectedPath = "/drive/root:/ForTestCopy2";
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expectedPath, result.Path);
+            Assert.AreEqual(folder.Name,result.Name);
         }
     }
 }

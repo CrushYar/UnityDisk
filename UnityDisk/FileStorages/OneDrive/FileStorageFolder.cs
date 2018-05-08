@@ -50,9 +50,7 @@ namespace UnityDisk.FileStorages.OneDrive
         public async Task Delete()
         {
             var httpClient = new System.Net.Http.HttpClient();
-            string path = Path;
-            if (path[path.Length - 1] != '/')
-                path += "/";
+            string path = AddBackslash(Path);
 
             path += Name;
             string url = "https://graph.microsoft.com/v1.0/me"+ path;
@@ -66,12 +64,10 @@ namespace UnityDisk.FileStorages.OneDrive
         public async Task Rename(string newName)
         {
             var httpClient = new System.Net.Http.HttpClient();
-            string path = Path;
-            if (path[path.Length - 1] != '/')
-                path += "/";
+            string fullPathFrom = AddBackslash(Path);
 
-            path += Name;
-            string url = "https://graph.microsoft.com/v1.0/me" + path;
+            fullPathFrom += Name;
+            string url = "https://graph.microsoft.com/v1.0/me" + fullPathFrom;
             var request = new System.Net.Http.HttpRequestMessage(new HttpMethod("PATCH"), url);
             request.Version = Version.Parse("1.0");
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
@@ -82,36 +78,67 @@ namespace UnityDisk.FileStorages.OneDrive
 
             string test = await response.Content.ReadAsStringAsync();
 
-            if (response.StatusCode != HttpStatusCode.OK) throw new InvalidOperationException("Item did not delete");
+            if (response.StatusCode != HttpStatusCode.OK) throw new InvalidOperationException("Item did not rename");
             Name = newName;
         }
 
         public async Task Move(IFileStorageFolder folder)
         {
             var httpClient = new System.Net.Http.HttpClient();
-            string path = Path;
-            if (path[path.Length - 1] != '/')
-                path += "/";
+            string fullPathFrom = AddBackslash(Path);
+            fullPathFrom += Name;
 
-            path += Name;
-            string url = "https://graph.microsoft.com/v1.0/me" + path;
+            string pathTo = AddBackslash(folder.Path);
+            pathTo += folder.Name;
+
+            string url = "https://graph.microsoft.com/v1.0/me" + fullPathFrom;
             var request = new System.Net.Http.HttpRequestMessage(new HttpMethod("PATCH"), url);
             request.Version = Version.Parse("1.0");
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
-            string content = "{\r\n  \"parentReference\": {\r\n    \"path\": \"" + folder.Path + "\"\r\n  },\r\n  \"name\": \"" + Name + "\"\r\n}";
+            string content = "{\r\n  \"parentReference\": {\r\n    \"path\": \"" + pathTo + "\"\r\n  },\r\n  \"name\": \"" + Name + "\"\r\n}";
             request.Content = new StringContent(content);
             request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
 
             string test = await response.Content.ReadAsStringAsync();
 
-            if (response.StatusCode != HttpStatusCode.OK) throw new InvalidOperationException("Item did not delete");
-            Path = folder.Path;
+            if (response.StatusCode != HttpStatusCode.OK) throw new InvalidOperationException("Item did not move");
+
+            Path = pathTo;
         }
 
-        public Task Copy(IFileStorageFolder othePath)
+        public async Task<IFileStorageItem> Copy(IFileStorageFolder othePath)
         {
-            throw new NotImplementedException();
+            var httpClient = new System.Net.Http.HttpClient();
+            string fullPathFrom = AddBackslash(Path);
+            fullPathFrom += Name;
+
+            string pathTo = AddBackslash(othePath.Path);
+            pathTo += othePath.Name;
+
+            string url = "https://graph.microsoft.com/v1.0/me" + fullPathFrom;
+            var request = new System.Net.Http.HttpRequestMessage(new HttpMethod("PATCH"), url);
+            request.Version = Version.Parse("1.0");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
+            string content = "{\r\n  \"parentReference\": {\r\n    \"path\": \"" + pathTo + "\"\r\n  },\r\n  \"name\": \"" + Name + "\"\r\n}";
+            request.Content = new StringContent(content);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new InvalidOperationException("Item did not copy");
+
+            using (System.IO.Stream stream = await response.Content.ReadAsStreamAsync())
+            {
+                DeserializedItem deserializedItem = new DeserializedItem();
+
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedItem.GetType());
+                deserializedItem = ser.ReadObject(stream) as DeserializedItem;
+
+                if (deserializedItem == null) throw new NullReferenceException("Couldn't deserialized the data");
+
+                return new FileStorageFolder(new FolderBuilder(deserializedItem){Account = Account, PreviewImage = PreviewImage});
+            }
         }
 
         public Task LoadPreviewImage()
@@ -184,6 +211,15 @@ namespace UnityDisk.FileStorages.OneDrive
             System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
             string test = await response.Content.ReadAsStringAsync();
             return await response.Content.ReadAsStreamAsync();
+        }
+
+        private string AddBackslash(string path)
+        {
+            string newPath = Path;
+            if (newPath[newPath.Length - 1] != '/')
+                newPath += "/";
+
+            return newPath;
         }
     }
 }

@@ -57,7 +57,8 @@ namespace UnityDisk.FileStorages
         /// Копирование элемента
         /// </summary>
         /// <param name="othePath">Целевой путь</param>
-        Task Copy(IFileStorageFolder othePath);
+        /// <returns>Скопированный файл</returns>
+        Task<IFileStorageItem> Copy(IFileStorageFolder othePath);
         /// <summary>
         /// Загрузка изображения предварительного просмотра
         /// </summary>

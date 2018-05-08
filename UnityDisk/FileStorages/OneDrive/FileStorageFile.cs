@@ -58,7 +58,7 @@ namespace UnityDisk.FileStorages.OneDrive
             throw new NotImplementedException();
         }
 
-        public Task Copy(IFileStorageFolder othePath)
+        public Task<IFileStorageItem> Copy(IFileStorageFolder othePath)
         {
             throw new NotImplementedException();
         }

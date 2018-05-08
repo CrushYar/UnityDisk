@@ -55,13 +55,20 @@ namespace UnityDisk.StorageItems
             
         }
 
-        public async Task Copy(IStorageProjectionFolder folder)
+        public async Task<IStorageItem> Copy(IStorageProjectionFolder folder)
         {
             IStorageFolder2 toFolder = folder.Folders.FirstOrDefault(folder2 => folder2.Account.Login == Account.Login);
             if (toFolder == null)
                 throw new ArgumentException("Not found Account");
+            IFileStorageFile storageFile = await DataContext.Copy(toFolder.DataContext) as IFileStorageFile;
+            if (storageFile == null)
+                throw new NullReferenceException("Did not get file after copy");
 
-            await DataContext.Copy(toFolder.DataContext);
+            return  new StorageFile()
+            {
+                DataContext = storageFile,
+                Account = Account
+            };
         }
 
         public async Task LoadPreviewImage()

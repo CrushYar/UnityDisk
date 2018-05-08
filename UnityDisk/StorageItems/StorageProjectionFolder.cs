@@ -51,12 +51,24 @@ namespace UnityDisk.StorageItems
             }
         }
 
-        public async Task Copy(IStorageProjectionFolder folder)
+        public async Task<IStorageItem> Copy(IStorageProjectionFolder folder)
         {
+            StorageProjectionFolder projectionFolder=new StorageProjectionFolder()
+            {
+                PreviewImage = PreviewImage,
+                Parent = folder,
+                Path = folder.Path
+            };
             foreach (var item in Folders)
             {
-                await item.Copy(folder);
+                IFileStorageFolder newFolder = await item.Copy(folder) as IFileStorageFolder;
+                if(newFolder==null)
+                    throw new NullReferenceException("Did not get folder after copy");
+
+                projectionFolder.Folders.Add(new StorageFolder(){DataContext = newFolder});
             }
+
+            return projectionFolder;
         }
 
         public async Task LoadPreviewImage()

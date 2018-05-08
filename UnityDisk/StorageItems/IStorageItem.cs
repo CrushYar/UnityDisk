@@ -66,7 +66,8 @@ namespace UnityDisk.StorageItems
         /// Копирование элемента
         /// </summary>
         /// <param name="folder">Целевая папка</param>
-        Task Copy(IStorageProjectionFolder folder);
+        /// <returns>Скопированный файл</returns>
+        Task<IStorageItem> Copy(IStorageProjectionFolder folder);
         /// <summary>
         /// Загрузка картинки предварительно просмотра
         /// </summary>
