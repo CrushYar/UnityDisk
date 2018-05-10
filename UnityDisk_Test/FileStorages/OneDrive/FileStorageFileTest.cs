@@ -20,7 +20,25 @@ namespace UnityDisk_Test.FileStorages.OneDrive
         {
             await UnityDisk.RemoteInitialization.Start();
         }
+        [TestMethod]
+        public async Task Can_RenameFile()
+        {
+            string expectedName = "ForTestRename_DONE.txt";
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn(_login);
+            FileStorageFile file = new FileStorageFile(new FileBuilder()
+            {
+                Name = "ForTestRename.txt",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
 
+            await file.Rename(expectedName);
+            Assert.AreEqual(file.Name, expectedName);
+        }
         [TestMethod]
         public async Task Can_LoadPreviewImage()
         {
