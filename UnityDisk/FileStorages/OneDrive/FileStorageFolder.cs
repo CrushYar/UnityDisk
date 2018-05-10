@@ -239,11 +239,21 @@ namespace UnityDisk.FileStorages.OneDrive
             List<FileStorages.IFileStorageItem> result=new List<FileStorages.IFileStorageItem>();
             DeserializedItemList deserializedItemList = new DeserializedItemList();
             string path = string.IsNullOrEmpty(Path) ? "/drive/root" : String.Concat("{0}{1}:",Path,Name);
-            using (var stream = await GetDataStream("https://graph.microsoft.com/v1.0/me"+path+"/children"))
+            var httpClient = new System.Net.Http.HttpClient();
+
+            var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, "https://graph.microsoft.com/v1.0/me"+path+"/children");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
+
+            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new InvalidOperationException("Item did not copy");
+
+            using (var stream = await response.Content.ReadAsStreamAsync())
             {
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedItemList.GetType());
                 deserializedItemList = ser.ReadObject(stream) as DeserializedItemList;
             }
+
             if (deserializedItemList == null) throw new NullReferenceException("Couldn't deserialized the data");
 
             foreach (var item in deserializedItemList.Value)
@@ -298,20 +308,6 @@ namespace UnityDisk.FileStorages.OneDrive
             if (deserializedItem == null) throw new NullReferenceException("Couldn't deserialized the data");
 
             return new FileStorageFolder(new FolderBuilder(deserializedItem){PreviewImage = PreviewImage,Account = Account});
-        }
-
-        private async Task<System.IO.Stream> GetDataStream(string url)
-        {
-            var httpClient = new System.Net.Http.HttpClient();
-
-            var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
-
-            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
-            if (response.StatusCode != HttpStatusCode.OK)
-                throw new InvalidOperationException("Item did not copy");
-
-            return await response.Content.ReadAsStreamAsync();
         }
 
         private string AddBackslash(string path)
