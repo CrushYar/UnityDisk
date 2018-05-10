@@ -63,9 +63,5 @@ namespace UnityDisk.BackgroundOperation
         /// </summary>
         /// <returns></returns>
         void Step();
-        /// <summary>
-        /// Предварительная инициализация после десериализации объекта
-        /// </summary>
-        void Initialization();
     }
 }

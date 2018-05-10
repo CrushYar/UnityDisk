@@ -287,7 +287,7 @@ namespace UnityDisk.FileStorages.OneDrive
 
         private string AddBackslash(string path)
         {
-            string newPath = Path;
+            string newPath = path;
             if (newPath[newPath.Length - 1] != '/')
                 newPath += "/";
 
