@@ -79,9 +79,29 @@ namespace UnityDisk.FileStorages.OneDrive
             Name = newName;
         }
 
-        public Task Move(FileStorages.IFileStorageFolder folder)
+        public async Task Move(FileStorages.IFileStorageFolder folder)
         {
-            throw new NotImplementedException();
+            var httpClient = new System.Net.Http.HttpClient();
+            string fullPathFrom = AddBackslash(Path);
+            fullPathFrom += Name;
+
+            string pathTo = AddBackslash(folder.Path);
+            pathTo += folder.Name;
+
+            string url = "https://graph.microsoft.com/v1.0/me" + fullPathFrom;
+            var request = new System.Net.Http.HttpRequestMessage(new HttpMethod("PATCH"), url);
+            request.Version = Version.Parse("1.0");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
+            string content = "{\r\n  \"parentReference\": {\r\n    \"path\": \"" + pathTo + "\"\r\n  },\r\n  \"name\": \"" + Name + "\"\r\n}";
+            request.Content = new StringContent(content);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
+
+            string test = await response.Content.ReadAsStringAsync();
+
+            if (response.StatusCode != HttpStatusCode.OK) throw new InvalidOperationException("Item did not move");
+
+            Path = pathTo;
         }
 
         public Task<FileStorages.IFileStorageItem> Copy(FileStorages.IFileStorageFolder othePath)

@@ -40,6 +40,33 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.AreEqual(file.Name, expectedName);
         }
         [TestMethod]
+        public async Task Can_MoveFile()
+        {
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn(_login);
+            FileStorageFile file = new FileStorageFile(new FileBuilder()
+            {
+                Name = "ForTestMove2.docx",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+            FileStorageFolder folderTo = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = "ForTestMove",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+            string expectedPath = "/drive/root:/ForTestMove";
+            await file.Move(folderTo);
+            Assert.AreEqual(expectedPath, file.Path);
+        }
+        [TestMethod]
         public async Task Can_LoadPreviewImage()
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
