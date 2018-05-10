@@ -117,8 +117,8 @@ namespace UnityDisk.FileStorages.OneDrive
             string pathTo = AddBackslash(othePath.Path);
             pathTo += othePath.Name;
 
-            string url = "https://graph.microsoft.com/v1.0/me" + fullPathFrom;
-            var request = new System.Net.Http.HttpRequestMessage(new HttpMethod("PATCH"), url);
+            string url = "https://graph.microsoft.com/v1.0/me" + fullPathFrom+ ":/copy";
+            var request = new System.Net.Http.HttpRequestMessage(HttpMethod.Post, url);
             request.Version = Version.Parse("1.0");
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
             string content = "{\r\n  \"parentReference\": {\r\n    \"path\": \"" + pathTo + "\"\r\n  },\r\n  \"name\": \"" + Name + "\"\r\n}";
@@ -126,20 +126,11 @@ namespace UnityDisk.FileStorages.OneDrive
             request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
 
-            if (response.StatusCode != HttpStatusCode.OK)
+            if (response.StatusCode != HttpStatusCode.OK&& response.StatusCode != HttpStatusCode.Accepted)
                 throw new InvalidOperationException("Item did not copy");
 
-            using (System.IO.Stream stream = await response.Content.ReadAsStreamAsync())
-            {
-                DeserializedItem deserializedItem = new DeserializedItem();
+            return await othePath.CreateFolder(Name);
 
-                DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedItem.GetType());
-                deserializedItem = ser.ReadObject(stream) as DeserializedItem;
-
-                if (deserializedItem == null) throw new NullReferenceException("Couldn't deserialized the data");
-
-                return new FileStorageFolder(new FolderBuilder(deserializedItem){Account = Account, PreviewImage = PreviewImage});
-            }
         }
 
         public Task LoadPreviewImage()
@@ -275,7 +266,38 @@ namespace UnityDisk.FileStorages.OneDrive
 
         public async Task<FileStorages.IFileStorageFolder> CreateFolder(string name)
         {
-            throw new NotImplementedException();
+            var httpClient = new System.Net.Http.HttpClient();
+
+            string fullPath;
+            if (String.IsNullOrEmpty(Name))
+                fullPath = "/drive/root";
+            else
+            {
+                fullPath = AddBackslash(Path);
+                fullPath += Name+":";
+            }
+
+            string url = "https://graph.microsoft.com/v1.0/me"+ fullPath+"/children";
+            var request = new System.Net.Http.HttpRequestMessage(HttpMethod.Post, url);
+            request.Version = Version.Parse("1.0");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
+            string content = "{\r\n  \"name\": \""+name+"\",\r\n  \"folder\": { }\r\n}";
+            request.Content = new StringContent(content);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
+
+            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
+                throw new InvalidOperationException("Item did not create");
+            DeserializedItem deserializedItem = new DeserializedItem();
+
+            using (var stream = await response.Content.ReadAsStreamAsync())
+            {
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedItem.GetType());
+                deserializedItem = ser.ReadObject(stream) as DeserializedItem;
+            }
+            if (deserializedItem == null) throw new NullReferenceException("Couldn't deserialized the data");
+
+            return new FileStorageFolder(new FolderBuilder(deserializedItem){PreviewImage = PreviewImage,Account = Account});
         }
 
         private async Task<System.IO.Stream> GetDataStream(string url)

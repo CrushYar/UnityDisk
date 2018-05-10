@@ -46,7 +46,19 @@ namespace UnityDisk_Test.FileStorages.OneDrive
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
-            FileStorageFile file= new FileStorageFile(new FileBuilder()
+            FileStorageFile file = new FileStorageFile(new FileBuilder()
+            {
+                Name = "Untitled.png",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+
+            await file.CreatePublicUrl();
+
+            file = new FileStorageFile(new FileBuilder()
             {
                 Name = "Untitled.png",
                 Path = "/drive/root:"

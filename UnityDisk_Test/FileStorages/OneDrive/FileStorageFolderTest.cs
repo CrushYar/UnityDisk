@@ -145,6 +145,17 @@ namespace UnityDisk_Test.FileStorages.OneDrive
                     new UnityDisk.Accounts.Account(account))
             };
 
+            await folder.CreatePublicUrl();
+
+            folder = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = "ForTestLoadPublicUrl",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
             await folder.LoadPublicUrl();
 
             Assert.IsFalse(String.IsNullOrEmpty(folder.PublicUrl));
@@ -175,7 +186,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
-            FileStorageFile file = new FileStorageFile(new FileBuilder()
+            FileStorageFolder folder = new FileStorageFolder(new FolderBuilder()
             {
                 Name = "ForTestDeletePublicUrl",
                 Path = "/drive/root:"
@@ -185,11 +196,31 @@ namespace UnityDisk_Test.FileStorages.OneDrive
                     new UnityDisk.Accounts.Account(account))
             };
 
-            await file.CreatePublicUrl();
-            await file.DeletePublicUrl();
+            await folder.CreatePublicUrl();
+            await folder.DeletePublicUrl();
 
-            Assert.IsTrue(String.IsNullOrEmpty(file.PublicUrl));
-            Assert.IsTrue(String.IsNullOrEmpty(file.PublicUrlId));
+            Assert.IsTrue(String.IsNullOrEmpty(folder.PublicUrl));
+            Assert.IsTrue(String.IsNullOrEmpty(folder.PublicUrlId));
+        }
+        [TestMethod]
+        public async Task Can_CreateFolder()
+        {
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn(_login);
+            FileStorageFolder folder = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = "",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+            string expectedName = "ForTestCreateFolder";
+           var newFolder= await folder.CreateFolder(expectedName);
+
+            Assert.IsNotNull(newFolder);
+            Assert.AreEqual(expectedName,newFolder.Name);
         }
     }
 }
