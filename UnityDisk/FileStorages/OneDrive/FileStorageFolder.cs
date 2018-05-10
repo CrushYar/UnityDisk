@@ -135,6 +135,8 @@ namespace UnityDisk.FileStorages.OneDrive
 
         public Task LoadPreviewImage()
         {
+            if (PreviewImage != null) return new Task(() => { });
+
             throw new NotImplementedException();
         }
 
