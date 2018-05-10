@@ -104,9 +104,28 @@ namespace UnityDisk.FileStorages.OneDrive
             Path = pathTo;
         }
 
-        public Task<FileStorages.IFileStorageItem> Copy(FileStorages.IFileStorageFolder othePath)
+        public async Task<FileStorages.IFileStorageItem> Copy(FileStorages.IFileStorageFolder othePath)
         {
-            throw new NotImplementedException();
+            var httpClient = new System.Net.Http.HttpClient();
+            string fullPathFrom = AddBackslash(Path);
+            fullPathFrom += Name;
+
+            string pathTo = AddBackslash(othePath.Path);
+            pathTo += othePath.Name;
+
+            string url = "https://graph.microsoft.com/v1.0/me" + fullPathFrom + ":/copy";
+            var request = new System.Net.Http.HttpRequestMessage(HttpMethod.Post, url);
+            request.Version = Version.Parse("1.0");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
+            string content = "{\r\n  \"parentReference\": {\r\n    \"path\": \"" + pathTo + "\"\r\n  },\r\n  \"name\": \"" + Name + "\"\r\n}";
+            request.Content = new StringContent(content);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
+
+            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Accepted)
+                throw new InvalidOperationException("Item did not copy");
+
+            return null;
         }
 
         public async Task LoadPreviewImage()

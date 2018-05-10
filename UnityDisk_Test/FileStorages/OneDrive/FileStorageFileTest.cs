@@ -67,6 +67,35 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.AreEqual(expectedPath, file.Path);
         }
         [TestMethod]
+        public async Task Can_CopyFile()
+        {
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn(_login);
+            FileStorageFile file = new FileStorageFile(new FileBuilder()
+            {
+                Name = "ForTestCopy1.exe",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+            FileStorageFolder folderTo = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = "ForTestCopy2",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+
+            UnityDisk.FileStorages.IFileStorageFolder result =
+                await file.Copy(folderTo) as UnityDisk.FileStorages.IFileStorageFolder;
+
+            Assert.IsNull(result);
+        }
+        [TestMethod]
         public async Task Can_LoadPreviewImage()
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
