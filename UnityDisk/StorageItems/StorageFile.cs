@@ -90,9 +90,9 @@ namespace UnityDisk.StorageItems
             await DataContext.DeletePublicUrl();
         }
 
-        public async Task Download(Windows.Storage.IStorageFile storageFile)
+        public BackgroundOperation.IDownloader Download(Windows.Storage.IStorageFile storageFile)
         {
-            await DataContext.Download(storageFile);
+            return DataContext.Download(storageFile);
         }
 
         public void Parse(string data)

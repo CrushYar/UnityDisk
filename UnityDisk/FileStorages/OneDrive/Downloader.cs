@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -20,12 +21,14 @@ namespace UnityDisk.FileStorages.OneDrive
         /// <summary>
         /// Локальный файл
         /// </summary>
-        private Windows.Storage.StorageFile _loсalFile;
+        private Windows.Storage.IStorageFile _loсalFile;
         private DownloadOperation _downloadOperation;
         private CancellationTokenSource _cancellationToken;
         private DateTime _lastStep;
         private ulong _previewDownloadBytes;
         private int _proccessId;
+        private readonly string _pathToLocalFile;
+
 
         public ulong TotalBytesToTransfer { get; private set; }
         public ulong ByteTransferred { get; private set; }
@@ -33,7 +36,14 @@ namespace UnityDisk.FileStorages.OneDrive
         public BackgroundOperationActionEnum Action { get; private set; }
         public DateTime DateCompleted { get; private set; }
         public BackgroundOperationStateEnum State { get; private set; }
-        public IStorageFile RemoteFile { get; private set; }
+        public UnityDisk.FileStorages.IFileStorageFile RemoteFile { get; private set; }
+        public Downloader(Windows.Storage.IStorageFile loсalFile, OneDrive.IFileStorageFile file)
+        {
+            RemoteFile = file;
+            _loсalFile = loсalFile;
+            _pathToLocalFile = _loсalFile.Path;
+            TotalBytesToTransfer = RemoteFile.Size;
+        }
         public async Task Start()
         {
             await Run();
@@ -52,8 +62,12 @@ namespace UnityDisk.FileStorages.OneDrive
             ulong currentDownloaded = _previewDownloadBytes + _downloadOperation.Progress.BytesReceived;
             ulong downloadBytes =currentDownloaded - ByteTransferred;
             ByteTransferred = currentDownloaded;
-            Speed = (downloadBytes / (ulong)different.Milliseconds)*60;
-            _lastStep=DateTime.Now;
+            if(downloadBytes>0)
+                Speed = (downloadBytes / (ulong)different.Milliseconds)*60;
+            else
+                Speed = 0;
+
+            _lastStep =DateTime.Now;
         }
 
         public async void Initialization(IList<DownloadOperation> downloaders)
@@ -66,20 +80,18 @@ namespace UnityDisk.FileStorages.OneDrive
                     break;
                 }
             }
-            _loсalFile = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(_loсalFile.Path);
+            _loсalFile = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(_pathToLocalFile);
             var basicProperties= await _loсalFile.GetBasicPropertiesAsync();
             _previewDownloadBytes = (uint)basicProperties.Size;
         }
 
         private async Task Run()
         {
-            var httpClient = new System.Net.Http.HttpClient();
             string fullPath = AddBackslash(RemoteFile.Path);
-            fullPath += RemoteFile.Name;
-
-            var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Post, "https://graph.microsoft.com/v1.0/me"+ fullPath+ ":/content");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", RemoteFile.Account.Token);
-            BackgroundDownloader downloader= new BackgroundDownloader();
+            fullPath += RemoteFile.Name;;
+          
+            BackgroundDownloader downloader = new BackgroundDownloader();
+            downloader.SetRequestHeader("Authorization", "Bearer " + RemoteFile.Account.Token);
             _downloadOperation = downloader.CreateDownload(new Uri("https://graph.microsoft.com/v1.0/me" + fullPath + ":/content"), _loсalFile);
             _cancellationToken=new CancellationTokenSource();
             _proccessId = _downloadOperation.Guid.GetHashCode();

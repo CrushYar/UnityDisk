@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Imaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UnityDisk.Accounts.Registry;
@@ -19,6 +23,23 @@ namespace UnityDisk_Test.FileStorages.OneDrive
         public async Task BeforeEachTest()
         {
             await UnityDisk.RemoteInitialization.Start();
+        }
+        [TestMethod]
+        public async Task Can_DeleteFile()
+        {
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn(_login);
+            FileStorageFolder folder = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = "ForTestDeleteFile.txt",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+
+            await folder.Delete();
         }
         [TestMethod]
         public async Task Can_RenameFile()

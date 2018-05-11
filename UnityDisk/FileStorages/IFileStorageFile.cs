@@ -19,6 +19,7 @@ namespace UnityDisk.FileStorages
         /// Зкачивание файла
         /// </summary>
         /// <param name="file">Локальный файл, куда буду записаны байты</param>
-        Task Download(Windows.Storage.IStorageFile file);
+        /// <returns>Объект процесса</returns>
+        BackgroundOperation.IDownloader Download(Windows.Storage.IStorageFile file);
     }
 }

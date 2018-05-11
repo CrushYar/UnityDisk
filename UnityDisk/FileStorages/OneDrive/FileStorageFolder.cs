@@ -11,6 +11,7 @@ using Windows.Foundation;
 using Windows.UI.Xaml.Media.Imaging;
 using UnityDisk.Accounts;
 using UnityDisk.Accounts.Registry;
+using UnityDisk.BackgroundOperation;
 using UnityDisk.FileStorages.OneDrive.Deserialized;
 using UnityDisk.StorageItems;
 using IStorageFile = Windows.Storage.IStorageFile;
@@ -271,9 +272,10 @@ namespace UnityDisk.FileStorages.OneDrive
             return result;
         }
 
-        public Task Upload(IStorageFile loacalFile)
+        public async Task<IUploader> Upload(IStorageFile localFile)
         {
-            throw new NotImplementedException();
+            var basicProperties = await localFile.GetBasicPropertiesAsync();
+            return new OneDrive.Uploader(localFile, basicProperties.Size,this);
         }
 
         public async Task<FileStorages.IFileStorageFolder> CreateFolder(string name)

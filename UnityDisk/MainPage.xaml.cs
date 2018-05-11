@@ -17,8 +17,11 @@ using UnityDisk.FileStorages;
 using UnityDisk.Settings.Accounts;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
+using Windows.Storage.Pickers;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Imaging;
+using UnityDisk.Accounts.Registry;
+using UnityDisk.FileStorages.OneDrive;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -35,9 +38,26 @@ namespace UnityDisk
             this.InitializeComponent();
         }
 
-        private  void MainPage_Loaded(object sender, RoutedEventArgs e)
+        private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
+            await account.SignIn("shazhko.artem@gmail.com");
+            FileStorageFolder folder = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = "",
+                Path = "/drive/root:"
+            })
+            {
+                Account = new AccountProjection(
+                    new UnityDisk.Accounts.Account(account))
+            };
+            FileOpenPicker openPicker = new FileOpenPicker();
+            openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            // Dropdown of file types the user can save the file as
+            openPicker.FileTypeFilter.Add("*");
+            var localFile = await openPicker.PickSingleFileAsync();
+            var uploader = await folder.Upload(localFile);
+            await uploader.Start();
         }
     }
 }

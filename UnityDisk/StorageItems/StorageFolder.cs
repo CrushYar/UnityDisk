@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using Unity;
 using UnityDisk.Accounts.Registry;
+using UnityDisk.BackgroundOperation;
 using UnityDisk.FileStorages;
 using UnityDisk.StorageItems.PreviewImageManager;
 
@@ -143,9 +144,9 @@ namespace UnityDisk.StorageItems
             return result;
         }
 
-        public async Task Upload(Windows.Storage.IStorageFile storageFile)
+        public Task<IUploader> Upload(Windows.Storage.IStorageFile storageFile)
         {
-            await DataContext.Upload(storageFile);
+            return DataContext.Upload(storageFile);
         }
 
         public async Task<IStorageFolder> CreateFolder(string name)

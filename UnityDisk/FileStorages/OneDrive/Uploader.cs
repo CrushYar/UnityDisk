@@ -24,29 +24,32 @@ namespace UnityDisk.FileStorages.OneDrive
         /// <summary>
         /// Локальный файл
         /// </summary>
-        private Windows.Storage.StorageFile _loсalFile;
+        private Windows.Storage.IStorageFile _loсalFile;
         private CancellationTokenSource _cancellationToken;
         private DateTime _lastStep;
         private ulong _previewUploadBytes;
         private string _pathToLocalFile;
+        private OneDrive.IFileStorageFolder _storageFolder;
 
         public ulong TotalBytesToTransfer { get; private set; }
         public ulong ByteTransferred { get; private set; }
         public ulong Speed { get; private set; }
-        public BackgroundOperationActionEnum Action { get; private set; }
+        public BackgroundOperationActionEnum Action => BackgroundOperationActionEnum.Upload;
         public DateTime DateCompleted { get; private set; }
         public BackgroundOperationStateEnum State { get; private set; }
-        public IStorageFile RemoteFile { get; private set; }
-        public Task Start()
+        public UnityDisk.FileStorages.IFileStorageFile RemoteFile { get; private set; }
+        public async Task Start()
         {
-            throw new NotImplementedException();
+           await Run();
         }
 
-        public Uploader(Windows.Storage.StorageFile loсalFile,StorageItems.IStorageFile file)
+        public Uploader(Windows.Storage.IStorageFile loсalFile,ulong fileSize, OneDrive.IFileStorageFolder folder)
         {
-            RemoteFile = file;
+            _storageFolder = folder;
             _loсalFile = loсalFile;
             _pathToLocalFile = _loсalFile.Path;
+            TotalBytesToTransfer = fileSize;
+            StorageApplicationPermissions.FutureAccessList.AddOrReplace(loсalFile.Path.GetHashCode().ToString(),loсalFile);
         }
 
         public void Stop()
@@ -59,9 +62,13 @@ namespace UnityDisk.FileStorages.OneDrive
             _lastStep = DateTime.Now;
             DateTime currentTime = DateTime.Now;
             var different = currentTime.Subtract(_lastStep);
-            ulong downloadBytes = ByteTransferred - _previewUploadBytes;
+            ulong uploadedBytes = ByteTransferred - _previewUploadBytes;
             _previewUploadBytes = ByteTransferred;
-            Speed = (downloadBytes / (ulong)different.Milliseconds)*60;
+            if (uploadedBytes > 0)
+                Speed = (uploadedBytes / (ulong) different.Milliseconds) * 60;
+            else
+                Speed = 0;
+
             _lastStep = DateTime.Now;
         }
 
@@ -72,13 +79,13 @@ namespace UnityDisk.FileStorages.OneDrive
 
         private async Task Run()
         {
-            string fullPath = AddBackslash(RemoteFile.Path);
-            fullPath += RemoteFile.Name;
+            string fullPath = AddBackslash(_storageFolder.Path);
+            fullPath += _loсalFile.Name;
 
             var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Post,
                 "https://graph.microsoft.com/v1.0/me" + fullPath + ":/createUploadSession");
             request.Headers.Authorization =
-                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", RemoteFile.Account.Token);
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _storageFolder.Account.Token);
 
             var httpClient = new System.Net.Http.HttpClient();
 
@@ -103,11 +110,10 @@ namespace UnityDisk.FileStorages.OneDrive
             _previewUploadBytes = UInt32.Parse(result.Value);
             fileStream.Seek(_previewUploadBytes);
             ulong offset = _previewUploadBytes;
-            string token = RemoteFile.Account.Token;
+            string token = _storageFolder.Account.Token;
             do
             {
-                request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Put,
-                    "https://api.onedrive.com/rup/ba580bfa74ca04b7/eyJSZXNvdXJjZUlEIjoiQkE1ODBCRkE3NENBMDRCNyE0NjAiLCJSZWxhdGlvbnNoaXBOYW1lIjoiTHVpcyBGb25zaSAtIERlc3BhY2l0byBmdC4gRGFkZHkgWWFua2VlLm1wNCJ9/4mljKc7vvf3kk1vsmDZEJjbHFb9FNrrJA3_JjfI3yvSYfVaqeS8JTrJJ2QocG2o0qCYlpNdulraqLrKpkz0MvzjVr826tgHza_Y9v9YOWebeo/eyJOYW1lIjoiTHVpcyBGb25zaSAtIERlc3BhY2l0byBmdC4gRGFkZHkgWWFua2VlLm1wNCJ9/4wli1SXBXp-I4-vuiB4bI1R25OWHjC2hIVvkqkv7YcT-jeNSrHcg2HK7zRRmjp0z9PUJrz0rscSIt8p2SBcVxsfYDa9yZrAblEj5CIFdWNfCkjfbIoYNJbRcou7QmVj4P-hJ7J_ewbQSw1Osrbqiz_tdrHGOZ00r4UtAvDD-0Ruh32xC4wI74Ou0gKeh8ZHfeyntrvavayiMynes3SyRCyJUY7tXhO0VhyYBT0fhSAomDhKE_5hanj81DRr_wUsB3d33VoWDXGf7zUUKSEqlEhKipJtGlKsW7kadtnN4J7UYSi4JleQzIfCQO9k4aHeuHBg090u6lhRE7VOzCP9mf1UZ5YVUZ_UTYLNiuY9SSCAjXA6DkclJqvtRV11aw6xiPcxzAS8tPcXrn-GyoUT5SWX9aRli3HncLRNKZH4_n7Qls7IQHf_Gc1ccI4pHSeGJJk6ZVmwZJ5xB8YX0BQV8ZGue-byClNjh0FgL3Ag2VfUqf5Y5pglEO7kidhfCW4IvUrpK8-cG6KZD-vNj2GWhv0Zg");
+                request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Put,deserializedUploadSession.UploadUrl);
                 request.Headers.Authorization =
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
@@ -116,11 +122,23 @@ namespace UnityDisk.FileStorages.OneDrive
                 request.Content.Headers.ContentRange = new ContentRangeHeaderValue((long)offset, (long)offset + reader.Length - 1,
                     (long) TotalBytesToTransfer);
                 response = await httpClient.SendAsync(request);
-                var content = await response.Content.ReadAsStringAsync();
                 offset += reader.Length;
             } while (offset != TotalBytesToTransfer);
+            var content = await response.Content.ReadAsStringAsync();
 
-            StorageApplicationPermissions.FutureAccessList.Remove(_loсalFile.Path);
+            DeserializedItem deserializedItem = new DeserializedItem();
+
+            using (System.IO.Stream stream = await response.Content.ReadAsStreamAsync())
+            {
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedItem.GetType());
+                deserializedItem = ser.ReadObject(stream) as DeserializedItem;
+
+                if (deserializedItem?.File == null)
+                    throw new NullReferenceException("Couldn't deserialized the data");
+            }
+            RemoteFile=new FileStorageFile(new FileBuilder(deserializedItem)){Account = _storageFolder.Account};
+
+            StorageApplicationPermissions.FutureAccessList.Remove(_loсalFile.Path.ToString());
         }
 
         private string AddBackslash(string path)

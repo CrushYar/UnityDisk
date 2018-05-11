@@ -34,15 +34,11 @@ namespace UnityDisk.FileStorages.OneDrive
         public DateTime CreateDate { get; private set; }
         public ulong Size { get; private set; }
 
-        public Task Delete()
-        {
-            throw new NotImplementedException();
-        }
-
         public FileStorageFile() { }
 
         public FileStorageFile(FileBuilder builder)
         {
+            Id = builder.Id;
             Name = builder.Name;
             Path = builder.Path;
             PreviewImage = builder.PreviewImage;
@@ -57,7 +53,19 @@ namespace UnityDisk.FileStorages.OneDrive
         {
             Account = account;
         }
+        public async Task Delete()
+        {
+            var httpClient = new System.Net.Http.HttpClient();
+            string path = AddBackslash(Path);
 
+            path += Name;
+            string url = "https://graph.microsoft.com/v1.0/me" + path;
+            var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Delete, url);
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Account.Token);
+
+            System.Net.Http.HttpResponseMessage response = await httpClient.SendAsync(request);
+            if (response.StatusCode != HttpStatusCode.NoContent) throw new InvalidOperationException("Item did not delete");
+        }
         public async Task Rename(string newName)
         {
             var httpClient = new System.Net.Http.HttpClient();
@@ -280,9 +288,11 @@ namespace UnityDisk.FileStorages.OneDrive
             throw new NotImplementedException();
         }
 
-        public Task Download(IStorageFile file)
+        public BackgroundOperation.IDownloader Download(IStorageFile file)
         {
-            throw new NotImplementedException();
+            OneDrive.Downloader downloader=new Downloader(file,this);
+
+            return downloader;
         }
 
         private string AddBackslash(string path)

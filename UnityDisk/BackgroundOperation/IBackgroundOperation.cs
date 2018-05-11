@@ -47,7 +47,7 @@ namespace UnityDisk.BackgroundOperation
         /// <summary>
         /// Файл облачного сервиса
         /// </summary>
-        UnityDisk.StorageItems.IStorageFile RemoteFile { get; }
+        UnityDisk.FileStorages.IFileStorageFile RemoteFile { get; }
         /// <summary>
         /// Начать фоновую операцию
         /// </summary>

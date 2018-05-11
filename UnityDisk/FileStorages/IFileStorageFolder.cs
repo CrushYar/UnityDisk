@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
+using UnityDisk.BackgroundOperation;
 
 namespace UnityDisk.FileStorages
 {
@@ -16,11 +18,12 @@ namespace UnityDisk.FileStorages
         /// </summary>
         /// <returns>Коллекция загруженных элементов</returns>
         Task<IList<IFileStorageItem>> LoadDirectory();
+
         /// <summary>
         /// Загрузка локального файла в облако
         /// </summary>
         /// <param name="loacalFile">Локальный файл</param>
-        Task Upload(Windows.Storage.IStorageFile loacalFile);
+        Task<IUploader> Upload(Windows.Storage.IStorageFile loacalFile);
         /// <summary>
         /// Создание папки
         /// </summary>

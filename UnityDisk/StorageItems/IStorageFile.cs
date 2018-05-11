@@ -21,7 +21,7 @@ namespace UnityDisk.StorageItems
         /// Скачивание элемента
         /// </summary>
         /// <param name="storageFile">Файл в файловой системе компьютера, куда запишутся все байты</param>
-        Task Download(Windows.Storage.IStorageFile storageFile);
+        BackgroundOperation.IDownloader Download(Windows.Storage.IStorageFile storageFile);
         /// <summary>
         /// Контекс данных
         /// </summary>

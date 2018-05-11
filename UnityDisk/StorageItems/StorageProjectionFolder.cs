@@ -137,7 +137,7 @@ namespace UnityDisk.StorageItems
             return result;
         }
 
-        public async Task Upload(Windows.Storage.IStorageFile storageFile)
+        public async Task<BackgroundOperation.IUploader> Upload(Windows.Storage.IStorageFile storageFile)
         {
             BasicProperties basicProperties=await storageFile.GetBasicPropertiesAsync().AsTask();
             var folders = from f1 in Folders
@@ -147,7 +147,7 @@ namespace UnityDisk.StorageItems
             if(folder==null)
                 throw new InvalidOperationException("You have not enough memory");
 
-            await folder.Upload(storageFile);
+           return await folder.Upload(storageFile);
         }
 
         public async Task<IStorageFolder> CreateFolder(string name)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using UnityDisk.BackgroundOperation;
 using UnityDisk.FileStorages;
 
 namespace UnityDisk.StorageItems
@@ -18,11 +19,12 @@ namespace UnityDisk.StorageItems
         /// </summary>
         /// <returns>Загруженные элементы</returns>
         Task<List<IStorageItem>> LoadDirectory();
+
         /// <summary>
         /// Загрузка файла в директорию облака
         /// </summary>
         /// <param name="storageFile">Загружаемый файл</param>
-        Task Upload(Windows.Storage.IStorageFile storageFile);
+        Task<BackgroundOperation.IUploader> Upload(Windows.Storage.IStorageFile storageFile);
         /// <summary>
         /// Создание новой папки
         /// </summary>
