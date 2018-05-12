@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -29,8 +30,10 @@ namespace UnityDisk.FileStorages.OneDrive
         private DateTime _lastStep;
         private ulong _previewUploadBytes;
         private string _pathToLocalFile;
-        private OneDrive.IFileStorageFolder _storageFolder;
-
+        private readonly OneDrive.IFileStorageFolder _storageFolder;
+        private string _uploadUrl;
+        private readonly string _localFileToken;
+         
         public ulong TotalBytesToTransfer { get; private set; }
         public ulong ByteTransferred { get; private set; }
         public ulong Speed { get; private set; }
@@ -40,7 +43,33 @@ namespace UnityDisk.FileStorages.OneDrive
         public UnityDisk.FileStorages.IFileStorageFile RemoteFile { get; private set; }
         public async Task Start()
         {
-           await Run();
+            string fullPath = AddBackslash(_storageFolder.Path);
+            fullPath += _loсalFile.Name;
+
+            var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Post,
+                "https://graph.microsoft.com/v1.0/me" + fullPath + ":/createUploadSession");
+            request.Headers.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _storageFolder.Account.Token);
+
+            var httpClient = new System.Net.Http.HttpClient();
+
+            var response = await httpClient.SendAsync(request);
+
+            if(response.StatusCode!=HttpStatusCode.Created && response.StatusCode!=HttpStatusCode.OK)
+                throw new InvalidOperationException("Session of upload did not create");
+
+            DeserializedUploadSession deserializedUploadSession = new DeserializedUploadSession();
+            using (System.IO.Stream stream = await response.Content.ReadAsStreamAsync())
+            {
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedUploadSession.GetType());
+                deserializedUploadSession = ser.ReadObject(stream) as DeserializedUploadSession;
+
+                if (deserializedUploadSession?.UploadUrl == null)
+                    throw new NullReferenceException("Couldn't deserialized the data");
+            }
+
+            _uploadUrl = deserializedUploadSession.UploadUrl;
+            await Run();
         }
 
         public Uploader(Windows.Storage.IStorageFile loсalFile,ulong fileSize, OneDrive.IFileStorageFolder folder)
@@ -49,7 +78,7 @@ namespace UnityDisk.FileStorages.OneDrive
             _loсalFile = loсalFile;
             _pathToLocalFile = _loсalFile.Path;
             TotalBytesToTransfer = fileSize;
-            StorageApplicationPermissions.FutureAccessList.AddOrReplace(loсalFile.Path.GetHashCode().ToString(),loсalFile);
+            _localFileToken= StorageApplicationPermissions.FutureAccessList.Add(loсalFile);
         }
 
         public void Stop()
@@ -74,16 +103,13 @@ namespace UnityDisk.FileStorages.OneDrive
 
         public async void Initialization(IList<UploadOperation> uploaders)
         {
-            _loсalFile=await StorageApplicationPermissions.FutureAccessList.GetFileAsync(_loсalFile.Path);
+            _loсalFile=await StorageApplicationPermissions.FutureAccessList.GetFileAsync(_localFileToken);
         }
 
         private async Task Run()
         {
-            string fullPath = AddBackslash(_storageFolder.Path);
-            fullPath += _loсalFile.Name;
 
-            var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Post,
-                "https://graph.microsoft.com/v1.0/me" + fullPath + ":/createUploadSession");
+            var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get,_uploadUrl);
             request.Headers.Authorization =
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _storageFolder.Account.Token);
 
@@ -91,19 +117,22 @@ namespace UnityDisk.FileStorages.OneDrive
 
             var response = await httpClient.SendAsync(request);
 
+            if (response.StatusCode != HttpStatusCode.Created && response.StatusCode != HttpStatusCode.OK)
+                throw new InvalidOperationException("Session of upload did not create");
             DeserializedUploadSession deserializedUploadSession = new DeserializedUploadSession();
+
             using (System.IO.Stream stream = await response.Content.ReadAsStreamAsync())
             {
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedUploadSession.GetType());
                 deserializedUploadSession = ser.ReadObject(stream) as DeserializedUploadSession;
 
-                if (deserializedUploadSession?.UploadUrl == null)
+                if (deserializedUploadSession?.NextExpectedRanges == null)
                     throw new NullReferenceException("Couldn't deserialized the data");
             }
 
             var fileStream = await _loсalFile.OpenReadAsync();
 
-            uint bytesCount = 10 * 320 * 1024;
+            uint bytesCount = 13*320*1024;
             Byte[] bytes = new byte[bytesCount];
             Regex regex = new Regex("[0-9]*");
             var result = regex.Match(deserializedUploadSession.NextExpectedRanges[0]);
@@ -113,7 +142,7 @@ namespace UnityDisk.FileStorages.OneDrive
             string token = _storageFolder.Account.Token;
             do
             {
-                request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Put,deserializedUploadSession.UploadUrl);
+                request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Put, _uploadUrl);
                 request.Headers.Authorization =
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
@@ -138,7 +167,7 @@ namespace UnityDisk.FileStorages.OneDrive
             }
             RemoteFile=new FileStorageFile(new FileBuilder(deserializedItem)){Account = _storageFolder.Account};
 
-            StorageApplicationPermissions.FutureAccessList.Remove(_loсalFile.Path.ToString());
+            StorageApplicationPermissions.FutureAccessList.Remove(_localFileToken);
         }
 
         private string AddBackslash(string path)

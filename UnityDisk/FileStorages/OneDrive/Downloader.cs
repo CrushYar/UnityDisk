@@ -28,6 +28,7 @@ namespace UnityDisk.FileStorages.OneDrive
         private ulong _previewDownloadBytes;
         private int _proccessId;
         private readonly string _pathToLocalFile;
+        private readonly string _localFileToken;
 
 
         public ulong TotalBytesToTransfer { get; private set; }
@@ -43,6 +44,7 @@ namespace UnityDisk.FileStorages.OneDrive
             _loсalFile = loсalFile;
             _pathToLocalFile = _loсalFile.Path;
             TotalBytesToTransfer = RemoteFile.Size;
+            _localFileToken = StorageApplicationPermissions.FutureAccessList.Add(loсalFile);
         }
         public async Task Start()
         {
@@ -57,17 +59,27 @@ namespace UnityDisk.FileStorages.OneDrive
         public void Step()
         {
             _lastStep = DateTime.Now;
-            DateTime currentTime= DateTime.Now;
-            var different= currentTime.Subtract(_lastStep);
+            DateTime currentTime = DateTime.Now;
+            var different = currentTime.Subtract(_lastStep);
             ulong currentDownloaded = _previewDownloadBytes + _downloadOperation.Progress.BytesReceived;
-            ulong downloadBytes =currentDownloaded - ByteTransferred;
+            ulong downloadBytes = currentDownloaded - ByteTransferred;
             ByteTransferred = currentDownloaded;
-            if(downloadBytes>0)
-                Speed = (downloadBytes / (ulong)different.Milliseconds)*60;
+            if (downloadBytes > 0)
+                Speed = (downloadBytes / (ulong) different.Milliseconds) * 60;
             else
                 Speed = 0;
 
-            _lastStep =DateTime.Now;
+            _lastStep = DateTime.Now;
+            if (ByteTransferred == TotalBytesToTransfer)
+            {
+                try
+                {
+                    StorageApplicationPermissions.FutureAccessList.Remove(_localFileToken);
+                }
+                catch (Exception e)
+                {
+                }
+            }
         }
 
         public async void Initialization(IList<DownloadOperation> downloaders)
@@ -80,22 +92,39 @@ namespace UnityDisk.FileStorages.OneDrive
                     break;
                 }
             }
-            _loсalFile = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(_pathToLocalFile);
-            var basicProperties= await _loсalFile.GetBasicPropertiesAsync();
+            _loсalFile = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(_localFileToken);
+            var basicProperties = await _loсalFile.GetBasicPropertiesAsync();
             _previewDownloadBytes = (uint)basicProperties.Size;
         }
 
         private async Task Run()
         {
-            string fullPath = AddBackslash(RemoteFile.Path);
-            fullPath += RemoteFile.Name;;
-          
-            BackgroundDownloader downloader = new BackgroundDownloader();
-            downloader.SetRequestHeader("Authorization", "Bearer " + RemoteFile.Account.Token);
-            _downloadOperation = downloader.CreateDownload(new Uri("https://graph.microsoft.com/v1.0/me" + fullPath + ":/content"), _loсalFile);
-            _cancellationToken=new CancellationTokenSource();
-            _proccessId = _downloadOperation.Guid.GetHashCode();
-            await _downloadOperation.StartAsync().AsTask(_cancellationToken.Token);
+            if (_downloadOperation != null)
+            {
+                await _downloadOperation.AttachAsync();
+            }
+            else
+            {
+                string fullPath = AddBackslash(RemoteFile.Path);
+                fullPath += RemoteFile.Name;
+
+                BackgroundDownloader downloader = new BackgroundDownloader();
+                downloader.SetRequestHeader("Authorization", "Bearer " + RemoteFile.Account.Token);
+                _downloadOperation =
+                    downloader.CreateDownload(new Uri("https://graph.microsoft.com/v1.0/me" + fullPath + ":/content"),
+                        _loсalFile);
+                _cancellationToken = new CancellationTokenSource();
+                _proccessId = _downloadOperation.Guid.GetHashCode();
+                await _downloadOperation.StartAsync().AsTask(_cancellationToken.Token);
+            }
+
+            try
+            {
+                StorageApplicationPermissions.FutureAccessList.Remove(_localFileToken);
+            }
+            catch (Exception e)
+            {
+            }
         }
         private string AddBackslash(string path)
         {
