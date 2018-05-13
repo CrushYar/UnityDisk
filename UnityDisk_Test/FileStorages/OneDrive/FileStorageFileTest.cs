@@ -32,7 +32,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
-            FileStorageFolder folder = new FileStorageFolder(new FolderBuilder()
+            FileStorageFile file = new FileStorageFile(new FileBuilder()
             {
                 Name = "ForTestDeleteFile.txt",
                 Path = "/drive/root:"
@@ -42,7 +42,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
                     new UnityDisk.Accounts.Account(account))
             };
 
-            await folder.Delete();
+            await file.Delete();
         }
         [TestMethod]
         public async Task Can_RenameFile()

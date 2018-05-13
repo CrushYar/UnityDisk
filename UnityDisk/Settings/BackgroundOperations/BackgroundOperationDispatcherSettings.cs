@@ -14,9 +14,17 @@ namespace UnityDisk.Settings.BackgroundOperations
    public class BackgroundOperationDispatcherSettings:IBackgroundOperationDispatcherSettings
    {
        private readonly ISettings _settings;
+       private readonly FileStorages.FactoryRagistry.IFactoryRagistry _factoryRagistry;
        public BackgroundOperationDispatcherSettings(ISettings settings)
        {
            _settings = settings;
+           IUnityContainer container = ContainerConfiguration.GetContainer().Container;
+           _factoryRagistry = container.Resolve<FileStorages.FactoryRagistry.IFactoryRagistry>();
+       }
+       public BackgroundOperationDispatcherSettings(ISettings settings, FileStorages.FactoryRagistry.IFactoryRagistry factoryRagistry)
+       {
+           _settings = settings;
+           _factoryRagistry = factoryRagistry;
        }
         public void SaveOperations(string paramName, IList<IBackgroundOperation> backgroundOperations)
         {
@@ -31,6 +39,7 @@ namespace UnityDisk.Settings.BackgroundOperations
                     State = operation.ToString(),
                     Action=operation.Action
                 };
+                i++;
             }
 
             _settings.SetValueAsString(paramName,JsonConvert.SerializeObject(items));
@@ -45,15 +54,13 @@ namespace UnityDisk.Settings.BackgroundOperations
             if(items==null)
                 throw new InvalidOperationException("Item did not create the public url");
 
-            IUnityContainer container =ContainerConfiguration.GetContainer().Container;
-            var  factoryRagistry=container.Resolve<FileStorages.FactoryRagistry.IFactoryRagistry>();
             List<IBackgroundOperation> result=new List<IBackgroundOperation>(items.Length);
             foreach (var item in items)
             {
-                var operation=factoryRagistry.ParseBackgroundOperation(item.Action, item.State, item.ServerName);
+                var operation=_factoryRagistry.ParseBackgroundOperation(item.Action, item.State, item.ServerName);
                 if(operation!=null)
                     result.Add(operation);
-            }
+            } 
 
             return result;
         }

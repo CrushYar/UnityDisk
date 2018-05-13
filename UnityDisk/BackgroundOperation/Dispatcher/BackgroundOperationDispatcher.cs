@@ -20,7 +20,7 @@ namespace UnityDisk.BackgroundOperation.Dispatcher
         private SpinLock _spinLockWait = new SpinLock(true);
         private SpinLock _spinLockProccess = new SpinLock(true);
         private SpinLock _spinLockHistory = new SpinLock(true);
-        private bool IsDispatcherRuned;
+        private bool _isDispatcherRuned;
         private AsyncCoordinator _mAc = new AsyncCoordinator();
         private readonly Settings.BackgroundOperations.IBackgroundOperationDispatcherSettings _settings;
 
@@ -43,9 +43,9 @@ namespace UnityDisk.BackgroundOperation.Dispatcher
             LockQueue();
             _inQueue.Add(operation);
 
-            if (!IsDispatcherRuned)
+            if (!_isDispatcherRuned)
             {
-                IsDispatcherRuned = true;
+                _isDispatcherRuned = true;
                 Task.Run(RunDispatcher);
             }
             UnLockQueue();
@@ -64,7 +64,7 @@ namespace UnityDisk.BackgroundOperation.Dispatcher
                 }
                 if (_inQueue.Count == 0)
                 {
-                    IsDispatcherRuned = false;
+                    _isDispatcherRuned = false;
                     return;
                 }
                 UnLockQueue();
