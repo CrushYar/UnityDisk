@@ -20,7 +20,6 @@ namespace UnityDisk.FileStorages.OneDrive
         public string PublicUrl { get; set; }
         public IAccountProjection Account { get; set; }
         public DateTime CreateDate { get; set; }
-        public string DownloadUrl { get; set; }
         public FolderBuilder() { }
 
         public FolderBuilder(DeserializedItem item)
@@ -30,7 +29,6 @@ namespace UnityDisk.FileStorages.OneDrive
             Type = StorageItemTypeEnum.Directory;
             PublicUrl = item.WebUrl;
             CreateDate = DateTime.Parse(item.CreatedDateTime);
-            DownloadUrl = item.DownloadUrl;
             Path = item.ParentReference.Path;
         }
     }

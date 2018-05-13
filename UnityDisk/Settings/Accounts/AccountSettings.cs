@@ -24,6 +24,12 @@ namespace UnityDisk.Settings.Accounts
             _settings = settings;
             _parameterName = "saveAcc";
         }
+        public AccountSettings()
+        {
+            IUnityContainer container = ContainerConfiguration.GetContainer().Container;
+            _settings = container.Resolve<ISettings>();
+            _parameterName = "saveAcc";
+        }
 
         public AccountSettings(ISettings settings,string parameterName)
         {

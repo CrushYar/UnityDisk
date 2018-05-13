@@ -13,33 +13,42 @@ using System.Threading.Tasks;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Streams;
+using Newtonsoft.Json;
 using UnityDisk.BackgroundOperation;
 using UnityDisk.FileStorages.OneDrive.Deserialized;
 using UnityDisk.StorageItems;
 
 namespace UnityDisk.FileStorages.OneDrive
 {
+    [Serializable]
     public class Uploader:BackgroundOperation.IUploader
     {
 
         /// <summary>
         /// Локальный файл
         /// </summary>
+        [NonSerialized]
         private Windows.Storage.IStorageFile _loсalFile;
+        [NonSerialized]
         private CancellationTokenSource _cancellationToken;
+        [NonSerialized]
         private DateTime _lastStep;
         private ulong _previewUploadBytes;
         private string _pathToLocalFile;
+        [NonSerialized]
         private readonly OneDrive.IFileStorageFolder _storageFolder;
         private string _uploadUrl;
-        private readonly string _localFileToken;
+        private string _localFileToken;
          
         public ulong TotalBytesToTransfer { get; private set; }
         public ulong ByteTransferred { get; private set; }
         public ulong Speed { get; private set; }
+        [JsonIgnore]
         public BackgroundOperationActionEnum Action => BackgroundOperationActionEnum.Upload;
+        [JsonIgnore]
         public DateTime DateCompleted { get; private set; }
         public BackgroundOperationStateEnum State { get; private set; }
+        [JsonIgnore]
         public UnityDisk.FileStorages.IFileStorageFile RemoteFile { get; private set; }
         public async Task Start()
         {
@@ -103,12 +112,12 @@ namespace UnityDisk.FileStorages.OneDrive
 
         public async void Initialization(IList<UploadOperation> uploaders)
         {
-            _loсalFile=await StorageApplicationPermissions.FutureAccessList.GetFileAsync(_localFileToken);
+            _loсalFile =await StorageApplicationPermissions.FutureAccessList.GetFileAsync(_localFileToken);
         }
 
         private async Task Run()
         {
-
+            _cancellationToken=new CancellationTokenSource();
             var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get,_uploadUrl);
             request.Headers.Authorization =
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _storageFolder.Account.Token);
@@ -152,9 +161,13 @@ namespace UnityDisk.FileStorages.OneDrive
                     (long) TotalBytesToTransfer);
                 response = await httpClient.SendAsync(request);
                 offset += reader.Length;
-            } while (offset != TotalBytesToTransfer);
-            var content = await response.Content.ReadAsStringAsync();
+            } while (offset != TotalBytesToTransfer&& !_cancellationToken.IsCancellationRequested);
 
+            if (_cancellationToken.IsCancellationRequested)
+            {
+                StorageApplicationPermissions.FutureAccessList.Remove(_localFileToken);
+                return;
+            }
             DeserializedItem deserializedItem = new DeserializedItem();
 
             using (System.IO.Stream stream = await response.Content.ReadAsStreamAsync())
@@ -177,6 +190,41 @@ namespace UnityDisk.FileStorages.OneDrive
                 newPath += "/";
 
             return newPath;
+        }
+        /// <summary>
+        /// Импортирует данные из строки
+        /// </summary>
+        /// <param name="data">Данные в строковом виде</param>
+        /// <returns>Объект полученный после анализа строки</returns>
+        public static OneDrive.Uploader Parse(String data)
+        {
+            var anonymClass = new
+            {
+                This = "",
+                LocalFileToken = "",
+                ProccessId = 0,
+                PreviewDownloadBytes = (ulong)0,
+                RemoteFile = "",
+                UploadUrl=""
+            };
+            anonymClass = JsonConvert.DeserializeAnonymousType(data, anonymClass);
+            Uploader uploader = JsonConvert.DeserializeObject<Uploader>(anonymClass.This);
+            uploader._localFileToken = anonymClass.LocalFileToken;
+            uploader.RemoteFile = OneDrive.FileStorageFile.Parse(anonymClass.RemoteFile);
+            uploader._uploadUrl = anonymClass.UploadUrl;
+            return uploader;
+        }
+
+        public override string ToString()
+        {
+            var result = new
+            {
+                This = JsonConvert.SerializeObject(this),
+                LocalFileToken = _localFileToken,
+                RemoteFile = JsonConvert.SerializeObject(RemoteFile),
+                UploadUrl= _uploadUrl
+            };
+            return JsonConvert.SerializeObject(result);
         }
     }
 }

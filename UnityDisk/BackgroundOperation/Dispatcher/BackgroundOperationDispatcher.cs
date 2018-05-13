@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity;
+using UnityDisk.Settings.BackgroundOperations;
 using UnityDisk.StorageItems.PreviewImageManager;
 
 namespace UnityDisk.BackgroundOperation.Dispatcher
@@ -19,14 +21,21 @@ namespace UnityDisk.BackgroundOperation.Dispatcher
         private SpinLock _spinLockProccess = new SpinLock(true);
         private SpinLock _spinLockHistory = new SpinLock(true);
         private bool IsDispatcherRuned;
-        private AsyncCoordinator m_ac = new AsyncCoordinator();
+        private AsyncCoordinator _mAc = new AsyncCoordinator();
+        private readonly Settings.BackgroundOperations.IBackgroundOperationDispatcherSettings _settings;
 
         public IList<IBackgroundOperation> Operations { get; private set; }
         public event EventHandler<UploadedEventArg> UploadedEvent;
         public event EventHandler<DownloadedEventArg> DownloadedEvent;
+
+        public BackgroundOperationDispatcher()
+        {
+            IUnityContainer container = ContainerConfiguration.GetContainer().Container;
+            _settings= container.Resolve<IBackgroundOperationDispatcherSettings>();
+        }
         public void Initialization()
         {
-            throw new NotImplementedException();
+          LoadState();
         }
 
         public void Registry(IBackgroundOperation operation)
@@ -75,15 +84,15 @@ namespace UnityDisk.BackgroundOperation.Dispatcher
                     UnLockProccess();
                     UnLockWait();
 
-                    m_ac.AboutToBegin(activeLoaderCount);
+                    _mAc.AboutToBegin(activeLoaderCount);
 
                     foreach (var item in _inProccess)
                     {
-                        await item.Start().ContinueWith(task => m_ac.JustEnded());
+                        await item.Start().ContinueWith(task => _mAc.JustEnded());
                     }
 
                     var token = new TaskCompletionSource<CoordinationStatus>();
-                    await m_ac.AllBegun(token);
+                    await _mAc.AllBegun(token);
 
                     foreach (var itemDone in _inProccess)
                     {
@@ -95,8 +104,30 @@ namespace UnityDisk.BackgroundOperation.Dispatcher
             }
         }
 
-        private void SaveState() { }
-        private void LoadState() { }
+        private void SaveState()
+        {
+            LockQueue();
+            LockWait();
+            LockProccess();
+            LockHistory();
+
+            _settings.SaveOperations("BO_inQueue",_inQueue);
+            _settings.SaveOperations("BO_inWait",_inWait);
+            _settings.SaveOperations("BO_inProccess",_inProccess);
+            _settings.SaveOperations("BO_history",_history);
+
+            UnLockHistory();
+            UnLockProccess();
+            UnLockWait();
+            UnLockQueue();
+        }
+        private void LoadState()
+        {
+            _inQueue = _settings.LoadOperations("BO_inQueue");
+            _inWait = _settings.LoadOperations("BO_inWait");
+            _inProccess = _settings.LoadOperations("BO_inProccess");
+            _history = _settings.LoadOperations("BO_history");
+        }
 
         private void OnUploadedEvent(UnityDisk.StorageItems.IStorageFile storageFile, IList<string> path)
         {

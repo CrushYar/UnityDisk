@@ -11,38 +11,45 @@ using System.Threading.Tasks;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Streams;
+using Newtonsoft.Json;
 using UnityDisk.BackgroundOperation;
 using UnityDisk.StorageItems;
 
 namespace UnityDisk.FileStorages.OneDrive
 {
+    [Serializable]
     public class Downloader:BackgroundOperation.IDownloader
     {
         /// <summary>
         /// Локальный файл
         /// </summary>
+        [NonSerialized]
         private Windows.Storage.IStorageFile _loсalFile;
+        [NonSerialized]
         private DownloadOperation _downloadOperation;
+        [NonSerialized]
         private CancellationTokenSource _cancellationToken;
+        [NonSerialized]
         private DateTime _lastStep;
         private ulong _previewDownloadBytes;
         private int _proccessId;
-        private readonly string _pathToLocalFile;
-        private readonly string _localFileToken;
+        private string _localFileToken;
 
 
         public ulong TotalBytesToTransfer { get; private set; }
         public ulong ByteTransferred { get; private set; }
         public ulong Speed { get; private set; }
-        public BackgroundOperationActionEnum Action { get; private set; }
+        [JsonIgnore]
+        public BackgroundOperationActionEnum Action => BackgroundOperationActionEnum.Download;
+        [JsonIgnore]
         public DateTime DateCompleted { get; private set; }
         public BackgroundOperationStateEnum State { get; private set; }
+        [JsonIgnore]
         public UnityDisk.FileStorages.IFileStorageFile RemoteFile { get; private set; }
         public Downloader(Windows.Storage.IStorageFile loсalFile, OneDrive.IFileStorageFile file)
         {
             RemoteFile = file;
             _loсalFile = loсalFile;
-            _pathToLocalFile = _loсalFile.Path;
             TotalBytesToTransfer = RemoteFile.Size;
             _localFileToken = StorageApplicationPermissions.FutureAccessList.Add(loсalFile);
         }
@@ -101,7 +108,8 @@ namespace UnityDisk.FileStorages.OneDrive
         {
             if (_downloadOperation != null)
             {
-                await _downloadOperation.AttachAsync();
+                _cancellationToken=new CancellationTokenSource();
+                await _downloadOperation.AttachAsync().AsTask(_cancellationToken.Token);
             }
             else
             {
@@ -133,6 +141,43 @@ namespace UnityDisk.FileStorages.OneDrive
                 newPath += "/";
 
             return newPath;
+        }
+        private Downloader() { }
+        /// <summary>
+        /// Импортирует данные из строки
+        /// </summary>
+        /// <param name="data">Данные в строковом виде</param>
+        /// <returns>Объект полученный после анализа строки</returns>
+        public static OneDrive.Downloader Parse(String data)
+        {
+            var anonymClass = new
+            {
+                This = "",
+                LocalFileToken = "",
+                ProccessId = 0,
+                PreviewDownloadBytes = (ulong)0,
+                RemoteFile = ""
+            };
+            anonymClass = JsonConvert.DeserializeAnonymousType(data, anonymClass);
+            Downloader downloader = JsonConvert.DeserializeObject<Downloader>(anonymClass.This);
+            downloader._proccessId = anonymClass.ProccessId;
+            downloader._previewDownloadBytes = anonymClass.PreviewDownloadBytes;
+            downloader._localFileToken = anonymClass.LocalFileToken;
+            downloader.RemoteFile = OneDrive.FileStorageFile.Parse(anonymClass.RemoteFile);
+            return downloader;
+        }
+
+        public override string ToString()
+        {
+            var result = new
+            {
+                This = JsonConvert.SerializeObject(this),
+                LocalFileToken = _localFileToken,
+                ProccessId = _proccessId,
+                PreviewDownloadBytes = _previewDownloadBytes,
+                RemoteFile=JsonConvert.SerializeObject(RemoteFile)
+            };
+            return JsonConvert.SerializeObject(result);
         }
     }
 }

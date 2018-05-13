@@ -26,15 +26,5 @@ namespace UnityDisk.StorageItems
         /// Контекс данных
         /// </summary>
         IFileStorageFile DataContext { get; set; }
-        /// <summary>
-        /// Импортирует данные из строки
-        /// </summary>
-        /// <param name="data">Данные в строковом виде</param>
-        void Parse(String data);
-        /// <summary>
-        /// Получение данных в строковом виде
-        /// </summary>
-        /// <returns></returns>
-        string ToString();
     }
 }

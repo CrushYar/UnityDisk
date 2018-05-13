@@ -27,13 +27,17 @@ namespace UnityDisk
             Container= new UnityContainer();
             Container.RegisterType<ISettings, RemoteSettings>(new ContainerControlledLifetimeManager(),
                 new InjectionConstructor())
+                .RegisterType<IAccountRegistry, UnityDisk.Accounts.Registry.AccountRegistry>(new ContainerControlledLifetimeManager(),
+                    new InjectionConstructor())
+                .RegisterType<IAccountSettings, UnityDisk.Settings.Accounts.AccountSettings>(new ContainerControlledLifetimeManager(),
+                    new InjectionConstructor())
+                .RegisterInstance<Settings.BackgroundOperations.IBackgroundOperationDispatcherSettings>(new UnityDisk.Settings.BackgroundOperations.BackgroundOperationDispatcherSettings(new Settings.LocalSettings()))
                 .RegisterType<IAccount, Account>(new InjectionConstructor())
                 .RegisterType<IAccountSettingsItem, AccountSettingsItem>(new InjectionConstructor())
                 .RegisterType<IFactoryRagistry, FactoryRagistry>(new InjectionConstructor())
                 .RegisterType<IGroupSettings, Settings.Groups.GroupSettings>(new InjectionConstructor())
                 .RegisterType<IStandardPreviewImagesRegistry,StandardPreviewImagesRegistry>(new ContainerControlledLifetimeManager(),new InjectionConstructor())
                 .RegisterType<IAccountProjection, AccountProjection>(new InjectionConstructor());
-            
         }
 
         public static ContainerConfiguration GetContainer()

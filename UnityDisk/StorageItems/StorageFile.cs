@@ -95,10 +95,11 @@ namespace UnityDisk.StorageItems
             return DataContext.Download(storageFile);
         }
 
-        public void Parse(string data)
-        {
-            DataContext.Parse(data);
-        }
+        //public static StorageFile Parse(string data)
+        //{
+
+        //    DataContext.Parse(data);
+        //}
 
         public override string ToString()
         {

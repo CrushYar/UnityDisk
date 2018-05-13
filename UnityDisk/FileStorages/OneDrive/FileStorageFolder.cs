@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media.Imaging;
+using Newtonsoft.Json;
+using Unity;
 using UnityDisk.Accounts;
 using UnityDisk.Accounts.Registry;
 using UnityDisk.BackgroundOperation;
@@ -29,7 +31,6 @@ namespace UnityDisk.FileStorages.OneDrive
         public string PublicUrl { get; private set; }
         public IAccountProjection Account { get; set; }
         public DateTime CreateDate { get; private set; }
-        public string DownloadUrl { get; private set; }
 
         public FileStorageFolder() { }
 
@@ -41,7 +42,6 @@ namespace UnityDisk.FileStorages.OneDrive
             PublicUrl = folderBuilder.PublicUrl;
             Account = folderBuilder.Account;
             CreateDate = folderBuilder.CreateDate;
-            DownloadUrl = folderBuilder.DownloadUrl;
             Id = folderBuilder.Id;
         }
 
@@ -231,10 +231,34 @@ namespace UnityDisk.FileStorages.OneDrive
 
             PublicUrlId = PublicUrl = null;
         }
-
-        public void Parse(string data)
+        public override string ToString()
         {
-            throw new NotImplementedException();
+            var result = new { This = JsonConvert.SerializeObject(this), Login = Account.Login };
+            return JsonConvert.SerializeObject(result);
+        }
+        /// <summary>
+        /// Импортирует данные из строки
+        /// </summary>
+        /// <param name="data">Данные в строковом виде</param>
+        /// <returns>Объект полученный после анализа строки</returns>
+        public static OneDrive.IFileStorageFolder Parse(String data)
+        {
+            var anonymClass = new { This = "", Login = "" };
+            anonymClass = JsonConvert.DeserializeAnonymousType(data, anonymClass);
+            FileStorageFolder thisClass = JsonConvert.DeserializeObject<FileStorageFolder>(anonymClass.This);
+
+            var folder = new FileStorageFolder(new FolderBuilder()
+            {
+                Name = thisClass.Name,
+                Id = thisClass.Id,
+                Path = thisClass.Path,
+                PublicUrl = thisClass.PublicUrl,
+                Type = thisClass.Type
+            });
+            IUnityContainer container = UnityDisk.ContainerConfiguration.GetContainer().Container;
+            var accountRegistry = container.Resolve<UnityDisk.Accounts.Registry.IAccountRegistry>();
+            folder.Account = accountRegistry.Find(anonymClass.Login);
+            return folder;
         }
 
         public async Task<IList<FileStorages.IFileStorageItem>> LoadDirectory()

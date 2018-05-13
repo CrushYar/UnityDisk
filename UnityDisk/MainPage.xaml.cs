@@ -42,28 +42,7 @@ namespace UnityDisk
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
-            await account.SignIn("shazhko.artem@gmail.com");
-            FileStorageFile file = new FileStorageFile(new FileBuilder()
-            {
-                Name = "David Guetta ft Justin Bieber - 2U (SING OFF vs. Olly Murs).mp4",
-                Path = "/drive/root:"
-            })
-            {
-                Account = new AccountProjection(
-                    new UnityDisk.Accounts.Account(account))
-            };
-            FileSavePicker openPicker = new FileSavePicker();
-            openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-
-            string type = file.Name.Substring(file.Name.LastIndexOf('.'));
-            openPicker.FileTypeChoices.Add(file.Name,new []{ type });
-            var localFile = await openPicker.PickSaveFileAsync();
-            var uploader = file.Download(localFile);
-            var list= await BackgroundDownloader.GetCurrentDownloadsAsync();
-            
-            uploader.Initialization(list.ToArray());
-            await uploader.Start();
+           
         }
     }
 }

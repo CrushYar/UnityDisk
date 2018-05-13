@@ -11,5 +11,7 @@ namespace UnityDisk.FileStorages
         FileStorages.IFileStorageAccount CreateAccount();
         FileStorages.IFileStorageFolder CreateFolder();
         FileStorages.IFileStorageFile CreateFile();
+        BackgroundOperation.IBackgroundOperation ParseBackgroundOperation(
+            BackgroundOperation.BackgroundOperationActionEnum action, string data);
     }
 }

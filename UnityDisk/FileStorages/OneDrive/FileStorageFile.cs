@@ -13,6 +13,8 @@ using Windows.ApplicationModel.Core;
 using Windows.Graphics.Imaging;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Imaging;
+using Newtonsoft.Json;
+using Unity;
 using UnityDisk.Accounts;
 using UnityDisk.Accounts.Registry;
 using UnityDisk.FileStorages.OneDrive.Deserialized;
@@ -21,18 +23,23 @@ using IStorageFile = Windows.Storage.IStorageFile;
 
 namespace UnityDisk.FileStorages.OneDrive
 {
+    [Serializable]
     public class FileStorageFile:OneDrive.IFileStorageFile
     {
         public string Id { get; private set; }
         public string PublicUrlId { get; private set; }
         public string Name { get; private set; }
         public string Path { get; private set; }
+        [JsonIgnore]
         public BitmapImage PreviewImage { get; set; }
         public StorageItemTypeEnum Type { get; private set; }
         public string PublicUrl { get; private set; }
+        [JsonIgnore]
         public IAccountProjection Account { get; set; }
+        [JsonIgnore]
         public DateTime CreateDate { get; private set; }
         public ulong Size { get; private set; }
+        public string DownloadUrl { get; private set; }
 
         public FileStorageFile() { }
 
@@ -47,6 +54,7 @@ namespace UnityDisk.FileStorages.OneDrive
             CreateDate = builder.CreateDate;
             Type = builder.Type;
             Size = builder.Size;
+            DownloadUrl = builder.DownloadUrl;
         }
 
         public FileStorageFile(IAccountProjection account)
@@ -283,9 +291,37 @@ namespace UnityDisk.FileStorages.OneDrive
             PublicUrlId = PublicUrl = null;
         }
 
-        public void Parse(string data)
+        /// <summary>
+        /// Импортирует данные из строки
+        /// </summary>
+        /// <param name="data">Данные в строковом виде</param>
+        /// <returns>Объект полученный после анализа строки</returns>
+        public static OneDrive.IFileStorageFile Parse(String data)
         {
-            throw new NotImplementedException();
+            var anonymClass = new { This = "", Login = "" };
+            anonymClass = JsonConvert.DeserializeAnonymousType(data, anonymClass);
+            FileStorageFile thisClass = JsonConvert.DeserializeObject<FileStorageFile>(anonymClass.This);
+
+            var file= new FileStorageFile(new FileBuilder()
+            {
+                Name = thisClass.Name,
+                DownloadUrl = thisClass.DownloadUrl,
+                Id = thisClass.Id,
+                Path = thisClass.Path,
+                PublicUrl = thisClass.PublicUrl,
+                Size = thisClass.Size,
+                Type = thisClass.Type
+            });
+            IUnityContainer container = UnityDisk.ContainerConfiguration.GetContainer().Container;
+            var accountRegistry = container.Resolve<UnityDisk.Accounts.Registry.IAccountRegistry>();
+            file.Account = accountRegistry.Find(anonymClass.Login);
+            return file;
+        }
+
+        public override string ToString()
+        {
+            var result = new {This = JsonConvert.SerializeObject(this), Login=Account.Login};
+            return JsonConvert.SerializeObject(result);
         }
 
         public BackgroundOperation.IDownloader Download(IStorageFile file)

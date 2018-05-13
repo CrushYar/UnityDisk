@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityDisk.BackgroundOperation;
 
 namespace UnityDisk.FileStorages.FactoryRagistry
 {
@@ -68,6 +69,15 @@ namespace UnityDisk.FileStorages.FactoryRagistry
             }
             UnLock();
             return !isContains;
+        }
+
+        public IBackgroundOperation ParseBackgroundOperation(BackgroundOperationActionEnum action, string data, string serverName)
+        {
+            Lock();
+            _ragistries.TryGetValue(serverName, out IFileStorageFactory factory);
+            UnLock();
+
+            return factory?.ParseBackgroundOperation(action, data);
         }
     }
 }

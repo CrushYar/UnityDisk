@@ -9,8 +9,11 @@ using Windows.Storage.Pickers;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Imaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Unity;
+using UnityDisk.Accounts;
 using UnityDisk.Accounts.Registry;
 using UnityDisk.FileStorages.OneDrive;
+using UnityDisk.StorageItems;
 
 namespace UnityDisk_Test.FileStorages.OneDrive
 {
@@ -208,6 +211,36 @@ namespace UnityDisk_Test.FileStorages.OneDrive
 
             Assert.IsTrue(String.IsNullOrEmpty(file.PublicUrl));
             Assert.IsTrue(String.IsNullOrEmpty(file.PublicUrlId));
+        }
+        [TestMethod]
+        public async Task Can_Parse()
+        {
+            var account = new UnityDisk.Accounts.Account(new UnityDisk.FileStorages.OneDrive.Account()
+            {
+                Login = "shazhko.artem@gmail.com",
+                Size = new SpaceSize() {TotalSize = 100, FreelSize = 30, UsedSize = 70},
+                Id = "idAccount",
+                Token = "accountToken",
+                Status = ConnectionStatusEnum.Connected
+            });
+            FileStorageFile file = new FileStorageFile(new FileBuilder()
+            {
+                Name = "Untitled.png",
+                Path = "/drive/root:",
+                Type = StorageItemTypeEnum.Image,
+                Size = 195544,
+                DownloadUrl = "downloadUrl",
+                Id ="idFile",
+                PublicUrl = "publicUrl"
+            })
+            {
+                Account = new AccountProjection(account)
+            };
+            string jsonData= file.ToString();
+            IUnityContainer container = UnityDisk.ContainerConfiguration.GetContainer().Container;
+            var accountRegistry = container.Resolve<UnityDisk.Accounts.Registry.IAccountRegistry>();
+            accountRegistry.Registry(account);
+            var result = FileStorageFile.Parse(jsonData);
         }
     }
 }

@@ -36,5 +36,14 @@ namespace UnityDisk.FileStorages.FactoryRagistry
         /// <param name="serverName">Имя сервера</param>
         /// <returns></returns>
         IFileStorageFile CreateFile(string serverName);
+        /// <summary>
+        /// Получение объекта управления фоновой операцией скачивания/загрузки из данных строкового типа
+        /// </summary>
+        /// <param name="action">Тип действия</param>
+        /// <param name="data">Данные в строковом виду</param>
+        /// <param name="serverName">Имя сервера</param>
+        /// <returns>Объекта управления фоновой операцией </returns>
+        BackgroundOperation.IBackgroundOperation ParseBackgroundOperation(
+            BackgroundOperation.BackgroundOperationActionEnum action, string data,string serverName);
     }
 }
