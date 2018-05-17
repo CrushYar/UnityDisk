@@ -24,6 +24,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Imaging;
 using UnityDisk.Accounts.Registry;
 using UnityDisk.FileStorages.OneDrive;
+using UnityDisk.View;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -40,9 +41,9 @@ namespace UnityDisk
             this.InitializeComponent();
         }
 
-        private async void MainPage_Loaded(object sender, RoutedEventArgs e)
+        private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-           
+            content_frame.Navigate(typeof(AccountManagerView));
         }
     }
 }

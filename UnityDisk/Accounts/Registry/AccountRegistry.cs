@@ -97,7 +97,7 @@ namespace UnityDisk.Accounts.Registry
                 SpaceSize oldSize = _size;
                 _size.TotalSize += account.Size.TotalSize;
                 _size.UsedSize += account.Size.UsedSize;
-                _size.FreelSize += account.Size.FreelSize;
+                _size.FreeSize += account.Size.FreeSize;
                 SaveSettings();
                 OnChangedSizeEvent(oldSize,account);
                 OnChangedRegistryEvent(account, RegistryActionEnum.Added);
@@ -124,7 +124,7 @@ namespace UnityDisk.Accounts.Registry
                 SpaceSize oldSize = Size;
                 _size.TotalSize -= accountForRemoved.Size.TotalSize;
                 _size.UsedSize -= accountForRemoved.Size.UsedSize;
-                _size.FreelSize -= accountForRemoved.Size.FreelSize;
+                _size.FreeSize -= accountForRemoved.Size.FreeSize;
                 SaveSettings();
                 OnChangedSizeEvent(oldSize, accountForRemoved);
                 OnChangedRegistryEvent(accountForRemoved, RegistryActionEnum.Removed);
@@ -148,7 +148,7 @@ namespace UnityDisk.Accounts.Registry
 
             _size.TotalSize = 0;
             _size.UsedSize = 0;
-            _size.FreelSize = 0;
+            _size.FreeSize = 0;
 
             Lock();
             
@@ -163,7 +163,7 @@ namespace UnityDisk.Accounts.Registry
                     _accounts.Add(settingsItem.Login, account);
                     _size.TotalSize += account.Size.TotalSize;
                     _size.UsedSize += account.Size.UsedSize;
-                    _size.FreelSize += account.Size.FreelSize;
+                    _size.FreeSize += account.Size.FreeSize;
                 }
             }
             UnLock();

@@ -47,7 +47,7 @@ namespace UnityDisk.FileStorages.OneDrive
                 Size=new SpaceSize();
                 Size.TotalSize = deserializedAccount.Quota.Total;
                 Size.UsedSize = deserializedAccount.Quota.Used;
-                Size.FreelSize = deserializedAccount.Quota.Remaining;
+                Size.FreeSize = deserializedAccount.Quota.Remaining;
             }
 
             Status = ConnectionStatusEnum.Connected;
@@ -67,7 +67,7 @@ namespace UnityDisk.FileStorages.OneDrive
                 Size = new SpaceSize();
                 Size.TotalSize = deserializedAccount.Quota.Total;
                 Size.UsedSize = deserializedAccount.Quota.Used;
-                Size.FreelSize = deserializedAccount.Quota.Remaining;
+                Size.FreeSize = deserializedAccount.Quota.Remaining;
             }
             Status = ConnectionStatusEnum.Connected;
         }

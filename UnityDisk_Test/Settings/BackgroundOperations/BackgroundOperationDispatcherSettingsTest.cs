@@ -51,7 +51,7 @@ namespace UnityDisk_Test.Settings.BackgroundOperations
             backgroundOperations.Add(mock2.Object);
 
              _dispatcherSettings.SaveOperations(_parameterName, backgroundOperations);
-            _mockService.Verify(settings => settings.SetValueAsString(_parameterName, "[{\"Action\":0,\"ServerName\":\"OneDrive\",\"State\":\"generatedProxy_4\"},{\"Action\":1,\"ServerName\":\"OneDrive\",\"State\":\"generatedProxy_4\"}]"),Occurred.Once());
+            _mockService.Verify(settings => settings.SetValueAsString(_parameterName, "[{\"Action\":0,\"ServerName\":\"OneDrive\",\"State\":\"generatedProxy_5\"},{\"Action\":1,\"ServerName\":\"OneDrive\",\"State\":\"generatedProxy_5\"}]"),Occurred.Once());
         }
         [TestMethod]
         public void Can_LoadOperations()

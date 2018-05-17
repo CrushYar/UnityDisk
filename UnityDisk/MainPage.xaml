@@ -2,12 +2,137 @@
     x:Class="UnityDisk.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:UnityDisk"
+    xmlns:controls="using:UnityDisk.View.Themes"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    </Page.Resources>
 
+    <Grid>
+        <Grid.Background>
+            <ImageBrush Stretch="UniformToFill" ImageSource="Assets/background_image.png"/>
+        </Grid.Background>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2.6*" MinWidth="350" MaxWidth="400"/>
+                <ColumnDefinition Width="8.3*"/>
+            </Grid.ColumnDefinitions>
+            <!--#region  LEFT MENU-->
+            <Grid Grid.Column="0"  BorderThickness="0,0,0.5,0" BorderBrush="#7F000000">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="150"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!--#region Информация о польователе-->
+                <Grid Background="#66FFFFFF">
+                    <Grid Margin="10" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="105" MinWidth="105"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Ellipse Grid.Column="0" Margin="10,5" VerticalAlignment="Top" HorizontalAlignment="Right" Height="85" Width="85" Stroke="#FF0089EA" StrokeThickness="2">
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="Assets\menedzher-prestizhnaya-li-eto-professiya-1-1024x531.jpg" Stretch="UniformToFill"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+
+
+                        <StackPanel Grid.Row="0" Grid.Column="1">
+                            <TextBlock FontSize="24" Margin="0,10,0,-2" FontWeight="Medium" >Vladimir Karzanov</TextBlock>
+                            <TextBlock FontSize="20" Margin="0,0,0,10" Foreground="#FF0089EA">6 storages</TextBlock>
+                            <controls:ProgressBarExt Grid.Row="0" PprogressBarIndicatorHeight="7" HeaderBackground="#FF0089EA" Value="50" Maximum="100" Foreground="#FF0089EA" Background="#7F303030">
+                                <controls:ProgressBarExt.Header>
+                                    <ContentControl>
+                                        <Border>
+                                            <TextBlock Margin="5,0" Foreground="White" Text="64 GB left" FontSize="14"></TextBlock>
+                                        </Border>
+                                    </ContentControl>
+                                </controls:ProgressBarExt.Header>
+                            </controls:ProgressBarExt>
+                            <TextBlock FontSize="14" Foreground="#FF2F2F2F">334 GB in total</TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+                <!--#endregion-->
+
+                <!--#region Элементы меню-->
+                <StackPanel Grid.Row="1" Background="#7FDADADA">
+                    <controls:RadioButtonExt HorizontalContentAlignment="Stretch" GroupName="Menu" Height="55">
+                        <controls:RadioButtonExt.Header>
+                            <ContentControl VerticalContentAlignment="Stretch">
+                                <Image Margin="65,3,30,0" Width="20"  Source="Assets/Left_panel_menu/Black/cloud50x50.png"/>
+                            </ContentControl>
+                        </controls:RadioButtonExt.Header>
+                        <controls:RadioButtonExt.HeaderChecked>
+                            <ContentControl VerticalContentAlignment="Stretch">
+                                <Image Margin="65,3,30,0" Width="20"  Source="Assets/Left_panel_menu/White/cloud50x50.png"/>
+                            </ContentControl>
+                        </controls:RadioButtonExt.HeaderChecked>
+                        <TextBlock FontSize="20" VerticalAlignment="Center">Account Manager</TextBlock>
+                    </controls:RadioButtonExt>
+                    <controls:RadioButtonExt HorizontalContentAlignment="Stretch" GroupName="Menu" Height="55">
+                        <controls:RadioButtonExt.Header>
+                            <ContentControl VerticalContentAlignment="Stretch">
+                                <Image Margin="65,3,30,0" Width="20"  Source="Assets/Left_panel_menu/Black/groups50x50.png"/>
+                            </ContentControl>
+                        </controls:RadioButtonExt.Header>
+                        <controls:RadioButtonExt.HeaderChecked>
+                            <ContentControl VerticalContentAlignment="Stretch">
+                                <Image Margin="65,3,30,0" Width="20"  Source="Assets/Left_panel_menu/White/groups50x50.png"/>
+                            </ContentControl>
+                        </controls:RadioButtonExt.HeaderChecked>
+                        <TextBlock FontSize="20" VerticalAlignment="Center">Groups</TextBlock>
+                    </controls:RadioButtonExt>
+                    <controls:RadioButtonExt HorizontalContentAlignment="Stretch" GroupName="Menu" Height="55">
+                        <controls:RadioButtonExt.Header>
+                            <ContentControl VerticalContentAlignment="Stretch">
+                                <Image Margin="65,3,30,0" Width="20"  Source="Assets/Left_panel_menu/Black/files50x50.png"/>
+                            </ContentControl>
+                        </controls:RadioButtonExt.Header>
+                        <controls:RadioButtonExt.HeaderChecked>
+                            <ContentControl VerticalContentAlignment="Stretch">
+                                <Image Margin="65,3,30,0" Width="20"  Source="Assets/Left_panel_menu/White/files50x50.png"/>
+                            </ContentControl>
+                        </controls:RadioButtonExt.HeaderChecked>
+                        <TextBlock FontSize="20" VerticalAlignment="Center">Files</TextBlock>
+                    </controls:RadioButtonExt>
+                    <controls:RadioButtonExt HorizontalContentAlignment="Stretch" GroupName="Menu" Height="55">
+                        <controls:RadioButtonExt.Header>
+                            <ContentControl VerticalContentAlignment="Stretch">
+                                <Image Margin="65,3,30,0" Width="20"  Source="Assets/Left_panel_menu/Black/download50x50.png"/>
+                            </ContentControl>
+                        </controls:RadioButtonExt.Header>
+                        <controls:RadioButtonExt.HeaderChecked>
+                            <ContentControl VerticalContentAlignment="Stretch">
+                                <Image Margin="65,3,30,0" Width="20"  Source="Assets/Left_panel_menu/White/download50x50.png"/>
+                            </ContentControl>
+                        </controls:RadioButtonExt.HeaderChecked>
+                        <TextBlock FontSize="20" VerticalAlignment="Center">Downloads</TextBlock>
+                    </controls:RadioButtonExt>
+                    <controls:RadioButtonExt HorizontalContentAlignment="Stretch" GroupName="Menu" Height="55">
+                        <controls:RadioButtonExt.Header>
+                            <ContentControl VerticalContentAlignment="Stretch">
+                                <Image Margin="65,3,30,0" Width="20"  Source="Assets/Left_panel_menu/Black/settings50x50.png"/>
+                            </ContentControl>
+                        </controls:RadioButtonExt.Header>
+                        <controls:RadioButtonExt.HeaderChecked>
+                            <ContentControl VerticalContentAlignment="Stretch">
+                                <Image Margin="65,3,30,0" Width="20"  Source="Assets/Left_panel_menu/White/settings50x50.png"/>
+                            </ContentControl>
+                        </controls:RadioButtonExt.HeaderChecked>
+                        <TextBlock FontSize="20" VerticalAlignment="Center">Settings</TextBlock>
+                    </controls:RadioButtonExt>
+                </StackPanel>
+                <!--#endregion-->
+            </Grid>
+            <!--#endregion-->
+
+            <Frame Name="content_frame" Grid.Column="1"></Frame>
+        </Grid>
     </Grid>
 </Page>

@@ -34,7 +34,7 @@ namespace UnityDisk_Test.Accounts
             string expectedLogin = "test@gmail.com";
             DateTime expectedCreaDate = new DateTime(2018, 4, 22, 2, 7, 0);
             string expectedServerName = "OneDrive";
-            SpaceSize expectedSize = new SpaceSize() { TotalSize = 1000, FreelSize = 300, UsedSize = 700 };
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 1000, FreeSize = 300, UsedSize = 700 };
             ConnectionStatusEnum expectedStatus = ConnectionStatusEnum.Connected;
 
             _mockService.SetupGet(account => account.Token).Returns(expectedToken);
@@ -89,7 +89,7 @@ namespace UnityDisk_Test.Accounts
             string expectedLogin = "test@gmail.com";
             DateTime expectedCreaDate = new DateTime(2018, 4, 22, 2, 7, 0);
             string expectedServerName = "OneDrive";
-            SpaceSize expectedSize = new SpaceSize() { TotalSize = 1000, FreelSize = 300, UsedSize = 700 };
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 1000, FreeSize = 300, UsedSize = 700 };
             List<string> expectedGroups=new List<string>(){"Group1","Group2"};
 
             ConnectionStatusEnum expectedStatus = ConnectionStatusEnum.Connected;

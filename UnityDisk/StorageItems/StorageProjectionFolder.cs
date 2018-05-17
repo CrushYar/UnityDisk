@@ -141,7 +141,7 @@ namespace UnityDisk.StorageItems
         {
             BasicProperties basicProperties=await storageFile.GetBasicPropertiesAsync().AsTask();
             var folders = from f1 in Folders
-                where f1.Account.Size.FreelSize > basicProperties.Size
+                where f1.Account.Size.FreeSize > basicProperties.Size
                 select f1;
             IStorageFolder folder= folders.First();
             if(folder==null)

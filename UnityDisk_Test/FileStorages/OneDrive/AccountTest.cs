@@ -30,7 +30,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.IsNotNull(account.Size);
             Assert.IsTrue(account.Size.TotalSize > 0);
             Assert.IsTrue(account.Size.UsedSize > 0);
-            Assert.IsTrue(account.Size.FreelSize > 0);
+            Assert.IsTrue(account.Size.FreeSize > 0);
             Assert.IsNotNull(account.Login);
             Assert.IsNotNull(account.Id);
             Assert.IsNotNull(account.Token);
@@ -47,7 +47,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.IsNotNull(account.Size);
             Assert.IsTrue(account.Size.TotalSize > 0);
             Assert.IsTrue(account.Size.UsedSize > 0);
-            Assert.IsTrue(account.Size.FreelSize > 0);
+            Assert.IsTrue(account.Size.FreeSize > 0);
             Assert.AreEqual(account.Status, ConnectionStatusEnum.Connected);
         }
     }

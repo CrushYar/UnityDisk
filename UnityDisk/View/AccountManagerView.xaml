@@ -1,0 +1,288 @@
+﻿<Page
+    x:Class="UnityDisk.View.AccountManagerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UnityDisk.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:m="using:WinRTMultibinding.Foundation.Data"
+    xmlns:toolkit="using:WinRTXamlToolkit.Controls"
+     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <local:GroupNameListConverter x:Key="GroupNameListConverter"></local:GroupNameListConverter>
+        <local:IconServerConverter x:Key="IconServerConverter"></local:IconServerConverter>
+
+        <SolidColorBrush x:Key="ListBoxItem_ManagerAccount_PointerOver" Color="#19575757"></SolidColorBrush>
+        <Style x:Key="ListBoxItem_ManagerAccount_Style" TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="TabNavigation" Value="Local"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Grid x:Name="LayoutRoot" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <Grid.Resources>
+                                <Style x:Key="BaseContentPresenterStyle" TargetType="ContentPresenter">
+                                    <Setter Property="FontFamily" Value="XamlAutoFontFamily"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="FontSize" Value="15"/>
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                    <Setter Property="LineStackingStrategy" Value="MaxHeight"/>
+                                    <Setter Property="TextLineBounds" Value="Full"/>
+                                    <Setter Property="OpticalMarginAlignment" Value="TrimSideBearings"/>
+                                </Style>
+                                <Style x:Key="BodyContentPresenterStyle" BasedOn="{StaticResource BaseContentPresenterStyle}" TargetType="ContentPresenter">
+                                    <Setter Property="FontWeight" Value="Normal"/>
+                                    <Setter Property="FontSize" Value="15"/>
+                                </Style>
+                            </Grid.Resources>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ListBoxItem_ManagerAccount_PointerOver}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ListBoxItem_ManagerAccount_PointerOver}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Selected">
+
+                                    </VisualState>
+                                    <VisualState x:Name="SelectedUnfocused">
+
+                                    </VisualState>
+                                    <VisualState x:Name="SelectedPointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ListBoxItem_ManagerAccount_PointerOver}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="SelectedPressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ListBoxItem_ManagerAccount_PointerOver}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Rectangle x:Name="PressedBackground"/>
+                            <ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Style="{StaticResource BodyContentPresenterStyle}" TextWrapping="NoWrap" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="FlyoutPresenter_managerAccountStyle" TargetType="FlyoutPresenter">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="MinWidth" Value="{ThemeResource FlyoutThemeMinWidth}"/>
+            <Setter Property="MaxWidth" Value="{ThemeResource FlyoutThemeMaxWidth}"/>
+            <Setter Property="MinHeight" Value="{ThemeResource FlyoutThemeMinHeight}"/>
+            <Setter Property="MaxHeight" Value="{ThemeResource FlyoutThemeMaxHeight}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="FlyoutPresenter">
+                        <ScrollViewer x:Name="ScrollViewer" AutomationProperties.AccessibilityView="Raw" HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}">
+                                    <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                </ScrollViewer>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Image x:Key="AddIcon" Source="ms-appx:///Assets/manager_accounts/add200x200.png"></Image>
+        <Image x:Key="OneDriveIcon" Source="ms-appx:///Assets/manager_accounts/oneDrive200x200.png"></Image>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush Stretch="UniformToFill" ImageSource="ms-appx:///Assets/background_image.png"/>
+        </Grid.Background>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0,1" SpreadMethod="Reflect">
+                        <GradientStop Color="#CC959191" Offset="0"/>
+                        <GradientStop Color="#E5C9C9C9" Offset="1"/>
+                        <GradientStop Color="#E5C9C9C9" Offset="0.009"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" >
+                    <AppBarButton Icon="ViewAll" RequestedTheme="Light" IsCompact="True"/>
+                    <AppBarButton Icon="Sort"  RequestedTheme="Light" IsCompact="True"></AppBarButton>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0,1" SpreadMethod="Reflect">
+                        <GradientStop Color="#CC959191" Offset="0"/>
+                        <GradientStop Color="#CCDFDFDF" Offset="1"/>
+                        <GradientStop Color="#E5DFDFDF" Offset="0.009"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+
+                <ListBox  Margin="10" Background="Transparent">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <toolkit:WrapPanel Orientation="Horizontal"></toolkit:WrapPanel>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+
+                    <ListBoxItem Margin="10" BorderThickness="0" Height="200" Width="350" Background="#7F7AB8F1" Style="{StaticResource ListBoxItem_ManagerAccount_Style}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Image Grid.ColumnSpan="3" Grid.RowSpan="2" Source="{Binding Path=ServerName,Converter={StaticResource IconServerConverter}, TargetNullValue=+}"></Image>
+                            <Grid Grid.Row="1" Visibility="Collapsed">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Margin="5,0" Grid.Column="0" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left">shazhko.artem@gmail.com</TextBlock>
+                                <Button Grid.Column="1" Padding="0" Height="40" Width="40"  BorderThickness="0" Background="Transparent">
+                                    <Button.Flyout>
+                                        <Flyout FlyoutPresenterStyle="{StaticResource FlyoutPresenter_managerAccountStyle}">
+                                            <StackPanel Width="250" Padding="10" Background="#CC000000">
+                                                <TextBlock Foreground="White" FontWeight="Medium" >shazhko.artem@gmail.com</TextBlock>
+                                                <Grid Margin="0,10">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock Grid.Row="0" Foreground="White">20 GB/50 GB</TextBlock>
+                                                    <ProgressBar Grid.Row="1" Value="60" Height="20" BorderBrush="White" BorderThickness="1"/>
+                                                    <TextBlock Grid.Row="1" Foreground="White" HorizontalAlignment="Center">60%</TextBlock>
+                                                </Grid>
+
+                                                <TextBlock Foreground="White" Text="Groups:"></TextBlock>
+                                                <TextBlock Foreground="White" TextWrapping="WrapWholeWords" Text="{Binding Path=Groups,Converter={StaticResource GroupNameListConverter}}"></TextBlock>
+
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Margin="0,10" Foreground="White">From 16.01.18</TextBlock>
+                                                    <TextBlock Grid.Column="1" Margin="0,10" Foreground="White">16:32</TextBlock>
+
+                                                </Grid>
+
+                                            </StackPanel>
+                                        </Flyout>
+                                    </Button.Flyout>
+                                    <TextBlock FontSize="29" FontWeight="Medium" Foreground="White">i</TextBlock>
+                                </Button>
+                                <Button Grid.Column="12" Padding="0" Height="40" Width="40" Foreground="White" BorderThickness="0" Background="Transparent">
+                                    <Image Source="ms-appx:///Assets/manager_accounts/delete25x25.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center" ></Image>
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </ListBoxItem>
+
+ 
+                    <ListBoxItem Margin="10" BorderThickness="0" Height="200" Width="350" Background="#B20050FB" Style="{StaticResource ListBoxItem_ManagerAccount_Style}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Image Grid.ColumnSpan="3" Grid.RowSpan="2" Source="{Binding Path=ServerName, Converter={StaticResource IconServerConverter}, TargetNullValue=+}"/>
+                            <Grid Grid.Row="1" Visibility="Visible">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Margin="5,0" Grid.Column="0" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left">shazhko.artem@gmail.com</TextBlock>
+                                <Button Grid.Column="1" Padding="0" Height="40" Width="40"  BorderThickness="0" Background="Transparent">
+                                    <Button.Flyout>
+                                        <Flyout FlyoutPresenterStyle="{StaticResource FlyoutPresenter_managerAccountStyle}">
+                                            <StackPanel Width="250" Padding="10" Background="#CC000000">
+                                                <TextBlock Foreground="White" FontWeight="Medium" >shazhko.artem@gmail.com</TextBlock>
+                                                <Grid Margin="0,10">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock Grid.Row="0" Foreground="White">20 GB/50 GB</TextBlock>
+                                                    <ProgressBar Grid.Row="1" Value="60" Height="20" BorderBrush="White" BorderThickness="1"/>
+                                                    <TextBlock Grid.Row="1" Foreground="White" HorizontalAlignment="Center">60%</TextBlock>
+                                                </Grid>
+
+                                                <TextBlock Foreground="White" Text="Groups:"></TextBlock>
+                                                <TextBlock Foreground="White" TextWrapping="WrapWholeWords" Text="{Binding Path=Groups,Converter={StaticResource GroupNameListConverter}}"></TextBlock>
+
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Margin="0,10" Foreground="White">From 16.01.18</TextBlock>
+                                                    <TextBlock Grid.Column="1" Margin="0,10" Foreground="White">16:32</TextBlock>
+
+                                                </Grid>
+
+                                            </StackPanel>
+                                        </Flyout>
+                                    </Button.Flyout>
+                                    <TextBlock FontSize="29" FontWeight="Medium" Foreground="White">i</TextBlock>
+                                </Button>
+                                <Button Grid.Column="12" Padding="0" Height="40" Width="40" Foreground="White" BorderThickness="0" Background="Transparent">
+                                    <Image Source="ms-appx:///Assets/manager_accounts/delete25x25.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center" ></Image>
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </ListBoxItem>
+               </ListBox>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

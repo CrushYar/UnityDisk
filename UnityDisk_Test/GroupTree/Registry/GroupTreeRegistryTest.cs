@@ -54,7 +54,7 @@ namespace UnityDisk_Test.GroupTree.Registry
                 }
             };
 
-            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 30, UsedSize = 70 };
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreeSize = 30, UsedSize = 70 };
 
             var expectedContainer = new ContainerProjection(new Container()
             {
@@ -100,7 +100,7 @@ namespace UnityDisk_Test.GroupTree.Registry
         {
             GroupSettingsContainer groupSettingsStub = null;
 
-            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 30, UsedSize = 70 };
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreeSize = 30, UsedSize = 70 };
 
             var forAdd = new Container()
             {
@@ -160,7 +160,7 @@ namespace UnityDisk_Test.GroupTree.Registry
                     new GroupSettingsGroup() {Name = "Group", Items = new List<string>() {"Account1"}}
                 }
             };
-            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 30, UsedSize = 70 };
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreeSize = 30, UsedSize = 70 };
 
             var expectedContainer = new ContainerProjection(new Container()
             {
@@ -221,7 +221,7 @@ namespace UnityDisk_Test.GroupTree.Registry
                     new GroupSettingsGroup() {Name = "Group", Items = new List<string>() {"Account1"}}
                 }
             };
-            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 30, UsedSize = 70 };
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreeSize = 30, UsedSize = 70 };
 
             var expectedContainer = new ContainerProjection(new Container()
             {
@@ -283,7 +283,7 @@ namespace UnityDisk_Test.GroupTree.Registry
                     new GroupSettingsGroup() {Name = "Group", Items = new List<string>() {"Account1"}}
                 }
             };
-            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 80, UsedSize = 20 };
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreeSize = 80, UsedSize = 20 };
 
             var expectedContainer = new ContainerProjection(new Container()
             {
@@ -346,7 +346,7 @@ namespace UnityDisk_Test.GroupTree.Registry
                     new GroupSettingsGroup() {Name = "Group", Items = new List<string>() {"Account1"}}
                 }
             };
-            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 80, UsedSize = 20 };
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreeSize = 80, UsedSize = 20 };
 
             var expectedContainer = new ContainerProjection(new Container()
             {
@@ -409,7 +409,7 @@ namespace UnityDisk_Test.GroupTree.Registry
                     new GroupSettingsGroup() {Name = "Group", Items = new List<string>() {"Account1"}}
                 }
             };
-            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 80, UsedSize = 20 };
+            SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreeSize = 80, UsedSize = 20 };
 
             var expectedContainer = new ContainerProjection(new Container()
             {

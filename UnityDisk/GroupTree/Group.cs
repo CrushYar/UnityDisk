@@ -43,13 +43,13 @@ namespace UnityDisk.GroupTree
             if (Size == null)
                 Size = new SpaceSize();
             else
-                Size.TotalSize = Size.UsedSize = Size.FreelSize = 0;
+                Size.TotalSize = Size.UsedSize = Size.FreeSize = 0;
 
             foreach (var item in Items)
             {
                 Size.TotalSize += item.Size.TotalSize;
                 Size.UsedSize += item.Size.UsedSize;
-                Size.FreelSize += item.Size.FreelSize;
+                Size.FreeSize += item.Size.FreeSize;
             }
         }
 

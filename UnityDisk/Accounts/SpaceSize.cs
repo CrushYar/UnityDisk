@@ -16,7 +16,7 @@ namespace UnityDisk.Accounts
         {
             this.TotalSize = size.TotalSize;
             this.UsedSize = size.UsedSize;
-            this.FreelSize = size.FreelSize;
+            this.FreeSize = size.FreeSize;
         }
 
         public SpaceSize()
@@ -34,7 +34,7 @@ namespace UnityDisk.Accounts
         /// <summary>
         /// Свободный размер
         /// </summary>
-        public ulong FreelSize { get; set; }
+        public ulong FreeSize { get; set; }
 
         /// <summary>
         /// Прибавляет переданное значение к текущему 
@@ -44,7 +44,7 @@ namespace UnityDisk.Accounts
         {
             TotalSize += size.TotalSize;
             UsedSize += size.UsedSize;
-            FreelSize += size.FreelSize;
+            FreeSize += size.FreeSize;
         }
         /// <summary>
         /// Вычитает переданное значение к текущему
@@ -54,22 +54,22 @@ namespace UnityDisk.Accounts
         {
             TotalSize -= size.TotalSize;
             UsedSize -= size.UsedSize;
-            FreelSize -= size.FreelSize;
+            FreeSize -= size.FreeSize;
         }
         public override Boolean Equals(Object o)
         {
             SpaceSize other = o as SpaceSize;
             if (other == null) return false;
-            return other.FreelSize == FreelSize && other.TotalSize == TotalSize && other.UsedSize == UsedSize;
+            return other.FreeSize == FreeSize && other.TotalSize == TotalSize && other.UsedSize == UsedSize;
         }
         public Boolean Equals(SpaceSize other)
         {
-            return other.FreelSize == FreelSize && other.TotalSize == TotalSize && other.UsedSize == UsedSize;
+            return other.FreeSize == FreeSize && other.TotalSize == TotalSize && other.UsedSize == UsedSize;
         }
 
         public override int GetHashCode()
         {
-           return Tuple.Create(TotalSize, UsedSize, FreelSize).GetHashCode();
+           return Tuple.Create(TotalSize, UsedSize, FreeSize).GetHashCode();
         }
     }
 }

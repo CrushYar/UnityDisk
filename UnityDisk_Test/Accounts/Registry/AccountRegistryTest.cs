@@ -30,7 +30,7 @@ namespace UnityDisk_Test.Accounts.Registry
         string expectedLogin = "login1",
             expectedServerName = "pCloud",
             expectedToken = "123456987";
-        SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreelSize = 70, UsedSize = 30 };
+        SpaceSize expectedSize = new SpaceSize() { TotalSize = 100, FreeSize = 70, UsedSize = 30 };
 
         [TestInitialize]
         public void BeforeEachTest()

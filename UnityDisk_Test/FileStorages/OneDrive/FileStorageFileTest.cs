@@ -218,7 +218,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             var account = new UnityDisk.Accounts.Account(new UnityDisk.FileStorages.OneDrive.Account()
             {
                 Login = "shazhko.artem@gmail.com",
-                Size = new SpaceSize() {TotalSize = 100, FreelSize = 30, UsedSize = 70},
+                Size = new SpaceSize() {TotalSize = 100, FreeSize = 30, UsedSize = 70},
                 Id = "idAccount",
                 Token = "accountToken",
                 Status = ConnectionStatusEnum.Connected
