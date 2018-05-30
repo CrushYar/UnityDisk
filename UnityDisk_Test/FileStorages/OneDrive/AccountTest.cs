@@ -23,7 +23,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
         }
 
         [TestMethod]
-        public async Task Can_SignIn()
+        public async Task SignIn_RequestForSingIn_GetAccountInfo()
         {
             Account account = new Account();
             await account.SignIn(_login);
@@ -38,7 +38,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
         }
 
         [TestMethod]
-        public async Task Can_Update()
+        public async Task Update_RequestForUpdate_GetNewAccountInfo()
         {
             Account account = new Account();
             await account.SignIn(_login);

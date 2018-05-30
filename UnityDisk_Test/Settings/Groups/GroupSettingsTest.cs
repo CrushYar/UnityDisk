@@ -25,7 +25,7 @@ namespace UnityDisk_Test.Settings.Groups
             _parameterName = "GroupTreeSettings";
         }
         [TestMethod]
-        public void Can_LoadGroupTree()
+        public void SaveGroupTree_RequestForSave_Save()
         {
             string expected = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<GroupSettingsContainer xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <IsActive>false</IsActive>\r\n  <Items>\r\n    <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n      <Name>Container1</Name>\r\n      <IsActive>true</IsActive>\r\n      <Items>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsContainer\">\r\n          <Name>Container2</Name>\r\n          <IsActive>false</IsActive>\r\n        </GroupSettingsItem>\r\n        <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n          <Name>Group2</Name>\r\n        </GroupSettingsItem>\r\n      </Items>\r\n    </GroupSettingsItem>\r\n    <GroupSettingsItem xsi:type=\"GroupSettingsGroup\">\r\n      <Name>Group</Name>\r\n      <Items>\r\n        <string>Account1</string>\r\n      </Items>\r\n    </GroupSettingsItem>\r\n  </Items>\r\n</GroupSettingsContainer>";
             var forSave = new GroupSettingsContainer()
@@ -51,7 +51,7 @@ namespace UnityDisk_Test.Settings.Groups
             _mockService.Verify(settings => settings.SetValueAsString(_parameterName, expected), Occurred.Once());
         }
         [TestMethod]
-        public void Can_SaveGroupTree()
+        public void LoadGroupTree_RequestForLoadGroup_LoadGroupTree()
         {
             GroupSettings _settings = new GroupSettings(_mockService.Object, _parameterName, null);
 
@@ -81,7 +81,7 @@ namespace UnityDisk_Test.Settings.Groups
             Assert.AreEqual(expected, actuality);
         }
         [TestMethod]
-        public void Can_AddGroup()
+        public void Add_RequestForAddGroup_AddNewGroup()
         {
             GroupSettings _settings = new GroupSettings(_mockService.Object, _parameterName, null);
             string expectedStringForSave =
@@ -99,7 +99,7 @@ namespace UnityDisk_Test.Settings.Groups
             Assert.IsNotNull(actuality.Items);
         }
         [TestMethod]
-        public void Can_AddContainer()
+        public void Add_RequestForAddContainer_AddNewContainer()
         {
             GroupSettings _settings = new GroupSettings(_mockService.Object, _parameterName, null);
             string expectedStringForSave =
@@ -136,7 +136,7 @@ namespace UnityDisk_Test.Settings.Groups
             Assert.IsNotNull(actuality.Items);
         }
         [TestMethod]
-        public void Can_Delete()
+        public void Delete_RequestForDeleteItem_DeleteItem()
         {
             GroupSettings _settings = new GroupSettings(_mockService.Object, _parameterName, null);
             string stubSettings =
@@ -152,7 +152,7 @@ namespace UnityDisk_Test.Settings.Groups
                 Occurred.Once());
         }
         [TestMethod]
-        public void Can_Rename()
+        public void Rename_RequestForRename_SetNewNameOfItem()
         {
             GroupSettings _settings = new GroupSettings(_mockService.Object, _parameterName, null);
             string stubSettings =
@@ -168,7 +168,7 @@ namespace UnityDisk_Test.Settings.Groups
                 Occurred.Once());
         }
         [TestMethod]
-        public void Can_Move()
+        public void Move_RequestForMobe_SetNewPossInGroupTreeSettings()
         {
             GroupSettings _settings = new GroupSettings(_mockService.Object, _parameterName, null);
             string stubSettings =
@@ -185,7 +185,7 @@ namespace UnityDisk_Test.Settings.Groups
                 Occurred.Once());
         }
         [TestMethod]
-        public void Can_Copy()
+        public void Copy_RequestForCopy_CopyItemByPathToOtherPath()
         {
             GroupSettings _settings = new GroupSettings(_mockService.Object, _parameterName, null);
             string stubSettings =
@@ -202,7 +202,7 @@ namespace UnityDisk_Test.Settings.Groups
                 Occurred.Once());
         }
         [TestMethod]
-        public void Can_SetActive()
+        public void SetActive_RequestForSetActive_SetActiveState()
         {
             GroupSettings _settings = new GroupSettings(_mockService.Object, _parameterName, null);
             string stubSettings =

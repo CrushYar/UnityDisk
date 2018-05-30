@@ -26,7 +26,7 @@ namespace UnityDisk_Test.Settings.Accounts
         }
 
         [TestMethod]
-        public void Can_SaveAccounts()
+        public void SaveAccounts_RequestForSaveAccount_SaveAccount()
         {
             string expected =
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<ArrayOfAccountSettingsItem xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <AccountSettingsItem>\r\n    <Login>myLogin</Login>\r\n    <Token>123</Token>\r\n    <ServerName>Yandex</ServerName>\r\n  </AccountSettingsItem>\r\n</ArrayOfAccountSettingsItem>";
@@ -37,7 +37,7 @@ namespace UnityDisk_Test.Settings.Accounts
             _mockService.Verify(settings => settings.SetValueAsString(_parameterName, expected), Occurred.Once());
         }
         [TestMethod]
-        public void Can_LoadAccounts()
+        public void LoadAccounts_RequestForLoadAccount_LoadAccount()
         {
             _mockService = Mock.Create<ISettings>();
             _parameterName = "accountSettings";

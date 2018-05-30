@@ -196,11 +196,13 @@
     <Compile Include="StorageItems\StorageFile.cs" />
     <Compile Include="StorageItems\StorageFolder.cs" />
     <Compile Include="StorageItems\StorageProjectionFolder.cs" />
-    <Compile Include="ViewModel\AccountManagerViewModel.cs" />
-    <Compile Include="View\AccountManagerView.xaml.cs">
+    <Compile Include="ViewModel\Accounts\AccountManagerViewModel.cs" />
+    <Compile Include="ViewModel\Accounts\AccountProjectionViewModel.cs" />
+    <Compile Include="View\AccountsManager\AccountManagerView.xaml.cs">
       <DependentUpon>AccountManagerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\AccountManagerViewConverter.cs" />
+    <Compile Include="View\AccountsManager\AccountManagerViewConverter.cs" />
+    <Compile Include="View\AccountsManager\Commands\AddNewAccountCommand.cs" />
     <Compile Include="View\Themes\ProgressBarExt.xaml.cs" />
     <Compile Include="View\Themes\RadioButtonExt.xaml.cs" />
   </ItemGroup>
@@ -222,9 +224,11 @@
     <Content Include="Assets\Left_panel_menu\White\files50x50.png" />
     <Content Include="Assets\Left_panel_menu\White\groups50x50.png" />
     <Content Include="Assets\Left_panel_menu\White\settings50x50.png" />
+    <Content Include="Assets\manager_accounts\active_account50x50.png" />
     <Content Include="Assets\manager_accounts\add200x200.png" />
     <Content Include="Assets\manager_accounts\delete25x25.png" />
     <Content Include="Assets\manager_accounts\oneDrive200x200.png" />
+    <Content Include="Assets\manager_accounts\selectItem50x50.png" />
     <Content Include="Assets\menedzher-prestizhnaya-li-eto-professiya-1-1024x531.jpg" />
     <Content Include="Assets\search50x50.png" />
     <Content Include="Properties\Default.rd.xml" />
@@ -245,7 +249,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\AccountManagerView.xaml">
+    <Page Include="View\AccountsManager\AccountManagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

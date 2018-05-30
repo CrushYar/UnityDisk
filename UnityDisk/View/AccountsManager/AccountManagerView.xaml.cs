@@ -12,24 +12,19 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using WinRTXamlToolkit.Controls;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
+// Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace UnityDisk.View
+namespace UnityDisk.View.AccountsManager
 {
-    public class Test
-    {
-        public string Name { get; set; }
-    }
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Пустая страница, которую можно использовать саму по себе или для перехода внутри фрейма.
     /// </summary>
     public sealed partial class AccountManagerView : Page
     {
         public AccountManagerView()
         {
             this.InitializeComponent();
-       }
+        }
     }
 }

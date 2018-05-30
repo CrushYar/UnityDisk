@@ -14,13 +14,11 @@ namespace UnityDisk.Settings.BackgroundOperations
    public class BackgroundOperationDispatcherSettings:IBackgroundOperationDispatcherSettings
    {
        private readonly ISettings _settings;
-       private readonly FileStorages.FactoryRagistry.IFactoryRagistry _factoryRagistry;
+       private FileStorages.FactoryRagistry.IFactoryRagistry _factoryRagistry;
        public BackgroundOperationDispatcherSettings(ISettings settings)
        {
            _settings = settings;
-           IUnityContainer container = ContainerConfiguration.GetContainer().Container;
-           _factoryRagistry = container.Resolve<FileStorages.FactoryRagistry.IFactoryRagistry>();
-       }
+        }
        public BackgroundOperationDispatcherSettings(ISettings settings, FileStorages.FactoryRagistry.IFactoryRagistry factoryRagistry)
        {
            _settings = settings;
@@ -54,6 +52,11 @@ namespace UnityDisk.Settings.BackgroundOperations
             if(items==null)
                 throw new InvalidOperationException("Item did not create the public url");
 
+            if (_factoryRagistry == null)
+            {
+                IUnityContainer container = ContainerConfiguration.GetContainer().Container;
+                _factoryRagistry = container.Resolve<FileStorages.FactoryRagistry.IFactoryRagistry>();
+            }
             List<IBackgroundOperation> result=new List<IBackgroundOperation>(items.Length);
             foreach (var item in items)
             {

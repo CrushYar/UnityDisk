@@ -33,7 +33,7 @@ namespace UnityDisk_Test.GroupTree.Registry
         }
 
         [TestMethod]
-        public void Can_Initialization()
+        public void Initialization_RequestForInit_InitRegistry()
         {
             var groupSettingsStub = new GroupSettingsContainer()
             {
@@ -96,7 +96,7 @@ namespace UnityDisk_Test.GroupTree.Registry
             Assert.IsTrue(expectedContainer.Equals(rootProjection));
         }
         [TestMethod]
-        public void Can_Add()
+        public void Add_RequestForAddItem_AddNewItem()
         {
             GroupSettingsContainer groupSettingsStub = null;
 
@@ -140,7 +140,7 @@ namespace UnityDisk_Test.GroupTree.Registry
         }
 
         [TestMethod]
-        public void Can_Delete()
+        public void Delete_RequestForDeleteItem_DeleteItemInRegistry()
         {
             var groupSettingsStub = new GroupSettingsContainer()
             {
@@ -201,7 +201,7 @@ namespace UnityDisk_Test.GroupTree.Registry
             Assert.IsTrue(expectedContainer.Equals(rootProjection));
         }
         [TestMethod]
-        public void Can_Rename()
+        public void Rename_RequestForRename_SetNewName()
         {
             var groupSettingsStub = new GroupSettingsContainer()
             {
@@ -263,7 +263,7 @@ namespace UnityDisk_Test.GroupTree.Registry
             Assert.IsTrue(expectedContainer.Equals(rootProjection));
         }
         [TestMethod]
-        public void Can_Move()
+        public void Move_RequestForMove_ChangePossInGroupTree()
         {
             var groupSettingsStub = new GroupSettingsContainer()
             {
@@ -326,7 +326,7 @@ namespace UnityDisk_Test.GroupTree.Registry
             Assert.IsTrue(expectedContainer.Equals(rootProjection));
         }
         [TestMethod]
-        public void Can_Copy()
+        public void Copy_RequestForCopy_CreateCopyItemByPath()
         {
             var groupSettingsStub = new GroupSettingsContainer()
             {
@@ -389,7 +389,7 @@ namespace UnityDisk_Test.GroupTree.Registry
             Assert.IsTrue(expectedContainer.Equals(rootProjection));
         }
         [TestMethod]
-        public void Can_SetActive()
+        public void SetActive_RequestForSetActive_SetActiveState()
         {
             var groupSettingsStub = new GroupSettingsContainer()
             {

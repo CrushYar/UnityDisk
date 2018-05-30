@@ -348,5 +348,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+
+        <SolidColorBrush x:Key="OneDrive" Color="#B20050FB"></SolidColorBrush>
+        <SolidColorBrush x:Key="AddAccount" Color="#7F7AB8F1"></SolidColorBrush>
+
     </Application.Resources>
 </Application>

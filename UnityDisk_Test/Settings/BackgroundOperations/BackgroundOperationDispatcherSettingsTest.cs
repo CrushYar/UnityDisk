@@ -33,7 +33,7 @@ namespace UnityDisk_Test.Settings.BackgroundOperations
             _mockRemoteFile = Mock.Create<UnityDisk.FileStorages.IFileStorageFile>();
         }
         [TestMethod]
-        public void Can_SaveOperations()
+        public void SaveOperations_RequestForSaveOperations_SaveOperations()
         {
             List<IBackgroundOperation> backgroundOperations = new List<IBackgroundOperation>();
             Mock<IBackgroundOperation> mock1 = Mock.Create<IBackgroundOperation>();
@@ -54,7 +54,7 @@ namespace UnityDisk_Test.Settings.BackgroundOperations
             _mockService.Verify(settings => settings.SetValueAsString(_parameterName, "[{\"Action\":0,\"ServerName\":\"OneDrive\",\"State\":\"generatedProxy_5\"},{\"Action\":1,\"ServerName\":\"OneDrive\",\"State\":\"generatedProxy_5\"}]"),Occurred.Once());
         }
         [TestMethod]
-        public void Can_LoadOperations()
+        public void LoadOperations_RequestForLoad_LoadOperations()
         {
             List<IBackgroundOperation> backgroundOperations = new List<IBackgroundOperation>();
             Mock<UnityDisk.FileStorages.FactoryRagistry.IFactoryRagistry> mockFactory = Mock.Create< UnityDisk.FileStorages.FactoryRagistry.IFactoryRagistry>();

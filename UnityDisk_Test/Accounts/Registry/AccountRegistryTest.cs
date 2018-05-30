@@ -53,7 +53,7 @@ namespace UnityDisk_Test.Accounts.Registry
         }
 
         [TestMethod]
-        public void Can_Load()
+        public void Load_RequestForLoadSetting_LoadSettings()
         {
            
             var accountSettingsStub = new[]
@@ -81,7 +81,7 @@ namespace UnityDisk_Test.Accounts.Registry
         }
 
         [TestMethod]
-        public void Can_Find()
+        public void Find_RequestForFindAccount_FindAccount()
         {
           
             var accountSettingsStub = new[]
@@ -113,7 +113,7 @@ namespace UnityDisk_Test.Accounts.Registry
         }
 
         [TestMethod]
-        public void Can_Registry()
+        public void Registry_RequestForRegistrationAccount_RegistryAccount()
         {
            
             _mockAccountSettings.SetupGet(settings => settings.LoadAccounts()).Returns(Array.Empty<IAccountSettingsItem>());
@@ -127,7 +127,7 @@ namespace UnityDisk_Test.Accounts.Registry
             Assert.IsNotNull(accountFound);
         }
         [TestMethod]
-        public void Can_SaveSettings()
+        public void SaveSettings_RequestForSaveSettings_SaveSettings()
         {
        
             var expectedAccountSettings = new[]
@@ -146,7 +146,7 @@ namespace UnityDisk_Test.Accounts.Registry
             _mockAccountSettings.Verify(settings => settings.SaveAccounts(Param.Is<IAccountSettingsItem[]>(items => items.SequenceEqual(expectedAccountSettings))), Occurred.Once());
         }
         [TestMethod]
-        public void Can_Delete()
+        public void Delete_RequestForDeletion_DeleteAccount()
         {  
             _mockAccountSettings.SetupGet(settings => settings.LoadAccounts()).Returns(Array.Empty<IAccountSettingsItem>());
      

@@ -28,7 +28,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             await UnityDisk.RemoteInitialization.Start();
         }
         [TestMethod]
-        public async Task Can_DeleteFile()
+        public async Task Delete_RequestForDeleteFile_DeleteFile()
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
@@ -45,7 +45,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             await file.Delete();
         }
         [TestMethod]
-        public async Task Can_RenameFile()
+        public async Task Rename_RequestForRenameFile_SetNewNameOfFile()
         {
             string expectedName = "ForTestRename_DONE.txt";
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
@@ -64,7 +64,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.AreEqual(file.Name, expectedName);
         }
         [TestMethod]
-        public async Task Can_MoveFile()
+        public async Task Move_RequestForMoveFile_SetNewPossOfFile()
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
@@ -91,7 +91,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.AreEqual(expectedPath, file.Path);
         }
         [TestMethod]
-        public async Task Can_CopyFile()
+        public async Task Copy_RequestForCopyFile_CopyFileByPath()
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
@@ -120,7 +120,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.IsNull(result);
         }
         [TestMethod]
-        public async Task Can_LoadPreviewImage()
+        public async Task LoadPreviewImage_RequestForGetPreviewImage_GetPreviewImage()
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
@@ -140,7 +140,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.IsNotNull(file.PreviewImage);
         }
         [TestMethod]
-        public async Task Can_LoadPublicUrl()
+        public async Task LoadPublicUrl_RequestForLoadPublicUrlFile_GetPublicUrlOfFile()
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
@@ -172,7 +172,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.IsFalse(String.IsNullOrEmpty(file.PublicUrlId));
         }
         [TestMethod]
-        public async Task Can_CreatePublicUrl()
+        public async Task CreatePublicUrl_RequestForCreatePublicUrl_GetCreatedPublicUrl()
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
@@ -192,7 +192,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.IsFalse(String.IsNullOrEmpty(file.PublicUrlId));
         }
         [TestMethod]
-        public async Task Can_DeletePublicUrl()
+        public async Task DeletePublicUrl_RequestForDeletePublicUrl_DeletePublicUrlOfFile()
         {
             UnityDisk.FileStorages.OneDrive.Account account = new UnityDisk.FileStorages.OneDrive.Account();
             await account.SignIn(_login);
@@ -213,7 +213,7 @@ namespace UnityDisk_Test.FileStorages.OneDrive
             Assert.IsTrue(String.IsNullOrEmpty(file.PublicUrlId));
         }
         [TestMethod]
-        public async Task Can_Parse()
+        public void Parse_RequestForParse_GetNewObjectByString()
         {
             var account = new UnityDisk.Accounts.Account(new UnityDisk.FileStorages.OneDrive.Account()
             {

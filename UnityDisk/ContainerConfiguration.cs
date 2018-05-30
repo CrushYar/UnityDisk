@@ -18,7 +18,7 @@ namespace UnityDisk
 {
     public sealed class ContainerConfiguration
     {
-        private static readonly ContainerConfiguration Configuration=new ContainerConfiguration();
+        private static ContainerConfiguration Configuration=new ContainerConfiguration();
 
         public IUnityContainer Container { get; private set; }
 
@@ -36,7 +36,7 @@ namespace UnityDisk
                 .RegisterType<IAccountSettingsItem, AccountSettingsItem>(new InjectionConstructor())
                 .RegisterType<IFactoryRagistry, FactoryRagistry>(new InjectionConstructor())
                 .RegisterType<IGroupSettings, Settings.Groups.GroupSettings>(new InjectionConstructor())
-                .RegisterType<IStandardPreviewImagesRegistry,StandardPreviewImagesRegistry>(new ContainerControlledLifetimeManager(),new InjectionConstructor())
+                .RegisterType<IStandardPreviewImagesRegistry, StandardPreviewImagesRegistry>(new ContainerControlledLifetimeManager(), new InjectionConstructor())
                 .RegisterType<IAccountProjection, AccountProjection>(new InjectionConstructor());
         }
 

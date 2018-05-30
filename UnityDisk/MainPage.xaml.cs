@@ -25,6 +25,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using UnityDisk.Accounts.Registry;
 using UnityDisk.FileStorages.OneDrive;
 using UnityDisk.View;
+using UnityDisk.View.AccountsManager;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -43,6 +44,7 @@ namespace UnityDisk
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+            var twat=App.Current.Resources.FirstOrDefault(pair => pair.Key.ToString() == "OneDriveColor");
             content_frame.Navigate(typeof(AccountManagerView));
         }
     }

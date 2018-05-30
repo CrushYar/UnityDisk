@@ -5,32 +5,46 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Unity;
-using UnityDisk.Accounts;
 using UnityDisk.Annotations;
 
-namespace UnityDisk.ViewModel
+namespace UnityDisk.ViewModel.Accounts
 {
-    public class AccountManagerViewModel:INotifyPropertyChanged
+    public class AccountProjectionViewModel:INotifyPropertyChanged
     {
-        private string _userName;
+        private string _login;
+        private string _serverName;
+        private IList<string> _groups;
         private ulong _totalSize;
         private ulong _usedSize;
         private ulong _freeSize;
-        private ulong _count;
-        private Accounts.Registry.IAccountRegistry _accountRegistry;
-        private IUnityContainer _container;
 
-        public string UserName
+        public string Login
         {
-            get { return _userName; }
+            get { return _login; }
             set
             {
-                _userName = value;
+                _login = value;
                 OnPropertyChanged();
             }
         }
-
+        public string ServerName
+        {
+            get { return _serverName; }
+            set
+            {
+                _serverName = value;
+                OnPropertyChanged();
+            }
+        }
+        public IList<string> Groups
+        {
+            get { return _groups; }
+            set
+            {
+                _groups = value;
+                OnPropertyChanged();
+            }
+        }
         public ulong TotalSize
         {
             get { return _totalSize; }
@@ -58,30 +72,17 @@ namespace UnityDisk.ViewModel
                 OnPropertyChanged();
             }
         }
-        public ulong Count
-        {
-            get { return _count; }
-            set
-            {
-                _count = value;
-                OnPropertyChanged();
-            }
-        }
 
-        public AccountManagerViewModel()
+        public AccountProjectionViewModel() { }
+        public AccountProjectionViewModel(UnityDisk.Accounts.Registry.IAccountProjection projection)
         {
-            _container = ContainerConfiguration.GetContainer().Container;
-            _accountRegistry= _container.Resolve<Accounts.Registry.IAccountRegistry>();
-
-            _accountRegistry.ChangedSizeEvent += (o, e) =>
-            {
-                TotalSize = e.NewSize.TotalSize;
-                UsedSize = e.NewSize.TotalSize;
-                FreeSize = e.NewSize.FreeSize;
-            };
+            Login = projection.Login;
+            ServerName = projection.ServerName;
+            Groups = projection.Groups;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

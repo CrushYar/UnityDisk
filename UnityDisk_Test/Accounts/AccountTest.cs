@@ -28,7 +28,7 @@ namespace UnityDisk_Test.Accounts
         /// Все параметры аккаунта должны зависеть от аккаунта файлового хранилища
         /// </summary>
         [TestMethod]
-        public void BindingParametersTest()
+        public void BindingParameters_ChangeFileStorageAccount_GetChangeInAccount()
         {
             string expectedToken = "simpleToken";
             string expectedLogin = "test@gmail.com";
@@ -52,7 +52,7 @@ namespace UnityDisk_Test.Accounts
         }
 
         [TestMethod]
-        public async Task Can_SignIn()
+        public async Task SignIn_RequestForSignIn_GetToken()
         {
             string token = "simpleToken";
 
@@ -64,7 +64,7 @@ namespace UnityDisk_Test.Accounts
         }
 
         [TestMethod]
-        public async Task Can_SignOut()
+        public async Task SignOut_RequestForSignOut_DeleteToken()
         {
             _mockService.Setup(fileStorage => fileStorage.SignOut()).Returns(Task.Run(() => { }));
 
@@ -74,7 +74,7 @@ namespace UnityDisk_Test.Accounts
         }
 
         [TestMethod]
-        public async Task Can_Update()
+        public async Task Update_RequestForUpdate_GetNewInfo()
         {
             _mockService.Setup(fileStorage => fileStorage.Update()).Returns(Task.Run(() => { }));
 
@@ -83,7 +83,7 @@ namespace UnityDisk_Test.Accounts
             _mockService.Verify(fileStorage => fileStorage.Update(), Occurred.Once());
         }
         [TestMethod]
-        public void Can_Clone()
+        public void Clone_RequestForClone_GetCloneObject()
         {
             string expectedToken = "simpleToken";
             string expectedLogin = "test@gmail.com";
